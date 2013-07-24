@@ -20,4 +20,4 @@ Sure. Under a few conditions, though:
 The source code that I have provided has all the API keys stripped. You will have to obtain those through the proper developer channels and include them in the app.
 
 ### Why none of the station lists load?
-Beem relies on Windows Azure Mobile Services, and I cannot give you access to my data. Based on the existing data models, you can create your own data infrastructure.
+Beem relies on [Windows Azure Mobile Services](http://www.windowsazure.com/en-us/develop/mobile/), and I cannot give you access to my data. Based on the existing data models, you can create your own data infrastructure.
