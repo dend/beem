@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Beem", "Beem\Beem.csproj", "{528AE867-14A0-400C-848B-CF47E23828C8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Beem.AudioAgent", "Beem.AudioAgent\Beem.AudioAgent.csproj", "{6D477B8E-C25C-4122-BF13-4C167791F596}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Beem.Core", "Beem.Core\Beem.Core.csproj", "{BBA15AE2-8C87-4331-A099-CCA1E7F21312}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{528AE867-14A0-400C-848B-CF47E23828C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{528AE867-14A0-400C-848B-CF47E23828C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{528AE867-14A0-400C-848B-CF47E23828C8}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{528AE867-14A0-400C-848B-CF47E23828C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{528AE867-14A0-400C-848B-CF47E23828C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{528AE867-14A0-400C-848B-CF47E23828C8}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{6D477B8E-C25C-4122-BF13-4C167791F596}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D477B8E-C25C-4122-BF13-4C167791F596}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D477B8E-C25C-4122-BF13-4C167791F596}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D477B8E-C25C-4122-BF13-4C167791F596}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBA15AE2-8C87-4331-A099-CCA1E7F21312}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBA15AE2-8C87-4331-A099-CCA1E7F21312}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBA15AE2-8C87-4331-A099-CCA1E7F21312}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBA15AE2-8C87-4331-A099-CCA1E7F21312}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

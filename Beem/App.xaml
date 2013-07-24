@@ -1,0 +1,31 @@
+﻿<Application 
+    x:Class="Beem.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"       
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:local="clr-namespace:Beem"
+    xmlns:converters="clr-namespace:Beem.Converters">
+
+    <!--Application Resources-->
+    <Application.Resources>
+        <local:Binder x:Key="Binder"></local:Binder>
+        
+        <converters:IndexToBrush x:Key="IndexToBrush"></converters:IndexToBrush>
+        <converters:FullToSelect x:Key="FullToFive"></converters:FullToSelect>
+        <converters:TimeSpanToString x:Key="TimeSpanToString"></converters:TimeSpanToString>
+        <converters:DropStateToText x:Key="DropStateToText"></converters:DropStateToText>
+        <converters:BoolToVisibility x:Key="BoolToVisibility"></converters:BoolToVisibility>
+        <converters:StringToVisibility x:Key="StringToVisibility"></converters:StringToVisibility>
+        <converters:ReverseBooleanConverter x:Key="ReverseBoolean"></converters:ReverseBooleanConverter>
+        <converters:KeyToButtonTypeConverter x:Key="KeyToButtonType"></converters:KeyToButtonTypeConverter>
+        <converters:KeyToEnabledConverter x:Key="KeyToEnabled"></converters:KeyToEnabledConverter>
+    </Application.Resources>
+
+    <Application.ApplicationLifetimeObjects>
+        <!--Required object that handles lifetime events for the application-->
+        <shell:PhoneApplicationService 
+            Launching="Application_Launching" Closing="Application_Closing" 
+            Activated="Application_Activated" Deactivated="Application_Deactivated"/>
+    </Application.ApplicationLifetimeObjects>
+</Application>

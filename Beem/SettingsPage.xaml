@@ -1,0 +1,128 @@
+﻿<phone:PhoneApplicationPage 
+    x:Class="Beem.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d" d:DesignHeight="800" d:DesignWidth="480"
+    shell:SystemTray.IsVisible="False"
+    xmlns:live="clr-namespace:Microsoft.Live.Controls;assembly=Microsoft.Live.Controls"
+    xmlns:controls="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    DataContext="{Binding Path=Instance,Source={StaticResource Binder}}">
+
+    <!--LayoutRoot is the root grid where all page content is placed-->
+
+    <Grid x:Name="LayoutRoot">
+        <Grid.Background>
+            <ImageBrush Opacity=".5" ImageSource="/Images/panorama.png" AlignmentX="Left" Stretch="None"></ImageBrush>
+        </Grid.Background>
+
+        <controls:Pivot Grid.Row="1" Title="SETTINGS">
+            <controls:PivotItem Header="general">
+                <Grid>
+                    <!--ContentPanel - place additional content here-->
+                    <StackPanel x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+                        <toolkit:ToggleSwitch IsChecked="{Binding Path=Instance.CurrentAppSettings.CanRunUnderLockScreen,Source={StaticResource Binder}}"
+                                              Unchecked="ToggleSwitch_Unchecked" 
+                                              Checked="ToggleSwitch_Checked" 
+                                              Header="Run Under Lock Screen">
+                        </toolkit:ToggleSwitch>
+                        <TextBlock Style="{StaticResource PhoneTextTitle3Style}" Text="Allow streaming when the application is idle. Disabling this capability might cause streaming interruptions." TextWrapping="Wrap"></TextBlock>
+                        <Button Content="Delete Recorded Files" Margin="0,24,0,0" x:Name="btnDelete" Click="btnDelete_Click"></Button>
+                        <Button Content="Clear The Audio Controls" x:Name="btnClearControls" Click="btnClearControls_Click"></Button>
+                    </StackPanel>
+                </Grid>
+            </controls:PivotItem>
+            
+            <!-- DI.FM Premium authentication data -->
+            <controls:PivotItem Header="premium">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource PhoneTextTitle3Style}" TextWrapping="Wrap"
+                           Text="DI.FM Premium allows you to listed to high-quality streams. This feature is available to paying DI.FM members."></TextBlock>
+
+                    <StackPanel Margin="0,24,0,0">
+                        <toolkit:ToggleSwitch Checked="SaveDISettings" Unchecked="SaveDISettings" IsChecked="{Binding DISettings.IsPremiumEnabled, Mode=TwoWay}" IsEnabled="{Binding DISettings.PremiumKey, Converter={StaticResource KeyToEnabled}}" Header="Use DI.FM Premium"></toolkit:ToggleSwitch>
+                        <TextBlock Text="Listener Key:" Style="{StaticResource PhoneTextTitle3Style}"></TextBlock>
+                        <TextBox x:Name="txtKey" Text="{Binding DISettings.PremiumKey}" IsEnabled="{Binding DISettings.PremiumKey, Converter={StaticResource KeyToEnabled},ConverterParameter=reverse}"></TextBox>
+                        <Button Content="{Binding DISettings.PremiumKey, Converter={StaticResource KeyToButtonType}}" x:Name="btnAuthorize" Click="btnAuthorize_Click"></Button>
+                    </StackPanel>
+
+                    <StackPanel Margin="0,24,0,0">
+                        <TextBlock Text="You can get your listener key here:" Style="{StaticResource PhoneTextTitle3Style}"></TextBlock>
+                        <Button Content="Get Key" x:Name="btnGetKey" Click="btnGetKey_Click"></Button>
+                    </StackPanel>
+                </StackPanel>
+            </controls:PivotItem>
+            
+            <controls:PivotItem Header="skydrive">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource PhoneTextTitle3Style}" Text="Microsoft SkyDrive integration allows you to upload your recorded streams to your cloud storage. This feature should be used for BACKUP ONLY. You do not have the permission to distribute the recordings." TextWrapping="Wrap"></TextBlock>
+
+                    <StackPanel Margin="0,24,0,0">
+                        <TextBlock Style="{StaticResource PhoneTextTitle3Style}" Text="Current Account:"></TextBlock>
+                        <StackPanel Margin="12,12,0,12" Orientation="Horizontal">
+                            <Image x:Name="imgProfile" Source="{Binding MicrosoftAccountImage}" Height="64" Width="64" HorizontalAlignment="Left"></Image>
+                            <TextBlock VerticalAlignment="Center" x:Name="txtMicrosoftEmail" Style="{StaticResource PhoneTextTitle3Style}" Text="{Binding MicrosoftAccountName}"></TextBlock>
+                        </StackPanel>
+
+                        <live:SignInButton x:Name="btnSignIn" ClientId="" Scopes="wl.signin wl.basic wl.offline_access wl.skydrive wl.skydrive_update" Branding="Skydrive" TextType="Connect"></live:SignInButton>
+                    </StackPanel>
+                </StackPanel>
+            </controls:PivotItem>
+            <controls:PivotItem Header="last.fm">
+                <StackPanel>
+                    <TextBlock 
+                        Style="{StaticResource PhoneTextTitle3Style}" 
+                        Text="Last.fm integration allows you to scrobble the tracks you listen." 
+                        TextWrapping="Wrap"></TextBlock>
+
+                    <StackPanel Margin="0,24,0,0" 
+                                Visibility="{Binding Path=Instance.CurrentAppSettings.Session.Key, Source={StaticResource Binder}, Converter={StaticResource StringToVisibility},ConverterParameter=notNormal}" >
+                        <TextBlock
+                        Style="{StaticResource PhoneTextTitle3Style}" 
+                        Text="Username:" 
+                        TextWrapping="Wrap"></TextBlock>
+                        <TextBox x:Name="txtLastFmUsername"></TextBox>
+                        <TextBlock
+                        Style="{StaticResource PhoneTextTitle3Style}" 
+                        Text="Password:" 
+                        TextWrapping="Wrap"></TextBlock>
+                        <PasswordBox x:Name="txtLastFmPassword"></PasswordBox>
+                        <Button Click="btnLastFmLogin_Click_1" x:Name="btnLastFmLogin" Content="Log In"></Button>
+                    </StackPanel>
+
+                    <StackPanel Margin="0,24,0,0"
+                                Visibility="{Binding Path=Instance.CurrentAppSettings.Session.Key, Source={StaticResource Binder}, Converter={StaticResource StringToVisibility},ConverterParameter=normal}" >
+
+                        <toolkit:ToggleSwitch
+                            x:Name="tglScrobbleOnLaunch"
+                        IsChecked="{Binding Path=Instance.CurrentAppSettings.ScrobbleOnLaunch,Source={StaticResource Binder}}" 
+                        Unchecked="tglScrobbleOnLaunch_Unchecked_1"
+                        Checked="tglScrobbleOnLaunch_Checked_1" 
+                        Header="Scrobble On Station Launch"></toolkit:ToggleSwitch>
+
+                        <Button Content="Deauthenticate" x:Name="btnLastFmDeauth" Click="btnLastFmDeauth_Click_1"></Button>
+                    </StackPanel>
+                </StackPanel>
+            </controls:PivotItem>
+
+        </controls:Pivot>
+
+        <Grid Visibility="Collapsed" x:Name="grdLoading" >
+            <Grid.Background>
+                <SolidColorBrush Color="Black" Opacity=".8"></SolidColorBrush>
+            </Grid.Background>
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="Please Wait..." HorizontalAlignment="Center"></TextBlock>
+                <toolkit:PerformanceProgressBar IsIndeterminate="True" Height="40" Width="300"></toolkit:PerformanceProgressBar>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</phone:PhoneApplicationPage>

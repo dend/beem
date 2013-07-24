@@ -1,0 +1,128 @@
+﻿<phone:PhoneApplicationPage 
+    x:Class="Beem.StationPlayer"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d" d:DesignHeight="800" d:DesignWidth="480"
+    shell:SystemTray.IsVisible="False"
+    xmlns:c4f="clr-namespace:Coding4Fun.Toolkit.Controls;assembly=Coding4Fun.Toolkit.Controls"
+    DataContext="{Binding Path=Instance.CurrentStation,Source={StaticResource Binder}}">
+
+    <phone:PhoneApplicationPage.Resources>
+        <Storyboard x:Key="ScrollBoxAnimation">
+            <DoubleAnimation
+                Storyboard.TargetName="NameTranslation"
+                Storyboard.TargetProperty="X" AutoReverse="True"
+                              To="-200" RepeatBehavior="Forever"
+                              Duration="00:00:20"/>
+        </Storyboard>
+    </phone:PhoneApplicationPage.Resources>
+
+    <Grid x:Name="LayoutRoot">
+        <Grid.Background>
+            <ImageBrush Opacity=".5" ImageSource="/Images/panorama.png" AlignmentX="Left" Stretch="None"></ImageBrush>
+        </Grid.Background>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+
+        <Grid Height="120" Grid.Row="0">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="0" Orientation="Horizontal">
+                <c4f:RoundButton x:Name="btnPrevious" Click="btnPrevious_Click" ImageSource="/Images/appbar.control.rewind.png" Margin="0,0,4,0" ButtonHeight="90" ButtonWidth="90"></c4f:RoundButton>
+                <c4f:RoundButton x:Name="btnPlay" Click="btnPlay_Click" ImageSource="/Images/appbar.control.pause.png" Margin="0,0,4,0" ButtonHeight="90" ButtonWidth="90"></c4f:RoundButton>
+                <c4f:RoundButton x:Name="btnNext" Click="btnNext_Click" ImageSource="/Images/appbar.control.fastforward.png" Margin="0,0,4,0" ButtonHeight="90" ButtonWidth="90"></c4f:RoundButton>
+                <c4f:RoundButton IsEnabled="{Binding Converter={StaticResource ReverseBoolean}, Path=Instance.IsRecording,Source={StaticResource Binder}}" x:Name="btnRecord" Click="btnRecord_Click" ImageSource="/Images/appbar.moon.full.png" Margin="0,0,4,0" ButtonHeight="90" ButtonWidth="90"></c4f:RoundButton>
+                <c4f:RoundButton IsEnabled="{Binding Path=Instance.IsRecording,Source={StaticResource Binder}}" x:Name="btnRecordStop" Click="btnRecordStop_Click" ImageSource="/Images/record.stop.png" ButtonHeight="90" ButtonWidth="90"></c4f:RoundButton>
+            </StackPanel>
+        </Grid>
+
+
+        <StackPanel x:Name="ContentPanel" Grid.Row="1">
+            <Grid Margin="0,0,0,12" Height="480" Width="480" HorizontalAlignment="Left">
+                <Image Source="{Binding Image}" Grid.Column="0" Height="480" Width="480" Stretch="UniformToFill"></Image>
+
+                <Grid VerticalAlignment="Bottom">
+                    <Grid.Background>
+                        <SolidColorBrush Color="Black" Opacity=".5"></SolidColorBrush>
+                    </Grid.Background>
+                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+
+                        <Button BorderThickness="0" Padding="0" Click="btnMarket_Click" x:Name="btnMarket">
+                            <Image Height="64" Width="64" Source="/Images/appbar.marketplace.light.png"></Image>
+                        </Button>
+
+                        <Button x:Name="btnPin" Click="btnPin_Click" BorderThickness="0" Padding="0">
+                            <Image Height="64" Width="64" Source="/Images/appbar.pin.png"></Image>
+                        </Button>
+
+                        <Button x:Name="btnShare" Click="btnShare_Click" BorderThickness="0" Padding="0">
+                            <Image Height="64" Width="64" Source="/Images/appbar.share.png">
+                            </Image>
+                        </Button>
+
+                        <Button x:Name="btnCopy" Click="btnCopy_Click" BorderThickness="0" Padding="0">
+                            <Image Height="64" Width="64" Source="/Images/appbar.clipboard.png"></Image>
+                        </Button>
+
+                        <Button BorderThickness="0" Padding="0" x:Name="btnFavorite" Click="btnFavorite_Click">
+                            <Image x:Name="imgFave" Height="64" Width="64" Margin="0" Loaded="imgFave_Loaded"></Image>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+
+                <Canvas Height="132" VerticalAlignment="Top">
+                    <Canvas.Background>
+                        <SolidColorBrush Color="Black" Opacity=".5"></SolidColorBrush>
+                    </Canvas.Background>
+                    <StackPanel Margin="12">
+                        <TextBlock Foreground="White" Style="{StaticResource PhoneTextExtraLargeStyle}" Text="{Binding Name}"></TextBlock>
+
+                        <TextBlock Foreground="White" Style="{StaticResource PhoneTextLargeStyle}" Text="{Binding NowPlaying.FullTrackName}">
+                            <TextBlock.RenderTransform>
+                                <TranslateTransform x:Name="NameTranslation"></TranslateTransform>
+                            </TextBlock.RenderTransform>
+                        </TextBlock>
+                    </StackPanel>
+                </Canvas>
+            </Grid>
+
+            <ListBox Margin="0,12,0,0" ItemsSource="{Binding TrackList, Converter={StaticResource FullToFive}}">
+                <ListBox.Template>
+                    <ControlTemplate>
+                        <ItemsPresenter />
+                    </ControlTemplate>
+                </ListBox.Template>
+
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Tap="TextBlock_Tap" Tag="{Binding}" Margin="0,0,0,3" Width="440">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" Style="{StaticResource PhoneTextSmallStyle}" Text="{Binding Duration}"></TextBlock>
+                            <TextBlock Grid.Column="1" Style="{StaticResource PhoneTextTitle3Style}" Text="{Binding FullTrackName}"></TextBlock>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+        </StackPanel>
+
+        <Grid Visibility="{Binding Path=Instance.IsRecording,Source={StaticResource Binder},Converter={StaticResource BoolToVisibility}, ConverterParameter=normal}" Grid.Row="1" Height="40" VerticalAlignment="Bottom" Width="250" HorizontalAlignment="Right" Background="Red">
+            <TextBlock Style="{StaticResource PhoneTextLargeStyle}" Foreground="White" Text="{Binding Path=Instance.RecordingLength,Source={StaticResource Binder}, Converter={StaticResource TimeSpanToString}}" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+        </Grid>
+
+        <Border Visibility="{Binding Path=Instance.IsRecording,Source={StaticResource Binder}, Converter={StaticResource BoolToVisibility}, ConverterParameter=normal}" Grid.RowSpan="2" BorderThickness="6" BorderBrush="Red"></Border>
+    </Grid>
+</phone:PhoneApplicationPage>
