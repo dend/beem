@@ -6,6 +6,8 @@ Beem is the first DI.FM client for Windows Phone. It allows its users to stream 
 It supports both standard and premium streams, given that the user has the secret key necessary to unlock the 
 premium quality stream.
 
+It is licensed under the [Microsoft Public License (MS-PL)](http://www.microsoft.com/en-us/openness/licenses.aspx).
+
 ### I don't want to mess with source code. Can I download your app on my Windows Phone?
 
 Absolutely. Head over to the Windows Phone Store and either download [Beem](http://www.windowsphone.com/en-us/store/app/beem-plus/8433ad41-9a4e-46ff-ba33-340d265f53d5) or [Beem for SKY.FM] (http://www.windowsphone.com/en-us/store/app/beem-for-sky-fm/89012aa1-3606-42fe-b924-48b305f50ebc).
