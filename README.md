@@ -21,3 +21,9 @@ The source code that I have provided has all the API keys stripped. You will hav
 
 ### Why none of the station lists load?
 Beem relies on [Windows Azure Mobile Services](http://www.windowsazure.com/en-us/develop/mobile/), and I cannot give you access to my data. Based on the existing data models, you can create your own data infrastructure.
+
+### Will I always see the most recent Beem source code here?
+Yes, minus the API keys.
+
+### Do you offer support for this project?
+If you want specific ideas implemented in the app itself, feel free to use the [UserVoice page](https://beem.uservoice.com/). This, of course, doesn't guarantee that the feature will be implemented, but gives you the opportunity to put the feature on my radar.
