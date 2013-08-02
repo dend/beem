@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace Beem.Core.Binding
 {
@@ -7,7 +8,7 @@ namespace Beem.Core.Binding
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected bool SetProperty<T>(ref T storage, T value, String propertyName = null)
+        protected bool SetProperty<T>(ref T storage, T value, [CallerMemberName]String propertyName = null)
         {
             if (object.Equals(storage, value)) return false;
 
@@ -16,7 +17,7 @@ namespace Beem.Core.Binding
             return true;
         }
 
-        protected void OnPropertyChanged(string propertyName = null)
+        protected void OnPropertyChanged([CallerMemberName]string propertyName = null)
         {
             var eventHandler = this.PropertyChanged;
             if (eventHandler != null)
