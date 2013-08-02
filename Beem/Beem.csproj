@@ -160,6 +160,7 @@
     <Compile Include="Utility\SerializationHelper.cs" />
     <Compile Include="Utility\StationManager.cs" />
     <Compile Include="Utility\StringHelper.cs" />
+    <Compile Include="ViewModels\KeyContainerViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -192,6 +193,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="APIKeyManifest.xml" />
     <Content Include="ApplicationIcon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
