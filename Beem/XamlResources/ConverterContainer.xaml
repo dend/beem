@@ -1,0 +1,15 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="clr-namespace:Beem.Converters">
+  
+    <c:IndexToBrush x:Key="IndexToBrush" />
+    <c:FullToSelect x:Key="FullToFive" />
+    <c:TimeSpanToString x:Key="TimeSpanToString" />
+    <c:DropStateToText x:Key="DropStateToText" />
+    <c:BoolToVisibility x:Key="BoolToVisibility" />
+    <c:StringToVisibility x:Key="StringToVisibility" />
+    <c:ReverseBooleanConverter x:Key="ReverseBoolean" />
+    <c:KeyToButtonTypeConverter x:Key="KeyToButtonType" />
+    <c:KeyToEnabledConverter x:Key="KeyToEnabled" />
+</ResourceDictionary>

@@ -9,17 +9,12 @@
 
     <!--Application Resources-->
     <Application.Resources>
-        <local:Binder x:Key="Binder"></local:Binder>
-        
-        <converters:IndexToBrush x:Key="IndexToBrush"></converters:IndexToBrush>
-        <converters:FullToSelect x:Key="FullToFive"></converters:FullToSelect>
-        <converters:TimeSpanToString x:Key="TimeSpanToString"></converters:TimeSpanToString>
-        <converters:DropStateToText x:Key="DropStateToText"></converters:DropStateToText>
-        <converters:BoolToVisibility x:Key="BoolToVisibility"></converters:BoolToVisibility>
-        <converters:StringToVisibility x:Key="StringToVisibility"></converters:StringToVisibility>
-        <converters:ReverseBooleanConverter x:Key="ReverseBoolean"></converters:ReverseBooleanConverter>
-        <converters:KeyToButtonTypeConverter x:Key="KeyToButtonType"></converters:KeyToButtonTypeConverter>
-        <converters:KeyToEnabledConverter x:Key="KeyToEnabled"></converters:KeyToEnabledConverter>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="XamlResources/ConverterContainer.xaml" />
+                <ResourceDictionary Source="XamlResources/ViewModelContainer.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 
     <Application.ApplicationLifetimeObjects>
