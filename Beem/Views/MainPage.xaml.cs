@@ -18,7 +18,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Beem
+namespace Beem.Views
 {
     public partial class MainPage : PhoneApplicationPage
     {

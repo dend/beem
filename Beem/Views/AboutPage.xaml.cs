@@ -2,7 +2,7 @@
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Tasks;
 
-namespace Beem
+namespace Beem.Views
 {
     public partial class AboutPage : PhoneApplicationPage
     {

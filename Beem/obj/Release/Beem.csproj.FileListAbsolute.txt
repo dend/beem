@@ -1,9 +1,5 @@
 C:\Users\Dennis\Documents\GitHub\beem\Beem\obj\Release\Beem.csprojResolveAssemblyReference.cache
 C:\Users\Dennis\Documents\GitHub\beem\Beem\obj\Release\App.g.cs
-C:\Users\Dennis\Documents\GitHub\beem\Beem\obj\Release\AboutPage.g.cs
-C:\Users\Dennis\Documents\GitHub\beem\Beem\obj\Release\MainPage.g.cs
-C:\Users\Dennis\Documents\GitHub\beem\Beem\obj\Release\SettingsPage.g.cs
-C:\Users\Dennis\Documents\GitHub\beem\Beem\obj\Release\StationPlayer.g.cs
 C:\Users\Dennis\Documents\GitHub\beem\Beem\obj\Release\Beem.g.resources
 C:\Users\Dennis\Documents\GitHub\beem\Beem\Bin\Release\ApplicationIcon.png
 C:\Users\Dennis\Documents\GitHub\beem\Beem\Bin\Release\Background.png
@@ -109,3 +105,7 @@ C:\Users\Dennis\Documents\GitHub\beem\Beem\Bin\Release\zh-Hant\System.Json.resou
 C:\Users\Dennis\Documents\GitHub\beem\Beem\obj\Release\Beem.dll
 C:\Users\Dennis\Documents\GitHub\beem\Beem\obj\Release\Beem.pdb
 C:\Users\Dennis\Documents\GitHub\beem\Beem\obj\Release\XapCacheFile.xml
+C:\Users\Dennis\Documents\GitHub\beem\Beem\obj\Release\Views\AboutPage.g.cs
+C:\Users\Dennis\Documents\GitHub\beem\Beem\obj\Release\Views\MainPage.g.cs
+C:\Users\Dennis\Documents\GitHub\beem\Beem\obj\Release\Views\SettingsPage.g.cs
+C:\Users\Dennis\Documents\GitHub\beem\Beem\obj\Release\Views\StationPlayer.g.cs

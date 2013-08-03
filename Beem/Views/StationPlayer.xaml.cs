@@ -25,7 +25,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Resources;
 
-namespace Beem
+namespace Beem.Views
 {
     public partial class StationPlayer : PhoneApplicationPage
     {

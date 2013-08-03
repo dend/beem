@@ -8,7 +8,7 @@ using Microsoft.Phone.Tasks;
 using System.IO.IsolatedStorage;
 using System.Windows;
 
-namespace Beem
+namespace Beem.Views
 {
     public partial class SettingsPage : PhoneApplicationPage
     {
