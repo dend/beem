@@ -1,5 +1,9 @@
-﻿using System.IO;
+﻿using Beem.Core.Models;
+using System;
+using System.IO;
+using System.Xml.Linq;
 using System.Xml.Serialization;
+using System.Linq;
 
 namespace Beem.Utility
 {
@@ -11,6 +15,26 @@ namespace Beem.Utility
             TextReader reader = new StringReader(xmlContent);
             T result = (T)serializer.Deserialize(reader);
             return result;
+        }
+
+        public static KeyContainer GetKeys(string name)
+        {
+            XDocument keyDocument = XDocument.Load(name);
+
+            KeyContainer container = new KeyContainer();
+            container.DiFmPremiumKey = (from c in keyDocument.Root.Elements() where c.Attribute("type").Value == "difm" 
+                                        select c).FirstOrDefault().Attribute("value").Value;
+            container.LastFmKey = (from c in keyDocument.Root.Elements()
+                                        where c.Attribute("type").Value == "lastfm"
+                                        select c).FirstOrDefault().Attribute("value").Value;
+            container.MsaKey = (from c in keyDocument.Root.Elements()
+                                        where c.Attribute("type").Value == "msa"
+                                        select c).FirstOrDefault().Attribute("value").Value;
+            container.ZumoKey = (from c in keyDocument.Root.Elements()
+                                        where c.Attribute("type").Value == "zumo"
+                                        select c).FirstOrDefault().Attribute("value").Value;
+
+            return container;
         }
     }
 }
