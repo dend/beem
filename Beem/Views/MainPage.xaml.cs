@@ -112,7 +112,7 @@ namespace Beem.Views
                 if (currentStation != null)
                 {
                     CoreViewModel.Instance.CurrentStation = currentStation;
-                    NavigationService.Navigate(new Uri("/StationPlayer.xaml", UriKind.Relative));
+                    NavigationService.Navigate(new Uri("/Views/StationPlayer.xaml", UriKind.Relative));
                 }
             }
 
@@ -145,12 +145,12 @@ namespace Beem.Views
 
         private void btnAbout_Click(object sender, EventArgs e)
         {
-            NavigationService.Navigate(new Uri("/AboutPage.xaml", UriKind.Relative));
+            NavigationService.Navigate(new Uri("/Views/AboutPage.xaml", UriKind.Relative));
         }
 
         private void btnSettings_Click(object sender, EventArgs e)
         {
-            NavigationService.Navigate(new Uri("/SettingsPage.xaml", UriKind.Relative));
+            NavigationService.Navigate(new Uri("/Views/SettingsPage.xaml", UriKind.Relative));
         }
 
         private void btnPlay_Click(object sender, EventArgs e)
@@ -168,7 +168,7 @@ namespace Beem.Views
             FrameworkElement tapStack = (FrameworkElement)sender;
             Station currentStation = (Station)tapStack.Tag;
             CoreViewModel.Instance.CurrentStation = currentStation;
-            NavigationService.Navigate(new Uri("/StationPlayer.xaml", UriKind.Relative));
+            NavigationService.Navigate(new Uri("/Views/StationPlayer.xaml", UriKind.Relative));
         }
 
         private void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -219,7 +219,7 @@ namespace Beem.Views
         {
             if (CoreViewModel.Instance.CurrentStation != null)
             {
-                NavigationService.Navigate(new Uri("/StationPlayer.xaml", UriKind.Relative));
+                NavigationService.Navigate(new Uri("/Views/StationPlayer.xaml", UriKind.Relative));
             }
             else
             {
@@ -229,7 +229,7 @@ namespace Beem.Views
                 }
                 else
                 {
-                    NavigationService.Navigate(new Uri("/StationPlayer.xaml", UriKind.Relative));
+                    NavigationService.Navigate(new Uri("/Views/StationPlayer.xaml", UriKind.Relative));
                 }
             }
         }
