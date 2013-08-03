@@ -93,6 +93,19 @@ namespace Beem.ViewModels
                 SetProperty(ref _microsoftAccountImage, value);
             }
         }
+
+        private KeyContainer _apiKeys;
+        public KeyContainer ApiKeys
+        {
+            get
+            {
+                return _apiKeys;
+            }
+            set
+            {
+                SetProperty(ref _apiKeys, value);
+            }
+        }
     }
 }
 

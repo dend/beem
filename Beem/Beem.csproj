@@ -164,7 +164,6 @@
     <Compile Include="Utility\StationManager.cs" />
     <Compile Include="Utility\StringHelper.cs" />
     <Compile Include="ViewModels\CoreViewModel.cs" />
-    <Compile Include="ViewModels\KeyContainerViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="ViewModels\PlaybackPageViewModel.cs" />
   </ItemGroup>
