@@ -1,6 +1,10 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:c="clr-namespace:Beem.ViewModels">
+    xmlns:v="clr-namespace:Beem.ViewModels">
     
+    <v:CoreViewModel x:Name="CoreViewModel" />
+    <v:KeyContainerViewModel x:Name="KeyContainerViewModel" />
+    <v:MainPageViewModel x:Name="MainPageViewModel" />
+    <v:PlaybackPageViewModel x:Name="PlaybackPageViewModel" />
 </ResourceDictionary>

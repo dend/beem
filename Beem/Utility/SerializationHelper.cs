@@ -3,7 +3,7 @@ using System.Xml.Serialization;
 
 namespace Beem.Utility
 {
-    public static class SerializationHelper
+    public class SerializationHelper
     {
         public static T GetObjectFromString<T>(string xmlContent)
         {

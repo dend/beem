@@ -1,5 +1,6 @@
 ﻿using Microsoft.Phone.Shell;
 using Coding4Fun.Toolkit.Storage;
+using Beem.ViewModels;
 
 namespace Beem.Settings
 {
@@ -7,11 +8,11 @@ namespace Beem.Settings
     {
         public static bool AttemptToLoadSettings()
         {
-            Binder.Instance.CurrentAppSettings = Serialize.Open<BeemSettings>("settings.xml");
+            CoreViewModel.Instance.CurrentAppSettings = Serialize.Open<BeemSettings>("settings.xml");
 
-            if (Binder.Instance.CurrentAppSettings.FirstLaunchFlag)
+            if (CoreViewModel.Instance.CurrentAppSettings.FirstLaunchFlag)
             {
-                if (Binder.Instance.CurrentAppSettings.CanRunUnderLockScreen == true)
+                if (CoreViewModel.Instance.CurrentAppSettings.CanRunUnderLockScreen == true)
                     PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Enabled;
                 else
                     PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
@@ -26,7 +27,7 @@ namespace Beem.Settings
 
         public static void StoreSettings()
         {
-            Serialize.Save("settings.xml", Binder.Instance.CurrentAppSettings);
+            Serialize.Save("settings.xml", CoreViewModel.Instance.CurrentAppSettings);
         }
 
     }

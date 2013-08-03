@@ -1,5 +1,6 @@
 ﻿using Beem.Core.Models;
 using Beem.Settings;
+using Beem.ViewModels;
 using Coding4Fun.Toolkit.Storage;
 using Microsoft.Phone.BackgroundAudio;
 using Microsoft.Phone.Controls;
@@ -29,7 +30,7 @@ namespace Beem
         {
             if (!isPageLoading)
             {
-                Binder.Instance.CurrentAppSettings.CanRunUnderLockScreen = true;
+                CoreViewModel.Instance.CurrentAppSettings.CanRunUnderLockScreen = true;
 
                 StoreAndAlert();
             }
@@ -52,7 +53,7 @@ namespace Beem
         {
             if (!isPageLoading)
             {
-                Binder.Instance.CurrentAppSettings.CanRunUnderLockScreen = false;
+                CoreViewModel.Instance.CurrentAppSettings.CanRunUnderLockScreen = false;
                 StoreAndAlert();
             }
             else
@@ -78,7 +79,7 @@ namespace Beem
                         foreach (string name in names)
                             file.DeleteFile("/Music/" + name);
 
-                        Binder.Instance.Recorded = new System.Collections.ObjectModel.ObservableCollection<string>();
+                        MainPageViewModel.Instance.Recorded = new System.Collections.ObjectModel.ObservableCollection<string>();
                     }
                 }
             }
@@ -88,7 +89,7 @@ namespace Beem
         {
             if (!isPageLoading)
             {
-                Binder.Instance.CurrentAppSettings.ScrobbleOnLaunch = false;
+                CoreViewModel.Instance.CurrentAppSettings.ScrobbleOnLaunch = false;
                 StoreAndAlert(false);
             }
             else
@@ -101,7 +102,7 @@ namespace Beem
         {
             if (!isPageLoading)
             {
-                Binder.Instance.CurrentAppSettings.ScrobbleOnLaunch = true;
+                CoreViewModel.Instance.CurrentAppSettings.ScrobbleOnLaunch = true;
                 StoreAndAlert(false);
             }
             else
@@ -131,7 +132,7 @@ namespace Beem
 
                     if (response != null)
                     {
-                        Binder.Instance.CurrentAppSettings.Session = response.Session;
+                        CoreViewModel.Instance.CurrentAppSettings.Session = response.Session;
                         SettingsManager.StoreSettings();
                     }
                     else
@@ -147,8 +148,8 @@ namespace Beem
             if (MessageBox.Show("Are you sure you want to deauthenticate Beem from using Last.fm?",
                 "Beem", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
             {
-                Binder.Instance.CurrentAppSettings.ScrobbleOnLaunch = false;
-                Binder.Instance.CurrentAppSettings.Session = new LastFMClient.LastFmSession();
+                CoreViewModel.Instance.CurrentAppSettings.ScrobbleOnLaunch = false;
+                CoreViewModel.Instance.CurrentAppSettings.Session = new LastFMClient.LastFmSession();
                 StoreAndAlert(false);
             }
         }
@@ -174,10 +175,10 @@ namespace Beem
                     }
                     else
                     {
-                        Binder.Instance.DISettings.IsPremiumEnabled = true;
-                        Binder.Instance.DISettings.PremiumKey = txtKey.Text;
+                        CoreViewModel.Instance.DISettings.IsPremiumEnabled = true;
+                        CoreViewModel.Instance.DISettings.PremiumKey = txtKey.Text;
 
-                        Serialize.Save("di.xml", Binder.Instance.DISettings);
+                        Serialize.Save("di.xml", CoreViewModel.Instance.DISettings);
                     }
                 }
                 else
@@ -189,15 +190,15 @@ namespace Beem
             {
                 if (MessageBox.Show("Are you sure you want to deauthorize your DI.FM Premium key?", "Beem", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
                 {
-                    Binder.Instance.DISettings = new DISettingsCache();
-                    Serialize.Save("di.xml", Binder.Instance.DISettings);
+                    CoreViewModel.Instance.DISettings = new DISettingsCache();
+                    Serialize.Save("di.xml", CoreViewModel.Instance.DISettings);
                 }
             }
         }
 
         private void SaveDISettings(object sender, RoutedEventArgs e)
         {
-            Serialize.Save("di.xml", Binder.Instance.DISettings);
+            Serialize.Save("di.xml", CoreViewModel.Instance.DISettings);
         }
     }
 }

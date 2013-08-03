@@ -2,6 +2,7 @@
 using System.Windows.Media;
 using System.Windows.Data;
 using Beem.Core.Models;
+using Beem.ViewModels;
 
 namespace Beem.Converters
 {
@@ -9,7 +10,7 @@ namespace Beem.Converters
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            int ival = Binder.Instance.CurrentStation.TrackList.IndexOf((Track)value);
+            int ival = CoreViewModel.Instance.CurrentStation.TrackList.IndexOf((Track)value);
 
             if (ival % 2 == 0)
             {

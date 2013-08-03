@@ -1,5 +1,6 @@
 ﻿using Beem.Core.Models;
 using Beem.LastFMClient;
+using Beem.ViewModels;
 using Coding4Fun.Toolkit.Storage;
 using Microsoft.Live;
 using Microsoft.Phone.Controls;
@@ -35,7 +36,7 @@ namespace Beem
         private void Application_Launching(object sender, LaunchingEventArgs e)
         {
             // Attempt to open the DI.FM settings.
-            Binder.Instance.DISettings = Serialize.Open<DISettingsCache>("di.xml");
+            CoreViewModel.Instance.DISettings = Serialize.Open<DISettingsCache>("di.xml");
         }
 
         private void Application_Activated(object sender, ActivatedEventArgs e)
@@ -45,10 +46,10 @@ namespace Beem
 
         private void Application_Deactivated(object sender, DeactivatedEventArgs e)
         {
-            if (Binder.Instance.CurrentStation != null)
+            if (CoreViewModel.Instance.CurrentStation != null)
                 Utility.StationManager.SerializeCurrentStation();
 
-            Binder.Instance.IsRecording = false;
+            PlaybackPageViewModel.Instance.IsRecording = false;
         }
 
         private void Application_Closing(object sender, ClosingEventArgs e)
@@ -79,8 +80,8 @@ namespace Beem
             }
             else
             {
-                Binder.Instance.MicrosoftAccountImage = "/Images/stock_user.png";
-                Binder.Instance.MicrosoftAccountName = "no Microsoft Account connected";
+                CoreViewModel.Instance.MicrosoftAccountImage = "/Images/stock_user.png";
+                CoreViewModel.Instance.MicrosoftAccountName = "no Microsoft Account connected";
                 MicrosoftAccountClient = null;
             }
         }
@@ -96,13 +97,13 @@ namespace Beem
                     {
                         if (e.Result["first_name"] != null && e.Result["last_name"] != null)
                         {
-                            Binder.Instance.MicrosoftAccountName = e.Result["first_name"].ToString() + " " + e.Result["last_name"].ToString();
+                            CoreViewModel.Instance.MicrosoftAccountName = e.Result["first_name"].ToString() + " " + e.Result["last_name"].ToString();
                             MicrosoftAccountClient.GetAsync("me/picture", null);
                         }
                     }
                     else if (e.Result.ContainsKey("location"))
                     {
-                        Binder.Instance.MicrosoftAccountImage = e.Result["location"].ToString();
+                        CoreViewModel.Instance.MicrosoftAccountImage = e.Result["location"].ToString();
                     }
                 }
             }

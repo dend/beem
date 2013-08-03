@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using Beem.ViewModels;
+using System.IO;
 using System.IO.IsolatedStorage;
 
 namespace Beem.Utility
@@ -8,18 +9,18 @@ namespace Beem.Utility
         public static void GetRecords()
         {
 
-                IsolatedStorageFile file = IsolatedStorageFile.GetUserStoreForApplication();
+            IsolatedStorageFile file = IsolatedStorageFile.GetUserStoreForApplication();
 
             if (file.DirectoryExists("/Music"))
             {
                 string[] fileNames = file.GetFileNames("/Music/*");
-                Binder.Instance.Recorded.Clear();
+                MainPageViewModel.Instance.Recorded.Clear();
 
                 if (fileNames.Length != 0)
                 {
                     foreach (string name in fileNames)
                     {
-                        Binder.Instance.Recorded.Add(name);
+                        MainPageViewModel.Instance.Recorded.Add(name);
                     }
                 }
             }

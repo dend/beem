@@ -3,6 +3,7 @@ using Beem.Core;
 using Beem.Core.Models;
 using Beem.Settings;
 using Beem.Utility;
+using Beem.ViewModels;
 using Coding4Fun.Toolkit.Controls;
 using Coding4Fun.Toolkit.Storage;
 using Microsoft.Devices;
@@ -52,7 +53,7 @@ namespace Beem
 
                     SettingsManager.AttemptToLoadSettings();
 
-                    Utility.StationManager.DeserializeFavorites();
+                    MainPageViewModel.Instance.FavoriteStations = Serialize.Open<ObservableCollection<Station>>("fav.xml");
 
                     List<Station> stations = (await MobileServiceClientHelper.GetAllStations()).ToList();
                     if (stations != null)
@@ -64,16 +65,16 @@ namespace Beem
 
                         // after all, I need this because the user might do
                         // "station hopping"
-                        Binder.Instance.Stations = new System.Collections.ObjectModel.ObservableCollection<Station>(stations);
+                        MainPageViewModel.Instance.Stations = new System.Collections.ObjectModel.ObservableCollection<Station>(stations);
 
                         Station currentStation = (from c in
-                                                      Binder.Instance.Stations
+                                                      MainPageViewModel.Instance.Stations
                                                   where c.JSONID == station
                                                   select c).Single();
 
-                        Binder.Instance.CurrentStation = currentStation;
+                        CoreViewModel.Instance.CurrentStation = currentStation;
 
-                        imgFave.Source = FavoriteImageSetter.GetImage(Binder.Instance.CurrentStation);
+                        imgFave.Source = FavoriteImageSetter.GetImage(CoreViewModel.Instance.CurrentStation);
 
                         CheckCurrentPlayingState();
 
@@ -109,8 +110,8 @@ namespace Beem
             StreamResourceInfo localImage = Application.GetResourceStream(new Uri("Images/beem_media.jpg", UriKind.Relative));
             item.ImageStream = localImage.Stream;
             item.Source = "";
-            item.Title = Binder.Instance.CurrentStation.Name;
-            item.PlayerContext.Add("DI.FM", Binder.Instance.CurrentStation.Name);
+            item.Title = CoreViewModel.Instance.CurrentStation.Name;
+            item.PlayerContext.Add("DI.FM", CoreViewModel.Instance.CurrentStation.Name);
             MediaHistory.Instance.NowPlaying = item;
 
             localImage = Application.GetResourceStream(new Uri("Images/beem_media_micro.jpg", UriKind.Relative));
@@ -125,25 +126,25 @@ namespace Beem
                 // Download the track list first, so that I can manipulate the data
                 // to be passed to the player.
                 TrackListDownloader downloader = new TrackListDownloader();
-                var trackList = await downloader.GetTracksForStation(Binder.Instance.CurrentStation.JSONID);
-                Binder.Instance.CurrentStation.NowPlaying = trackList.First();
+                var trackList = await downloader.GetTracksForStation(CoreViewModel.Instance.CurrentStation.JSONID);
+                CoreViewModel.Instance.CurrentStation.NowPlaying = trackList.First();
                 trackList.Remove(trackList.First());
 
-                Binder.Instance.CurrentStation.TrackList = new ObservableCollection<Track>(trackList);
+                CoreViewModel.Instance.CurrentStation.TrackList = new ObservableCollection<Track>(trackList);
 
                 // The first track in the collection tells what's playing now. It does not
                 // need to be in the track history
 
                 // Also make sure that we scrobble the track to Last.fm if necessary.
-                if (Binder.Instance.CurrentAppSettings.ScrobbleOnLaunch)
+                if (CoreViewModel.Instance.CurrentAppSettings.ScrobbleOnLaunch)
                 {
                     ScrobbleCurrentTrack(false);
                 }
 
                 if (BackgroundAudioPlayer.Instance.Track != null)
                 {
-                    if (Binder.Instance.CurrentStation != null &&
-                        BackgroundAudioPlayer.Instance.Track.Title != Binder.Instance.CurrentStation.NowPlaying.FullTrackName)
+                    if (CoreViewModel.Instance.CurrentStation != null &&
+                        BackgroundAudioPlayer.Instance.Track.Title != CoreViewModel.Instance.CurrentStation.NowPlaying.FullTrackName)
                     {
                         SetAudioTrack();
                     }
@@ -170,20 +171,20 @@ namespace Beem
             {
                 Uri stationLocation;
 
-                if (!Binder.Instance.DISettings.IsPremiumEnabled)
+                if (!CoreViewModel.Instance.DISettings.IsPremiumEnabled)
                 {
-                    stationLocation = new Uri(Binder.Instance.CurrentStation.Location);
+                    stationLocation = new Uri(CoreViewModel.Instance.CurrentStation.Location);
                 }
                 else
                 {
-                    stationLocation = new Uri(Binder.Instance.CurrentStation.PremiumLocation + "?" + Binder.Instance.DISettings.PremiumKey);
+                    stationLocation = new Uri(CoreViewModel.Instance.CurrentStation.PremiumLocation + "?" + CoreViewModel.Instance.DISettings.PremiumKey);
                 }
 
                 AudioTrack track = new AudioTrack(stationLocation,
-                    Binder.Instance.CurrentStation.NowPlaying.FullTrackName,
-                    Binder.Instance.CurrentStation.Name,
+                    CoreViewModel.Instance.CurrentStation.NowPlaying.FullTrackName,
+                    CoreViewModel.Instance.CurrentStation.Name,
                     string.Empty,
-                    new Uri(Binder.Instance.CurrentStation.Image), null, EnabledPlayerControls.All);
+                    new Uri(CoreViewModel.Instance.CurrentStation.Image), null, EnabledPlayerControls.All);
 
 
                 BackgroundAudioPlayer.Instance.Track = track;
@@ -230,23 +231,23 @@ namespace Beem
             try
             {
                 Station station = StationNavigator.GetStationByName(BackgroundAudioPlayer.Instance.Track.Artist,
-                    Binder.Instance.Stations);
+                    MainPageViewModel.Instance.Stations);
 
-                if (Binder.Instance.CurrentStation != station)
+                if (CoreViewModel.Instance.CurrentStation != station)
                 {
                     // Since the station has switched, it makes sense to stop 
                     // the recording and prompt the user to enter a name for the
                     // recorded track.
-                    if (Binder.Instance.IsRecording)
+                    if (PlaybackPageViewModel.Instance.IsRecording)
                         StopRecording();
 
-                    Binder.Instance.CurrentStation = station;
+                    CoreViewModel.Instance.CurrentStation = station;
                     TrackListDownloader downloader = new TrackListDownloader();
 
                     var result = await downloader.GetTracksForStation(station.JSONID);
-                    Binder.Instance.CurrentStation.NowPlaying = result.First();
+                    CoreViewModel.Instance.CurrentStation.NowPlaying = result.First();
                     result.Remove(result.First());
-                    Binder.Instance.CurrentStation.TrackList = new ObservableCollection<Track>(result);
+                    CoreViewModel.Instance.CurrentStation.TrackList = new ObservableCollection<Track>(result);
                 }
 
                 if (BackgroundAudioPlayer.Instance.PlayerState == PlayState.TrackReady)
@@ -262,12 +263,12 @@ namespace Beem
 
         private void imgFave_Loaded(object sender, RoutedEventArgs e)
         {
-            ((Image)sender).Source = Utility.FavoriteImageSetter.GetImage(Binder.Instance.CurrentStation);
+            ((Image)sender).Source = Utility.FavoriteImageSetter.GetImage(CoreViewModel.Instance.CurrentStation);
         }
 
         private void btnPrevious_Click(object sender, RoutedEventArgs e)
         {
-            if (!Binder.Instance.IsRecording)
+            if (!PlaybackPageViewModel.Instance.IsRecording)
             {
                 NavigateToPreviousStation();
             }
@@ -279,7 +280,7 @@ namespace Beem
 
         private void btnNext_Click(object sender, RoutedEventArgs e)
         {
-            if (!Binder.Instance.IsRecording)
+            if (!PlaybackPageViewModel.Instance.IsRecording)
             {
                 NavigateToNextStation();
             }
@@ -310,8 +311,8 @@ namespace Beem
         {
             try
             {
-                Station station = StationNavigator.GetPreviousStation(Binder.Instance.CurrentStation.Name,
-                    Binder.Instance.Stations.ToList());
+                Station station = StationNavigator.GetPreviousStation(CoreViewModel.Instance.CurrentStation.Name,
+                    MainPageViewModel.Instance.Stations.ToList());
 
                 if (station == null)
                 {
@@ -319,8 +320,8 @@ namespace Beem
                 }
                 else
                 {
-                    Binder.Instance.CurrentStation = station;
-                    imgFave.Source = Utility.FavoriteImageSetter.GetImage(Binder.Instance.CurrentStation);
+                    CoreViewModel.Instance.CurrentStation = station;
+                    imgFave.Source = Utility.FavoriteImageSetter.GetImage(CoreViewModel.Instance.CurrentStation);
                     CheckCurrentPlayingState();
                 }
             }
@@ -335,8 +336,8 @@ namespace Beem
         {
             try
             {
-                Station station = StationNavigator.GetNextStation(Binder.Instance.CurrentStation.Name,
-                    Binder.Instance.Stations.ToList());
+                Station station = StationNavigator.GetNextStation(CoreViewModel.Instance.CurrentStation.Name,
+                    MainPageViewModel.Instance.Stations.ToList());
 
                 if (station == null)
                 {
@@ -344,8 +345,8 @@ namespace Beem
                 }
                 else
                 {
-                    Binder.Instance.CurrentStation = station;
-                    imgFave.Source = Utility.FavoriteImageSetter.GetImage(Binder.Instance.CurrentStation);
+                    CoreViewModel.Instance.CurrentStation = station;
+                    imgFave.Source = Utility.FavoriteImageSetter.GetImage(CoreViewModel.Instance.CurrentStation);
                     CheckCurrentPlayingState();
                 }
             }
@@ -363,9 +364,9 @@ namespace Beem
 
         private void StartRecording()
         {
-            if (Binder.Instance.CurrentStation.NowPlaying != null)
+            if (CoreViewModel.Instance.CurrentStation.NowPlaying != null)
             {
-                if (Binder.Instance.CurrentAppSettings.ShowRecordingAlert)
+                if (CoreViewModel.Instance.CurrentAppSettings.ShowRecordingAlert)
                 {
                     CheckBox box = new CheckBox();
                     box.Content = "Don't show this again.";
@@ -385,7 +386,7 @@ namespace Beem
                             {
                                 if (box.IsChecked == true)
                                 {
-                                    Binder.Instance.CurrentAppSettings.ShowRecordingAlert = false;
+                                    CoreViewModel.Instance.CurrentAppSettings.ShowRecordingAlert = false;
                                     SettingsManager.StoreSettings();
                                 }
 
@@ -404,12 +405,12 @@ namespace Beem
 
         void InitiateRecordingProcess()
         {
-            TrackName = Binder.Instance.CurrentStation.NowPlaying.FullTrackName.Replace(" ", "_");
-            Binder.Instance.RecordingContents = new MemoryStream();
+            TrackName = CoreViewModel.Instance.CurrentStation.NowPlaying.FullTrackName.Replace(" ", "_");
+            PlaybackPageViewModel.Instance.RecordingContents = new MemoryStream();
 
-            Binder.Instance.IsRecording = true;
+            PlaybackPageViewModel.Instance.IsRecording = true;
 
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Binder.Instance.CurrentStation.Location);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(CoreViewModel.Instance.CurrentStation.Location);
             request.AllowReadStreamBuffering = false;
             request.Method = "GET";
             request.BeginGetResponse(new AsyncCallback(GetShoutAsync), request);
@@ -427,10 +428,10 @@ namespace Beem
                 byte[] data = new byte[4096];
                 int read;
 
-                while ((read = r.Read(data, 0, data.Length)) > 0 && Binder.Instance.IsRecording)
+                while ((read = r.Read(data, 0, data.Length)) > 0 && PlaybackPageViewModel.Instance.IsRecording)
                 {
-                    Binder.Instance.RecordingContents.Write(data, 0, read);
-                    Binder.Instance.RecordingLength = Convert.ToInt32(Binder.Instance.RecordingContents.Length / 1024);
+                    PlaybackPageViewModel.Instance.RecordingContents.Write(data, 0, read);
+                    PlaybackPageViewModel.Instance.RecordingLength = Convert.ToInt32(PlaybackPageViewModel.Instance.RecordingContents.Length / 1024);
                 }
             }
             catch
@@ -440,7 +441,7 @@ namespace Beem
                         MessageBox.Show("There was a problem recording this stream. Please check your Internet connection. If you are recording a DI.FM Premium stream, make sure that your key is valid",
                             "Beem", MessageBoxButton.OK);
                     });
-                Binder.Instance.IsRecording = false;
+                PlaybackPageViewModel.Instance.IsRecording = false;
             }
         }
 
@@ -451,7 +452,7 @@ namespace Beem
 
         private void StopRecording()
         {
-            Binder.Instance.IsRecording = false;
+            PlaybackPageViewModel.Instance.IsRecording = false;
 
             DisplaySavePrompt();
         }
@@ -527,7 +528,7 @@ namespace Beem
                 }
             }
 
-            Binder.Instance.RecordingLength = 0;
+            PlaybackPageViewModel.Instance.RecordingLength = 0;
         }
 
 
@@ -535,8 +536,8 @@ namespace Beem
         {
             using (var writer = new IsolatedStorageFileStream("/Music/" + fileName, FileMode.Create, file))
             {
-                Binder.Instance.RecordingContents.Position = 0;
-                byte[] data = Binder.Instance.RecordingContents.ToArray();
+                PlaybackPageViewModel.Instance.RecordingContents.Position = 0;
+                byte[] data = PlaybackPageViewModel.Instance.RecordingContents.ToArray();
                 writer.Write(data, 0, data.Length);
             }
         }
@@ -578,7 +579,7 @@ namespace Beem
 
         protected override void OnBackKeyPress(System.ComponentModel.CancelEventArgs e)
         {
-            if (Binder.Instance.IsRecording)
+            if (PlaybackPageViewModel.Instance.IsRecording)
             {
                 if (MessageBox.Show("You have a recording in progress. Do you want to stop it before leaving this?", "Beem", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
                 {
@@ -599,20 +600,20 @@ namespace Beem
 
         void ScrobbleCurrentTrack(bool showNotification = true)
         {
-            if (Binder.Instance.CurrentAppSettings.Session != null &&
-                !string.IsNullOrEmpty(Binder.Instance.CurrentAppSettings.Session.Key))
+            if (CoreViewModel.Instance.CurrentAppSettings.Session != null &&
+                !string.IsNullOrEmpty(CoreViewModel.Instance.CurrentAppSettings.Session.Key))
             {
                 Dispatcher.BeginInvoke(() =>
                     {
                         try
                         {
-                            string trackArtist = string.IsNullOrEmpty(Binder.Instance.CurrentStation.NowPlaying.Artist) ?
-                                Binder.Instance.CurrentStation.Name : Binder.Instance.CurrentStation.NowPlaying.Artist;
+                            string trackArtist = string.IsNullOrEmpty(CoreViewModel.Instance.CurrentStation.NowPlaying.Artist) ?
+                                CoreViewModel.Instance.CurrentStation.Name : CoreViewModel.Instance.CurrentStation.NowPlaying.Artist;
 
                             App.LFMClient.ScrobbleTrack(
                             trackArtist,
-                            Binder.Instance.CurrentStation.NowPlaying.Title,
-                            Binder.Instance.CurrentAppSettings.Session.Key,
+                            CoreViewModel.Instance.CurrentStation.NowPlaying.Title,
+                            CoreViewModel.Instance.CurrentAppSettings.Session.Key,
                             (data) =>
                             {
                                 if (showNotification)
@@ -645,8 +646,8 @@ namespace Beem
         {
             try
             {
-                SearchMarketplace(string.Format("{0} {1}", Binder.Instance.CurrentStation.NowPlaying.Artist,
-                    Binder.Instance.CurrentStation.NowPlaying.Title));
+                SearchMarketplace(string.Format("{0} {1}", CoreViewModel.Instance.CurrentStation.NowPlaying.Artist,
+                    CoreViewModel.Instance.CurrentStation.NowPlaying.Title));
             }
             catch
             {
@@ -656,13 +657,13 @@ namespace Beem
 
         private void btnPin_Click(object sender, RoutedEventArgs e)
         {
-            Utility.StationManager.Pin(Binder.Instance.CurrentStation);
+            Utility.StationManager.Pin(CoreViewModel.Instance.CurrentStation);
         }
 
         private void btnShare_Click(object sender, RoutedEventArgs e)
         {
             // The station is null if there was a problem with the Internet connection.
-            if (Binder.Instance.CurrentStation.NowPlaying != null)
+            if (CoreViewModel.Instance.CurrentStation.NowPlaying != null)
             {
                 Guide.BeginShowMessageBox("Beem", "Do you want to share the track through the Windows Phone social channels or Last.fm?",
                     new List<string> { "windows phone", "last.fm" }, 0, MessageBoxIcon.None, (res) =>
@@ -672,7 +673,7 @@ namespace Beem
                             {
                                 ShareLinkTask shareLink = new ShareLinkTask();
                                 shareLink.LinkUri = new Uri("http://bitly.com/BeemPlus");
-                                shareLink.Message = "Listening to " + Binder.Instance.CurrentStation.NowPlaying.FullTrackName + " with #BeemWP.";
+                                shareLink.Message = "Listening to " + CoreViewModel.Instance.CurrentStation.NowPlaying.FullTrackName + " with #BeemWP.";
                                 shareLink.Show();
                             }
                             else if (result == 1)
@@ -689,24 +690,24 @@ namespace Beem
 
         private void btnFavorite_Click(object sender, RoutedEventArgs e)
         {
-            if (Utility.StationManager.CheckIfExists(Binder.Instance.CurrentStation))
+            if (Utility.StationManager.CheckIfExists(CoreViewModel.Instance.CurrentStation))
             {
-                Utility.StationManager.Remove(Binder.Instance.CurrentStation);
+                Utility.StationManager.Remove(CoreViewModel.Instance.CurrentStation);
             }
             else
             {
-                Binder.Instance.FavoriteStations.Add(Binder.Instance.CurrentStation);
+                MainPageViewModel.Instance.FavoriteStations.Add(CoreViewModel.Instance.CurrentStation);
             }
 
             Utility.StationManager.SerializeFavorites();
-            imgFave.Source = Utility.FavoriteImageSetter.GetImage(Binder.Instance.CurrentStation);
+            imgFave.Source = Utility.FavoriteImageSetter.GetImage(CoreViewModel.Instance.CurrentStation);
         }
 
         private void btnCopy_Click(object sender, RoutedEventArgs e)
         {
-            if (Binder.Instance.CurrentStation != null && Binder.Instance.CurrentStation.NowPlaying != null)
+            if (CoreViewModel.Instance.CurrentStation != null && CoreViewModel.Instance.CurrentStation.NowPlaying != null)
             {
-                Clipboard.SetText(Binder.Instance.CurrentStation.NowPlaying.FullTrackName);
+                Clipboard.SetText(CoreViewModel.Instance.CurrentStation.NowPlaying.FullTrackName);
                 MessageBox.Show("Track name copied to clipboard!", "Beem", MessageBoxButton.OK);
             }
             else

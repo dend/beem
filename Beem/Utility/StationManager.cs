@@ -1,4 +1,6 @@
 ﻿using Beem.Core.Models;
+using Beem.ViewModels;
+using Coding4Fun.Toolkit.Storage;
 using Microsoft.Phone.Shell;
 using System;
 using System.Collections.ObjectModel;
@@ -19,7 +21,7 @@ namespace Beem.Utility
 
                 try
                 {
-                    Station verifier = (from c in Binder.Instance.FavoriteStations where c.Name == name select c).Single();
+                    Station verifier = (from c in MainPageViewModel.Instance.FavoriteStations where c.Name == name select c).Single();
                     return true;
                 }
                 catch
@@ -35,8 +37,8 @@ namespace Beem.Utility
         {
             string name = station.Name;
 
-            Station verifier = (from c in Binder.Instance.FavoriteStations where c.Name == name select c).Single();
-            Binder.Instance.FavoriteStations.Remove(verifier);
+            Station verifier = (from c in MainPageViewModel.Instance.FavoriteStations where c.Name == name select c).Single();
+            MainPageViewModel.Instance.FavoriteStations.Remove(verifier);
         }
 
         public static void Pin(Station station)
@@ -60,59 +62,30 @@ namespace Beem.Utility
             }
         }
 
-        private static void Serialize(string fileName, object source)
-        {
-            var userStore = IsolatedStorageFile.GetUserStoreForApplication();
-
-            using (var stream = new IsolatedStorageFileStream(fileName, FileMode.Create, userStore))
-            {
-                XmlSerializer serializer = new XmlSerializer(source.GetType());
-                serializer.Serialize(stream, source);
-            }
-        }
 
         public static void SerializeCurrentStation()
         {
-            Serialize("current.xml", Binder.Instance.CurrentStation);
+            Serialize.Save("current.xml", CoreViewModel.Instance.CurrentStation);
         }
 
         public static void DeserializeCurrentStation()
         {
-            Binder.Instance.CurrentStation = new Station();
+            CoreViewModel.Instance.CurrentStation = new Station();
+
             var userStore = IsolatedStorageFile.GetUserStoreForApplication();
             if (userStore.FileExists("current.xml"))
             {
                 using (var stream = new IsolatedStorageFileStream("current.xml", FileMode.Open, userStore))
                 {
-                    XmlSerializer serializer = new XmlSerializer(Binder.Instance.CurrentStation.GetType());
-                    Binder.Instance.CurrentStation = (Station)serializer.Deserialize(stream);
+                    XmlSerializer serializer = new XmlSerializer(CoreViewModel.Instance.CurrentStation.GetType());
+                    CoreViewModel.Instance.CurrentStation = (Station)serializer.Deserialize(stream);
                 }
             }
         }
 
         public static void SerializeFavorites()
         {
-            Serialize("fav.xml", Binder.Instance.FavoriteStations);
-        }
-
-        public static void DeserializeFavorites()
-        {
-            Binder.Instance.FavoriteStations = new ObservableCollection<Station>();
-
-            var userStore = IsolatedStorageFile.GetUserStoreForApplication();
-            if (userStore.FileExists("fav.xml"))
-            {
-                using (var stream = new IsolatedStorageFileStream("fav.xml", FileMode.Open, userStore))
-                {
-                    XmlSerializer serializer = new XmlSerializer(Binder.Instance.FavoriteStations.GetType());
-                    var stations = (ObservableCollection<Station>)serializer.Deserialize(stream);
-
-                    foreach (Station station in stations)
-                    {
-                        Binder.Instance.FavoriteStations.Add(station);
-                    }
-                }
-            }
+            Serialize.Save("fav.xml", MainPageViewModel.Instance.FavoriteStations);
         }
     }
 }

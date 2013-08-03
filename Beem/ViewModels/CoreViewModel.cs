@@ -6,6 +6,29 @@ namespace Beem.ViewModels
 {
     public class CoreViewModel : BindableBase
     {
+        static CoreViewModel instance = null;
+        static readonly object padlock = new object();
+
+        public CoreViewModel()
+        {
+
+        }
+
+        public static CoreViewModel Instance
+        {
+            get
+            {
+                lock (padlock)
+                {
+                    if (instance == null)
+                    {
+                        instance = new CoreViewModel();
+                    }
+                    return instance;
+                }
+            }
+        }
+
         private DISettingsCache _diSettings;
         public DISettingsCache DISettings
         {
@@ -42,6 +65,32 @@ namespace Beem.ViewModels
             set
             {
                 SetProperty(ref _currentStation, value);
+            }
+        }
+
+        private string _microsoftAccountName;
+        public string MicrosoftAccountName
+        {
+            get
+            {
+                return _microsoftAccountName;
+            }
+            set
+            {
+                SetProperty(ref _microsoftAccountName, value);
+            }
+        }
+
+        private string _microsoftAccountImage;
+        public string MicrosoftAccountImage
+        {
+            get
+            {
+                return _microsoftAccountImage;
+            }
+            set
+            {
+                SetProperty(ref _microsoftAccountImage, value);
             }
         }
     }

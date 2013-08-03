@@ -2,6 +2,7 @@
 using Beem.Core.Models;
 using Beem.Settings;
 using Beem.Utility;
+using Beem.ViewModels;
 using Coding4Fun.Toolkit.Storage;
 using Microsoft.Live;
 using Microsoft.Phone.BackgroundAudio;
@@ -9,6 +10,7 @@ using Microsoft.Phone.Controls;
 using Microsoft.Phone.Tasks;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.IO.IsolatedStorage;
@@ -36,22 +38,22 @@ namespace Beem
             {
                 if (MessageBox.Show("Would you like Beem to run under lock screen? This way the streaming is not disrupted.", "Run Under Lock Screen", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
                 {
-                    Binder.Instance.CurrentAppSettings.CanRunUnderLockScreen = true;
+                    CoreViewModel.Instance.CurrentAppSettings.CanRunUnderLockScreen = true;
                 }
                 else
                 {
-                    Binder.Instance.CurrentAppSettings.CanRunUnderLockScreen = false;
+                    CoreViewModel.Instance.CurrentAppSettings.CanRunUnderLockScreen = false;
                 }
 
-                Binder.Instance.CurrentAppSettings.FirstLaunchFlag = true;
-                Binder.Instance.CurrentAppSettings.ShowRecordingAlert = true;
+                CoreViewModel.Instance.CurrentAppSettings.FirstLaunchFlag = true;
+                CoreViewModel.Instance.CurrentAppSettings.ShowRecordingAlert = true;
 
                 SettingsManager.StoreSettings();
             }
 
-            Utility.StationManager.DeserializeFavorites();
+            MainPageViewModel.Instance.FavoriteStations = Serialize.Open<ObservableCollection<Station>>("fav.xml");
 
-            if (Binder.Instance.Stations.Count == 0)
+            if (MainPageViewModel.Instance.Stations.Count == 0)
             {
                 LoadStations();
             }
@@ -101,15 +103,15 @@ namespace Beem
         private void HandleStationList(IEnumerable<Station> stations)
         {
 
-            Binder.Instance.Stations = new System.Collections.ObjectModel.ObservableCollection<Station>(stations);
+            MainPageViewModel.Instance.Stations = new System.Collections.ObjectModel.ObservableCollection<Station>(stations);
 
             if (!string.IsNullOrEmpty(customStationToLoad))
             {
-                Station currentStation = (from c in Binder.Instance.Stations where c.Name == customStationToLoad select c).FirstOrDefault();
+                Station currentStation = (from c in MainPageViewModel.Instance.Stations where c.Name == customStationToLoad select c).FirstOrDefault();
 
                 if (currentStation != null)
                 {
-                    Binder.Instance.CurrentStation = currentStation;
+                    CoreViewModel.Instance.CurrentStation = currentStation;
                     NavigationService.Navigate(new Uri("/StationPlayer.xaml", UriKind.Relative));
                 }
             }
@@ -130,7 +132,7 @@ namespace Beem
             Station station = ((MenuItem)sender).Tag as Station;
             if (!Utility.StationManager.CheckIfExists(station))
             {
-                Binder.Instance.FavoriteStations.Add(station);
+                MainPageViewModel.Instance.FavoriteStations.Add(station);
                 Utility.StationManager.SerializeFavorites();
             }
         }
@@ -165,7 +167,7 @@ namespace Beem
         {
             FrameworkElement tapStack = (FrameworkElement)sender;
             Station currentStation = (Station)tapStack.Tag;
-            Binder.Instance.CurrentStation = currentStation;
+            CoreViewModel.Instance.CurrentStation = currentStation;
             NavigationService.Navigate(new Uri("/StationPlayer.xaml", UriKind.Relative));
         }
 
@@ -208,14 +210,14 @@ namespace Beem
             string name = ((MenuItem)sender).Tag.ToString();
             if (MessageBox.Show("Are you sure you want to delete " + name + "?", "Delete File", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
             {
-                Binder.Instance.Recorded.Remove(name);
+                MainPageViewModel.Instance.Recorded.Remove(name);
                 IsolatedStorageFile.GetUserStoreForApplication().DeleteFile("Music/" + name);
             }
         }
 
         private void btnNowPlaying_Click(object sender, EventArgs e)
         {
-            if (Binder.Instance.CurrentStation != null)
+            if (CoreViewModel.Instance.CurrentStation != null)
             {
                 NavigationService.Navigate(new Uri("/StationPlayer.xaml", UriKind.Relative));
             }
@@ -236,12 +238,12 @@ namespace Beem
         {
             if (BackgroundAudioPlayer.Instance.Track != null)
             {
-                Station station = (from c in Binder.Instance.Stations
+                Station station = (from c in MainPageViewModel.Instance.Stations
                                    where c.Name == BackgroundAudioPlayer.Instance.Track.Artist
                                    select c).FirstOrDefault();
                 if (station != null)
                 {
-                    Binder.Instance.CurrentStation = station;
+                    CoreViewModel.Instance.CurrentStation = station;
                     return true;
                 }
                 else
@@ -259,7 +261,7 @@ namespace Beem
             {
                 if (App.MicrosoftAccountSession != null)
                 {
-                    Binder.Instance.CurrentlyUploading = ((MenuItem)sender).Tag.ToString();
+                    MainPageViewModel.Instance.CurrentlyUploading = ((MenuItem)sender).Tag.ToString();
 
                     client = new Microsoft.Live.LiveConnectClient(App.MicrosoftAccountSession);
                     client.GetCompleted += client_GetCompleted;
@@ -281,7 +283,7 @@ namespace Beem
         {
             MessageBox.Show("Upload failed. Please try again later.", "Upload", MessageBoxButton.OK);
             grdUpload.Visibility = System.Windows.Visibility.Collapsed;
-            Binder.Instance.SkyDriveUploadProgress = 0;
+            MainPageViewModel.Instance.SkyDriveUploadProgress = 0;
             ApplicationBar.IsVisible = true;
         }
 
@@ -292,7 +294,7 @@ namespace Beem
                 if (e.Result.ContainsKey("available"))
                 {
                     Int64 available = Convert.ToInt64(e.Result["available"]);
-                    byte[] data = RecordManager.GetRecordByteArray(Binder.Instance.CurrentlyUploading);
+                    byte[] data = RecordManager.GetRecordByteArray(MainPageViewModel.Instance.CurrentlyUploading);
 
                     if (available >= data.Length)
                     {
@@ -301,7 +303,7 @@ namespace Beem
                         client = new LiveConnectClient(App.MicrosoftAccountSession);
                         client.UploadCompleted += MicrosoftAccountClient_UploadCompleted;
                         client.UploadProgressChanged += MicrosoftAccountClient_UploadProgressChanged;
-                        client.UploadAsync("me/skydrive", Binder.Instance.CurrentlyUploading,
+                        client.UploadAsync("me/skydrive", MainPageViewModel.Instance.CurrentlyUploading,
                             stream, OverwriteOption.Overwrite);
                         grdUpload.Visibility = System.Windows.Visibility.Visible;
                         ApplicationBar.IsVisible = false;
@@ -321,7 +323,7 @@ namespace Beem
 
         void MicrosoftAccountClient_UploadProgressChanged(object sender, Microsoft.Live.LiveUploadProgressChangedEventArgs e)
         {
-            Binder.Instance.SkyDriveUploadProgress = e.ProgressPercentage;
+            MainPageViewModel.Instance.SkyDriveUploadProgress = e.ProgressPercentage;
         }
 
         void MicrosoftAccountClient_UploadCompleted(object sender, Microsoft.Live.LiveOperationCompletedEventArgs e)
@@ -329,7 +331,7 @@ namespace Beem
             if (e.Error == null)
             {
                 grdUpload.Visibility = System.Windows.Visibility.Collapsed;
-                Binder.Instance.SkyDriveUploadProgress = 0;
+                MainPageViewModel.Instance.SkyDriveUploadProgress = 0;
                 ApplicationBar.IsVisible = true;
             }
             else

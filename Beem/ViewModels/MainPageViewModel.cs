@@ -6,6 +6,29 @@ namespace Beem.ViewModels
 {
     public class MainPageViewModel : BindableBase
     {
+        static MainPageViewModel instance = null;
+        static readonly object padlock = new object();
+
+        public MainPageViewModel()
+        {
+
+        }
+
+        public static MainPageViewModel Instance
+        {
+            get
+            {
+                lock (padlock)
+                {
+                    if (instance == null)
+                    {
+                        instance = new MainPageViewModel();
+                    }
+                    return instance;
+                }
+            }
+        }
+
         private int _skyDriveUploadProgress;
         public int SkyDriveUploadProgress
         {
@@ -19,31 +42,6 @@ namespace Beem.ViewModels
             }
         }
 
-        private string _microsoftAccountName;
-        public string MicrosoftAccountName
-        {
-            get
-            {
-                return _microsoftAccountName;
-            }
-            set
-            {
-                SetProperty(ref _microsoftAccountName, value);
-            }
-        }
-
-        private string _microsoftAccountImage;
-        public string MicrosoftAccountImage
-        {
-            get
-            {
-                return _microsoftAccountImage;
-            }
-            set
-            {
-                SetProperty(ref _microsoftAccountImage, value);
-            }
-        }
 
         private string _currentlyUploading;
         public string CurrentlyUploading
