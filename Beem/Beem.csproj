@@ -131,7 +131,6 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Azure\MobileServicesClientHelper.cs" />
-    <Compile Include="Binder.cs" />
     <Compile Include="Converters\BoolToVisibility.cs" />
     <Compile Include="Converters\DropStateToText.cs" />
     <Compile Include="Converters\FullToSelect.cs" />
@@ -164,7 +163,10 @@
     <Compile Include="Utility\SerializationHelper.cs" />
     <Compile Include="Utility\StationManager.cs" />
     <Compile Include="Utility\StringHelper.cs" />
+    <Compile Include="ViewModels\CoreViewModel.cs" />
     <Compile Include="ViewModels\KeyContainerViewModel.cs" />
+    <Compile Include="ViewModels\MainPageViewModel.cs" />
+    <Compile Include="ViewModels\PlaybackPageViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
