@@ -28,4 +28,4 @@ Beem relies on [Windows Azure Mobile Services](http://www.windowsazure.com/en-us
 Yes, minus the API keys.
 
 ### Do you offer support for this project?
-If you want specific ideas implemented in the app itself, feel free to use the [UserVoice page](https://beem.uservoice.com/). This, of course, doesn't guarantee that the feature will be implemented, but gives you the opportunity to put the feature on my radar.
+If you want specific ideas implemented in the app itself, feel free to use the [Issues page](https://github.com/dend/beem/issues). This, of course, doesn't guarantee that the feature will be implemented, but gives you the opportunity to put the feature on my radar.
