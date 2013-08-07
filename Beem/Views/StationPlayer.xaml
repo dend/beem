@@ -13,7 +13,7 @@
     mc:Ignorable="d" d:DesignHeight="800" d:DesignWidth="480"
     shell:SystemTray.IsVisible="False"
     xmlns:c4f="clr-namespace:Coding4Fun.Toolkit.Controls;assembly=Coding4Fun.Toolkit.Controls"
-    DataContext="{Binding Path=Instance.CurrentStation,Source={StaticResource Binder}}">
+    DataContext="{Binding Path=Instance.CurrentStation,Source={StaticResource CoreViewModel}}">
 
     <phone:PhoneApplicationPage.Resources>
         <Storyboard x:Key="ScrollBoxAnimation">
@@ -40,8 +40,8 @@
                 <c4f:RoundButton x:Name="btnPrevious" Click="btnPrevious_Click" ImageSource="/Images/appbar.control.rewind.png" Margin="0,0,4,0" ButtonHeight="90" ButtonWidth="90"></c4f:RoundButton>
                 <c4f:RoundButton x:Name="btnPlay" Click="btnPlay_Click" ImageSource="/Images/appbar.control.pause.png" Margin="0,0,4,0" ButtonHeight="90" ButtonWidth="90"></c4f:RoundButton>
                 <c4f:RoundButton x:Name="btnNext" Click="btnNext_Click" ImageSource="/Images/appbar.control.fastforward.png" Margin="0,0,4,0" ButtonHeight="90" ButtonWidth="90"></c4f:RoundButton>
-                <c4f:RoundButton IsEnabled="{Binding Converter={StaticResource ReverseBoolean}, Path=Instance.IsRecording,Source={StaticResource Binder}}" x:Name="btnRecord" Click="btnRecord_Click" ImageSource="/Images/appbar.moon.full.png" Margin="0,0,4,0" ButtonHeight="90" ButtonWidth="90"></c4f:RoundButton>
-                <c4f:RoundButton IsEnabled="{Binding Path=Instance.IsRecording,Source={StaticResource Binder}}" x:Name="btnRecordStop" Click="btnRecordStop_Click" ImageSource="/Images/record.stop.png" ButtonHeight="90" ButtonWidth="90"></c4f:RoundButton>
+                <c4f:RoundButton IsEnabled="{Binding Converter={StaticResource ReverseBoolean}, Path=Instance.IsRecording,Source={StaticResource PlaybackPageViewModel}}" x:Name="btnRecord" Click="btnRecord_Click" ImageSource="/Images/appbar.moon.full.png" Margin="0,0,4,0" ButtonHeight="90" ButtonWidth="90"></c4f:RoundButton>
+                <c4f:RoundButton IsEnabled="{Binding Path=Instance.IsRecording,Source={StaticResource PlaybackPageViewModel}}" x:Name="btnRecordStop" Click="btnRecordStop_Click" ImageSource="/Images/record.stop.png" ButtonHeight="90" ButtonWidth="90"></c4f:RoundButton>
             </StackPanel>
         </Grid>
 
@@ -119,10 +119,10 @@
 
         </StackPanel>
 
-        <Grid Visibility="{Binding Path=Instance.IsRecording,Source={StaticResource Binder},Converter={StaticResource BoolToVisibility}, ConverterParameter=normal}" Grid.Row="1" Height="40" VerticalAlignment="Bottom" Width="250" HorizontalAlignment="Right" Background="Red">
-            <TextBlock Style="{StaticResource PhoneTextLargeStyle}" Foreground="White" Text="{Binding Path=Instance.RecordingLength,Source={StaticResource Binder}, Converter={StaticResource TimeSpanToString}}" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+        <Grid Visibility="{Binding Path=Instance.IsRecording,Source={StaticResource PlaybackPageViewModel},Converter={StaticResource BoolToVisibility}, ConverterParameter=normal}" Grid.Row="1" Height="40" VerticalAlignment="Bottom" Width="250" HorizontalAlignment="Right" Background="Red">
+            <TextBlock Style="{StaticResource PhoneTextLargeStyle}" Foreground="White" Text="{Binding Path=Instance.RecordingLength,Source={StaticResource PlaybackPageViewModel}, Converter={StaticResource TimeSpanToString}}" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
         </Grid>
 
-        <Border Visibility="{Binding Path=Instance.IsRecording,Source={StaticResource Binder}, Converter={StaticResource BoolToVisibility}, ConverterParameter=normal}" Grid.RowSpan="2" BorderThickness="6" BorderBrush="Red"></Border>
+        <Border Visibility="{Binding Path=Instance.IsRecording,Source={StaticResource PlaybackPageViewModel}, Converter={StaticResource BoolToVisibility}, ConverterParameter=normal}" Grid.RowSpan="2" BorderThickness="6" BorderBrush="Red"></Border>
     </Grid>
 </phone:PhoneApplicationPage>

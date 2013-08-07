@@ -15,7 +15,7 @@
     xmlns:live="clr-namespace:Microsoft.Live.Controls;assembly=Microsoft.Live.Controls"
     xmlns:controls="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls"
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
-    DataContext="{Binding Path=Instance,Source={StaticResource Binder}}">
+    DataContext="{Binding Path=Instance,Source={StaticResource CoreViewModel}}">
 
     <!--LayoutRoot is the root grid where all page content is placed-->
 
@@ -29,7 +29,7 @@
                 <Grid>
                     <!--ContentPanel - place additional content here-->
                     <StackPanel x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-                        <toolkit:ToggleSwitch IsChecked="{Binding Path=Instance.CurrentAppSettings.CanRunUnderLockScreen,Source={StaticResource Binder}}"
+                        <toolkit:ToggleSwitch IsChecked="{Binding Path=Instance.CurrentAppSettings.CanRunUnderLockScreen,Source={StaticResource CoreViewModel}}"
                                               Unchecked="ToggleSwitch_Unchecked" 
                                               Checked="ToggleSwitch_Checked" 
                                               Header="Run Under Lock Screen">
@@ -72,7 +72,7 @@
                             <TextBlock VerticalAlignment="Center" x:Name="txtMicrosoftEmail" Style="{StaticResource PhoneTextTitle3Style}" Text="{Binding MicrosoftAccountName}"></TextBlock>
                         </StackPanel>
 
-                        <live:SignInButton x:Name="btnSignIn" ClientId="" Scopes="wl.signin wl.basic wl.offline_access wl.skydrive wl.skydrive_update" Branding="Skydrive" TextType="Connect"></live:SignInButton>
+                        <live:SignInButton x:Name="btnSignIn" ClientId="{Binding Path=Instance.ApiKeys.MsaKey,Source={StaticResource CoreViewModel}}" Scopes="wl.signin wl.basic wl.offline_access wl.skydrive wl.skydrive_update" Branding="Skydrive" TextType="Connect"></live:SignInButton>
                     </StackPanel>
                 </StackPanel>
             </controls:PivotItem>
@@ -84,7 +84,7 @@
                         TextWrapping="Wrap"></TextBlock>
 
                     <StackPanel Margin="0,24,0,0" 
-                                Visibility="{Binding Path=Instance.CurrentAppSettings.Session.Key, Source={StaticResource Binder}, Converter={StaticResource StringToVisibility},ConverterParameter=notNormal}" >
+                                Visibility="{Binding Path=Instance.CurrentAppSettings.Session.Key, Source={StaticResource CoreViewModel}, Converter={StaticResource StringToVisibility},ConverterParameter=notNormal}" >
                         <TextBlock
                         Style="{StaticResource PhoneTextTitle3Style}" 
                         Text="Username:" 
@@ -99,14 +99,14 @@
                     </StackPanel>
 
                     <StackPanel Margin="0,24,0,0"
-                                Visibility="{Binding Path=Instance.CurrentAppSettings.Session.Key, Source={StaticResource Binder}, Converter={StaticResource StringToVisibility},ConverterParameter=normal}" >
+                                Visibility="{Binding Path=Instance.CurrentAppSettings.Session.Key, Source={StaticResource CoreViewModel}, Converter={StaticResource StringToVisibility},ConverterParameter=normal}" >
 
                         <toolkit:ToggleSwitch
                             x:Name="tglScrobbleOnLaunch"
-                        IsChecked="{Binding Path=Instance.CurrentAppSettings.ScrobbleOnLaunch,Source={StaticResource Binder}}" 
-                        Unchecked="tglScrobbleOnLaunch_Unchecked_1"
-                        Checked="tglScrobbleOnLaunch_Checked_1" 
-                        Header="Scrobble On Station Launch"></toolkit:ToggleSwitch>
+                            IsChecked="{Binding Path=Instance.CurrentAppSettings.ScrobbleOnLaunch,Source={StaticResource CoreViewModel}}" 
+                            Unchecked="tglScrobbleOnLaunch_Unchecked_1"
+                            Checked="tglScrobbleOnLaunch_Checked_1" 
+                            Header="Scrobble On Station Launch"></toolkit:ToggleSwitch>
 
                         <Button Content="Deauthenticate" x:Name="btnLastFmDeauth" Click="btnLastFmDeauth_Click_1"></Button>
                     </StackPanel>
