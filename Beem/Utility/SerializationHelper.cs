@@ -33,6 +33,9 @@ namespace Beem.Utility
             container.ZumoKey = (from c in keyDocument.Root.Elements()
                                         where c.Attribute("type").Value == "zumo"
                                         select c).FirstOrDefault().Attribute("value").Value;
+            container.ZumoUrl = (from c in keyDocument.Root.Elements()
+                                 where c.Attribute("type").Value == "zumourl"
+                                 select c).FirstOrDefault().Attribute("value").Value;
 
             return container;
         }

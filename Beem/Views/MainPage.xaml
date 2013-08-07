@@ -16,10 +16,11 @@
     local:TiltEffect.IsTiltEnabled="True"
     xmlns:live="clr-namespace:Microsoft.Live.Controls;assembly=Microsoft.Live.Controls"
     xmlns:slt="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" d:DesignHeight="728" d:DesignWidth="480"
-     DataContext="{Binding Path=Instance,Source={StaticResource Binder}}">
+    DataContext="{Binding Path=Instance,Source={StaticResource MainPageViewModel}}">
 
     <Grid x:Name="LayoutRoot" Background="Transparent">
-        <live:SignInButton x:Name="btnSignIn" ClientId="" Scopes="wl.signin wl.basic wl.offline_access wl.skydrive wl.skydrive_update" Branding="Skydrive" TextType="Connect" Visibility="Collapsed"></live:SignInButton>
+        <live:SignInButton x:Name="btnSignIn" ClientId="{Binding Path=Instance.ApiKeys.MsaKey,Source={StaticResource CoreViewModel}}" 
+                           Scopes="wl.signin wl.basic wl.offline_access wl.skydrive wl.skydrive_update" Branding="Skydrive" TextType="Connect" Visibility="Collapsed"></live:SignInButton>
 
         <controls:Pivot SelectionChanged="Pivot_SelectionChanged">
             <controls:Pivot.TitleTemplate>
@@ -34,7 +35,7 @@
             </controls:Pivot.Background>
             <controls:PivotItem Header="stations">
                 <Grid>
-                    <ListBox Margin="12,0,0,0" ItemsSource="{Binding Path=Instance.Stations,Source={StaticResource Binder}}">
+                    <ListBox Margin="12,0,0,0" ItemsSource="{Binding Path=Instance.Stations,Source={StaticResource MainPageViewModel}}">
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <slt:WrapPanel Width="460"/>
@@ -72,7 +73,7 @@
                 </Grid>
             </controls:PivotItem>
             <controls:PivotItem Header="favorites">
-                <ListBox ItemsSource="{Binding Path=Instance.FavoriteStations,Source={StaticResource Binder}}">
+                <ListBox ItemsSource="{Binding Path=Instance.FavoriteStations,Source={StaticResource MainPageViewModel}}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Tag="{Binding}" x:Name="stkStation" Tap="stkStation_Tap" Margin="12,0,0,12" Orientation="Horizontal">
@@ -99,7 +100,7 @@
             </controls:PivotItem>
 
             <controls:PivotItem x:Name="pvtRecorded" Header="recorded">
-                <ListBox Margin="12,0,12,0" ItemsSource="{Binding Path=Instance.Recorded,Source={StaticResource Binder}}">
+                <ListBox Margin="12,0,12,0" ItemsSource="{Binding Path=Instance.Recorded,Source={StaticResource MainPageViewModel}}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Margin="0,0,0,12" Orientation="Horizontal">

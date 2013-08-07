@@ -1,5 +1,6 @@
 ﻿using Beem.Core.Models;
 using Beem.LastFMClient;
+using Beem.Utility;
 using Beem.ViewModels;
 using Coding4Fun.Toolkit.Storage;
 using Microsoft.Live;
@@ -19,8 +20,7 @@ namespace Beem
         public static LiveConnectSession MicrosoftAccountSession;
         public static LastFmClient LFMClient;
 
-        public static MobileServiceClient AzureClient = new MobileServiceClient("",
-            "");
+        public static MobileServiceClient AzureClient;
 
         public App()
         {
@@ -37,6 +37,11 @@ namespace Beem
         {
             // Attempt to open the DI.FM settings.
             CoreViewModel.Instance.DISettings = Serialize.Open<DISettingsCache>("di.xml");
+
+            CoreViewModel.Instance.ApiKeys = SerializationHelper.GetKeys("APIKeyManifest.xml");
+
+            AzureClient = new MobileServiceClient(CoreViewModel.Instance.ApiKeys.ZumoUrl,
+            CoreViewModel.Instance.ApiKeys.ZumoKey);
         }
 
         private void Application_Activated(object sender, ActivatedEventArgs e)

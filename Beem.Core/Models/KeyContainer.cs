@@ -11,6 +11,7 @@ namespace Beem.Core.Models
         public string DiFmPremiumKey { get; set; }
         public string LastFmKey { get; set; }
         public string ZumoKey { get; set; }
+        public string ZumoUrl { get; set; }
         public string MsaKey { get; set; }
     }
 }

@@ -11,7 +11,9 @@ namespace Beem.ViewModels
 
         public MainPageViewModel()
         {
-
+            Recorded = new ObservableCollection<string>();
+            Stations = new ObservableCollection<Station>();
+            FavoriteStations = new ObservableCollection<Station>();
         }
 
         public static MainPageViewModel Instance
