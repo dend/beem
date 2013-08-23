@@ -403,7 +403,7 @@ namespace Beem.Views
             }
         }
 
-        void InitiateRecordingProcess()
+        async void InitiateRecordingProcess()
         {
             TrackName = CoreViewModel.Instance.CurrentStation.NowPlaying.FullTrackName.Replace(" ", "_");
             PlaybackPageViewModel.Instance.RecordingContents = new MemoryStream();
@@ -413,21 +413,11 @@ namespace Beem.Views
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(CoreViewModel.Instance.CurrentStation.Location);
             request.AllowReadStreamBuffering = false;
             request.Method = "GET";
-            request.BeginGetResponse(new AsyncCallback(GetShoutAsync), request);
-        }
-
-        void GetShoutAsync(IAsyncResult res)
-        {
             try
             {
-                HttpWebRequest request = (HttpWebRequest)res.AsyncState;
-                HttpWebResponse response = (HttpWebResponse)request.EndGetResponse(res);
-
-                Stream r = response.GetResponseStream();
-
+                Stream r = (await request.GetResponseAsync()).GetResponseStream();
                 byte[] data = new byte[4096];
                 int read;
-
                 while ((read = r.Read(data, 0, data.Length)) > 0 && PlaybackPageViewModel.Instance.IsRecording)
                 {
                     PlaybackPageViewModel.Instance.RecordingContents.Write(data, 0, read);
@@ -436,14 +426,12 @@ namespace Beem.Views
             }
             catch
             {
-                Dispatcher.BeginInvoke(() =>
-                    {
-                        MessageBox.Show("There was a problem recording this stream. Please check your Internet connection. If you are recording a DI.FM Premium stream, make sure that your key is valid",
-                            "Beem", MessageBoxButton.OK);
-                    });
+                MessageBox.Show("There was a problem recording this stream. Please check your Internet connection. If you are recording a DI.FM Premium stream, make sure that your key is valid",
+                        "Beem", MessageBoxButton.OK);
                 PlaybackPageViewModel.Instance.IsRecording = false;
             }
         }
+
 
         private void btnRecordStop_Click(object sender, RoutedEventArgs e)
         {
