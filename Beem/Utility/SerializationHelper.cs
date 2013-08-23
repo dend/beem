@@ -36,6 +36,9 @@ namespace Beem.Utility
             container.ZumoUrl = (from c in keyDocument.Root.Elements()
                                  where c.Attribute("type").Value == "zumourl"
                                  select c).FirstOrDefault().Attribute("value").Value;
+            container.LastFmSecret = (from c in keyDocument.Root.Elements()
+                                      where c.Attribute("type").Value == "lastfmsecret"
+                                      select c).FirstOrDefault().Attribute("value").Value;
 
             return container;
         }

@@ -1,5 +1,5 @@
 ﻿using Beem.Utility;
-using Coding4Fun.Toolkit.Storage;
+using Beem.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,47 +12,62 @@ namespace Beem.LastFMClient
 {
     public class LastFmClient
     {
-        const string API_KEY = "";
-        const string SECRET = "";
         const string CORE_URL = "https://ws.audioscrobbler.com/2.0/";
 
-        public void GetMobileSession(string userName, string password, Action<LastFmAuthResponse> onCompletion)
+        public async void GetMobileSession(string userName, string password, Action<LastFmAuthResponse> onCompletion)
         {
             var parameters = new Dictionary<string, string>();
             parameters.Add("username", userName);
             parameters.Add("password", password);
             parameters.Add("method", "auth.getMobileSession");
-            parameters.Add("api_key", API_KEY);
+            parameters.Add("api_key", CoreViewModel.Instance.ApiKeys.LastFmKey);
 
             string signature = GetSignature(parameters);
 
-            string comboUrl = string.Concat(CORE_URL, "?method=auth.getMobileSession", "&api_key=", API_KEY,
+            string comboUrl = string.Concat("method=auth.getMobileSession", "&api_key=", CoreViewModel.Instance.ApiKeys.LastFmKey,
                 "&username=", userName, "&password=", password, "&api_sig=", signature);
 
             LastFmAuthResponse response = null;
 
-            var client = new WebClient();
-            client.UploadStringAsync(new Uri(comboUrl),string.Empty);
-            client.UploadStringCompleted += (s, e) =>
+            byte[] pendingPostContent = Encoding.UTF8.GetBytes(comboUrl);
+            
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(CORE_URL);
+            request.Method = "POST";
+            request.ContentType = "application/x-www-form-urlencoded";
+
+            using (Stream requestStream = await request.GetRequestStreamAsync())
+            {
+                await requestStream.WriteAsync(pendingPostContent, 0, pendingPostContent.Length);
+            }
+
+            request.BeginGetResponse(new AsyncCallback(n =>
                 {
+                    HttpWebResponse rawResponse = (HttpWebResponse)request.EndGetResponse(n);
+
+                    string rawData = string.Empty;
+                    using (StreamReader reader = new StreamReader(rawResponse.GetResponseStream()))
+                    {
+                        rawData = reader.ReadToEnd();
+                    }
+
                     try
                     {
-                        response = SerializationHelper.GetObjectFromString<LastFmAuthResponse>(e.Result);
-                    }
-                    catch (WebException ex)
-                    {
-                        HttpWebResponse exResponse = (HttpWebResponse)ex.Response;
-                        using (StreamReader reader = new StreamReader(exResponse.GetResponseStream()))
+                        if (!string.IsNullOrEmpty(rawData))
                         {
-                            Debug.WriteLine(reader.ReadToEnd());
+                            response = SerializationHelper.GetObjectFromString<LastFmAuthResponse>(rawData);
                         }
+                    }
+                    catch
+                    {
+                        Debug.WriteLine(string.Format("[{0}]: LAST.FM - Failed to authenticate user.", DateTime.Now.ToString()));
                     }
 
                     onCompletion(response);
-                };
+
+                }), null);
         }
 
-        public void ScrobbleTrack(string artist, string track, string sessionKey, Action<string> onCompletion)
+        public async void ScrobbleTrack(string artist, string track, string sessionKey, Action<string> onCompletion)
         {
             string currentTimestamp = DateHelper.GetUnixTimestamp();
 
@@ -61,32 +76,45 @@ namespace Beem.LastFMClient
             parameters.Add("track[0]", track);
             parameters.Add("timestamp[0]", currentTimestamp);
             parameters.Add("method", "track.scrobble");
-            parameters.Add("api_key", API_KEY);
+            parameters.Add("api_key", CoreViewModel.Instance.ApiKeys.LastFmKey);
             parameters.Add("sk", sessionKey);
 
             string signature = GetSignature(parameters);
 
-            string comboUrl = string.Concat(CORE_URL, "?method=track.scrobble", "&api_key=", API_KEY,
+            string comboUrl = string.Concat("method=track.scrobble", "&api_key=", CoreViewModel.Instance.ApiKeys.LastFmKey,
                 "&artist[0]=", HttpUtility.UrlEncode(artist), "&track[0]=", HttpUtility.UrlEncode(track), "&sk=", sessionKey, "&timestamp[0]=", currentTimestamp,
                 "&api_sig=", signature);
 
-            var client = new WebClient();
-            client.UploadStringAsync(new Uri(comboUrl), string.Empty);
-            client.UploadStringCompleted += (s, e) =>
+            byte[] pendingPostContent = Encoding.UTF8.GetBytes(comboUrl);
+
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(CORE_URL);
+            request.Method = "POST";
+            request.ContentType = "application/x-www-form-urlencoded";
+
+            using (Stream requestStream = await request.GetRequestStreamAsync())
             {
+                await requestStream.WriteAsync(pendingPostContent, 0, pendingPostContent.Length);
+            }
+
+            request.BeginGetResponse(new AsyncCallback(n =>
+            {
+                HttpWebResponse rawResponse = (HttpWebResponse)request.EndGetResponse(n);
+
+                string rawData = string.Empty;
+                using (StreamReader reader = new StreamReader(rawResponse.GetResponseStream()))
+                {
+                    rawData = reader.ReadToEnd();
+                }
+
                 try
                 {
-                    onCompletion(e.Result);
+                    onCompletion(rawData);
                 }
-                catch (WebException ex)
+                catch
                 {
-                    HttpWebResponse response = (HttpWebResponse)ex.Response;
-                    using (StreamReader reader = new StreamReader(response.GetResponseStream()))
-                    {
-                        Debug.WriteLine(reader.ReadToEnd());
-                    }
+                    Debug.WriteLine(string.Format("[{0}]: LAST.FM - Failed to scrobble track.", DateTime.Now.ToString()));
                 }
-            };
+            }), null);
         }
 
         public string GetSignature(Dictionary<string, string> parameters)
@@ -100,7 +128,7 @@ namespace Beem.LastFMClient
                 result += s.Key + s.Value;
             }
 
-            result += SECRET;
+            result += CoreViewModel.Instance.ApiKeys.LastFmSecret;
             result = MD5Core.GetHashString(Encoding.UTF8.GetBytes(result));
 
             return result;

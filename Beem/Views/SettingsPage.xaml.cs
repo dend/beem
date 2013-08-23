@@ -128,18 +128,21 @@ namespace Beem.Views
             grdLoading.Visibility = System.Windows.Visibility.Visible;
             App.LFMClient.GetMobileSession(txtLastFmUsername.Text, txtLastFmPassword.Password, response =>
                 {
-                    grdLoading.Visibility = System.Windows.Visibility.Collapsed;
+                    Dispatcher.BeginInvoke(() =>
+                        {
+                            grdLoading.Visibility = System.Windows.Visibility.Collapsed;
 
-                    if (response != null)
-                    {
-                        CoreViewModel.Instance.CurrentAppSettings.Session = response.Session;
-                        SettingsManager.StoreSettings();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Could not log in to Last.fm. Either your credentials are invalid, the service is down or you are not connected to a network.",
-                            "Beem", MessageBoxButton.OK);
-                    }
+                            if (response != null)
+                            {
+                                CoreViewModel.Instance.CurrentAppSettings.Session = response.Session;
+                                SettingsManager.StoreSettings();
+                            }
+                            else
+                            {
+                                MessageBox.Show("Could not log in to Last.fm. Either your credentials are invalid, the service is down or you are not connected to a network.",
+                                    "Beem", MessageBoxButton.OK);
+                            }
+                        });
                 });
         }
 

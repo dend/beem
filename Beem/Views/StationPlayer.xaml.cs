@@ -606,7 +606,10 @@ namespace Beem.Views
                             {
                                 if (showNotification)
                                 {
-                                    MessageBox.Show("Scrobbled track to Last.fm!", "Beem", MessageBoxButton.OK);
+                                    Dispatcher.BeginInvoke(() =>
+                                    {
+                                        MessageBox.Show("Scrobbled track to Last.fm!", "Beem", MessageBoxButton.OK);
+                                    });
                                 }
                             });
                         }
