@@ -63,7 +63,7 @@
                         </ListBox.ItemTemplate>
                     </ListBox>
 
-                    <Grid x:Name="grdLoading" Visibility="Collapsed" Background="Transparent" Height="200" Width="300">
+                    <Grid x:Name="grdLoading" Visibility="{Binding IsCurrentlyLoading, Converter={StaticResource BoolToVisibility},ConverterParameter=normal}" Background="Transparent" Height="200" Width="300">
                         <StackPanel VerticalAlignment="Center">
                             <TextBlock Text="loading stations" HorizontalAlignment="Center"></TextBlock>
                             <toolkit:PerformanceProgressBar Margin="0,24,0,0" IsIndeterminate="True">

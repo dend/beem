@@ -14,7 +14,7 @@ namespace Beem
 {
     public partial class App : Application
     {
-        public PhoneApplicationFrame RootFrame { get; private set; }
+        public static PhoneApplicationFrame RootFrame { get; private set; }
 
         public static LiveConnectClient MicrosoftAccountClient;
         public static LiveConnectSession MicrosoftAccountSession;
@@ -38,10 +38,14 @@ namespace Beem
             // Attempt to open the DI.FM settings.
             CoreViewModel.Instance.DISettings = Serialize.Open<DISettingsCache>("di.xml");
 
+            // Get the API keys from the internal XML key storage.
             CoreViewModel.Instance.ApiKeys = SerializationHelper.GetKeys("APIKeyManifest.xml");
 
+            // Initialize the Azure Mobile Services client to pull the station list.
             AzureClient = new MobileServiceClient(CoreViewModel.Instance.ApiKeys.ZumoUrl,
             CoreViewModel.Instance.ApiKeys.ZumoKey);
+            
+            AppLoaderAgent.AttemptFirstRun();
         }
 
         private void Application_Activated(object sender, ActivatedEventArgs e)

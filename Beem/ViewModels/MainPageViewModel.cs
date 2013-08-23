@@ -14,6 +14,10 @@ namespace Beem.ViewModels
             Recorded = new ObservableCollection<string>();
             Stations = new ObservableCollection<Station>();
             FavoriteStations = new ObservableCollection<Station>();
+    
+            // Once the application starts, we are assuming that the loading process
+            // is ongoing, until the flag is reset.
+            IsCurrentlyLoading = true;
         }
 
         public static MainPageViewModel Instance
@@ -31,6 +35,19 @@ namespace Beem.ViewModels
             }
         }
 
+        private bool _isCurrentlyLoading;
+        public bool IsCurrentlyLoading
+        {
+            get
+            {
+                return _isCurrentlyLoading;
+            }
+            set
+            {
+                SetProperty(ref _isCurrentlyLoading, value);
+            }
+        }
+
         private int _skyDriveUploadProgress;
         public int SkyDriveUploadProgress
         {
@@ -43,7 +60,6 @@ namespace Beem.ViewModels
                 SetProperty(ref _skyDriveUploadProgress, value);
             }
         }
-
 
         private string _currentlyUploading;
         public string CurrentlyUploading

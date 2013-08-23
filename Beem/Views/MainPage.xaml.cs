@@ -32,92 +32,15 @@ namespace Beem.Views
             btnSignIn.SessionChanged += App.MicrosoftAccount_SessionChanged;
         }
 
-        protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
+        protected override async void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
         {
-            if (!SettingsManager.AttemptToLoadSettings())
-            {
-                if (MessageBox.Show("Would you like Beem to run under lock screen? This way the streaming is not disrupted.", "Run Under Lock Screen", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
-                {
-                    CoreViewModel.Instance.CurrentAppSettings.CanRunUnderLockScreen = true;
-                }
-                else
-                {
-                    CoreViewModel.Instance.CurrentAppSettings.CanRunUnderLockScreen = false;
-                }
-
-                CoreViewModel.Instance.CurrentAppSettings.FirstLaunchFlag = true;
-                CoreViewModel.Instance.CurrentAppSettings.ShowRecordingAlert = true;
-
-                SettingsManager.StoreSettings();
-            }
-
-            MainPageViewModel.Instance.FavoriteStations = Serialize.Open<ObservableCollection<Station>>("fav.xml");
-
             if (MainPageViewModel.Instance.Stations.Count == 0)
             {
-                LoadStations();
+                string customStation = AppLoaderAgent.GetCustomStation();
+                await AppLoaderAgent.AttemptStationLoading(customStation);
             }
 
-            if (NavigationContext.QueryString.ContainsKey("DI.FM"))
-            {
-                customStationToLoad = NavigationContext.QueryString["DI.FM"];
-            }
             base.OnNavigatedTo(e);
-        }
-
-        private async void LoadStations()
-        {
-            try
-            {
-                grdLoading.Visibility = System.Windows.Visibility.Visible;
-
-                List<Station> stations = (await MobileServiceClientHelper.GetAllStations()).ToList();
-                Debug.WriteLine(stations.GetType());
-
-                if (stations != null)
-                {
-                    // Storing the station cache so that I can manipulate those
-                    // with the back/forward buttons.
-                    Serialize.Save<List<Station>>("stationcache.xml", stations);
-
-                    HandleStationList(stations);
-                }
-                else
-                    NotifyOfStationDownloadError();
-            }
-            catch
-            {
-                NotifyOfStationDownloadError();
-            }
-        }
-
-        void NotifyOfStationDownloadError()
-        {
-            MessageBox.Show("Seems like Beem can't get the stations at this point. Try again later.",
-       "Download Station List", MessageBoxButton.OK);
-
-            customStationToLoad = string.Empty;
-            grdLoading.Visibility = System.Windows.Visibility.Collapsed;
-        }
-
-        private void HandleStationList(IEnumerable<Station> stations)
-        {
-
-            MainPageViewModel.Instance.Stations = new System.Collections.ObjectModel.ObservableCollection<Station>(stations);
-
-            if (!string.IsNullOrEmpty(customStationToLoad))
-            {
-                Station currentStation = (from c in MainPageViewModel.Instance.Stations where c.Name == customStationToLoad select c).FirstOrDefault();
-
-                if (currentStation != null)
-                {
-                    CoreViewModel.Instance.CurrentStation = currentStation;
-                    NavigationService.Navigate(new Uri("/Views/StationPlayer.xaml", UriKind.Relative));
-                }
-            }
-
-            customStationToLoad = string.Empty;
-            grdLoading.Visibility = System.Windows.Visibility.Collapsed;
         }
 
         private void mnuPin_Click(object sender, RoutedEventArgs e)
@@ -342,7 +265,7 @@ namespace Beem.Views
 
         private void btnRefreshStationList_Click_1(object sender, EventArgs e)
         {
-            LoadStations();
+            AppLoaderAgent.AttemptStationLoading();
         }
     }
 }
