@@ -31,6 +31,7 @@ namespace Beem.Views
             if (MainPageViewModel.Instance.Stations.Count == 0)
             {
                 string customStation = AppLoaderAgent.GetCustomStation();
+
                 await AppLoaderAgent.AttemptStationLoading(customStation);
             }
 

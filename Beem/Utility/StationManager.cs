@@ -50,7 +50,7 @@ namespace Beem.Utility
                 BackContent = station.Description
             };
 
-            Uri shellUri = new Uri("/StationPlayer.xaml?station=" + station.JSONID, UriKind.Relative);
+            Uri shellUri = new Uri("/Views/StationPlayer.xaml?station=" + station.JSONID, UriKind.Relative);
             try
             {
                 ShellTile.Create(shellUri, data);

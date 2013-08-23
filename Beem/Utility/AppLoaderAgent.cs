@@ -129,6 +129,7 @@ namespace Beem.Utility
             MainPageViewModel.Instance.IsCurrentlyLoading = false;
         }
 
+        // Used to initialize the station from Xbox Music
         internal static string GetCustomStation()
         {
             string customStationToLoad = string.Empty;

@@ -44,7 +44,7 @@ namespace Beem
             // Initialize the Azure Mobile Services client to pull the station list.
             AzureClient = new MobileServiceClient(CoreViewModel.Instance.ApiKeys.ZumoUrl,
             CoreViewModel.Instance.ApiKeys.ZumoKey);
-            
+
             AppLoaderAgent.AttemptFirstRun();
         }
 
