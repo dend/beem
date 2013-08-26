@@ -32,7 +32,7 @@
         <!--ContentPanel - place additional content here-->
         <StackPanel x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
             <TextBlock Style="{StaticResource PhoneTextTitle3Style}" Text="Version:"></TextBlock>
-            <TextBlock FontWeight="Bold" Style="{StaticResource PhoneTextTitle3Style}" Text="1.8.0"></TextBlock>
+            <TextBlock FontWeight="Bold" Style="{StaticResource PhoneTextTitle3Style}" Text="1.8.1"></TextBlock>
 
             <TextBlock Margin="12,12,0,0"  Style="{StaticResource PhoneTextTitle3Style}" Text="Developed by Den Delimarsky." TextWrapping="Wrap"></TextBlock>
             <TextBlock Margin="12,12,0,0" Style="{StaticResource PhoneTextTitle3Style}" Text="DI.FM, the associated radio stations, and station logos are registered trademarks of Digitally Imported, Inc." TextWrapping="Wrap"></TextBlock>
