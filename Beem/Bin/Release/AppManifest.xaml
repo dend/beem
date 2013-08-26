@@ -1,0 +1,27 @@
+﻿<Deployment xmlns="http://schemas.microsoft.com/client/2007/deployment" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" EntryPointAssembly="Beem" EntryPointType="Beem.App" RuntimeVersion="4.7.50308.0">
+  <Deployment.Parts>
+    <AssemblyPart x:Name="Beem" Source="Beem.dll" />
+    <AssemblyPart x:Name="Beem.AudioAgent" Source="Beem.AudioAgent.dll" />
+    <AssemblyPart x:Name="Beem.Core" Source="Beem.Core.dll" />
+    <AssemblyPart x:Name="Coding4Fun.Toolkit.Audio" Source="Coding4Fun.Toolkit.Audio.dll" />
+    <AssemblyPart x:Name="Coding4Fun.Toolkit.Controls" Source="Coding4Fun.Toolkit.Controls.dll" />
+    <AssemblyPart x:Name="Coding4Fun.Toolkit.Net" Source="Coding4Fun.Toolkit.Net.dll" />
+    <AssemblyPart x:Name="Coding4Fun.Toolkit.Storage" Source="Coding4Fun.Toolkit.Storage.dll" />
+    <AssemblyPart x:Name="GoogleAnalytics" Source="GoogleAnalytics.dll" />
+    <AssemblyPart x:Name="Microsoft.Live.Controls" Source="Microsoft.Live.Controls.dll" />
+    <AssemblyPart x:Name="Microsoft.Live" Source="Microsoft.Live.dll" />
+    <AssemblyPart x:Name="Microsoft.Phone.Controls" Source="Microsoft.Phone.Controls.dll" />
+    <AssemblyPart x:Name="Microsoft.Phone.Controls.Toolkit" Source="Microsoft.Phone.Controls.Toolkit.dll" />
+    <AssemblyPart x:Name="Microsoft.Threading.Tasks" Source="Microsoft.Threading.Tasks.dll" />
+    <AssemblyPart x:Name="Microsoft.Threading.Tasks.Extensions" Source="Microsoft.Threading.Tasks.Extensions.dll" />
+    <AssemblyPart x:Name="Microsoft.Threading.Tasks.Extensions.Phone" Source="Microsoft.Threading.Tasks.Extensions.Phone.dll" />
+    <AssemblyPart x:Name="Microsoft.WindowsAzure.Mobile" Source="Microsoft.WindowsAzure.Mobile.dll" />
+    <AssemblyPart x:Name="Microsoft.WindowsAzure.Mobile.Ext" Source="Microsoft.WindowsAzure.Mobile.Ext.dll" />
+    <AssemblyPart x:Name="Microsoft.WindowsAzure.Mobile.UI" Source="Microsoft.WindowsAzure.Mobile.UI.dll" />
+    <AssemblyPart x:Name="Newtonsoft.Json" Source="Newtonsoft.Json.dll" />
+    <AssemblyPart x:Name="System.Json" Source="System.Json.dll" />
+    <AssemblyPart x:Name="System.Net.Http" Source="System.Net.Http.dll" />
+    <AssemblyPart x:Name="System.Net.Http.Extensions" Source="System.Net.Http.Extensions.dll" />
+    <AssemblyPart x:Name="System.Net.Http.Primitives" Source="System.Net.Http.Primitives.dll" />
+  </Deployment.Parts>
+</Deployment>

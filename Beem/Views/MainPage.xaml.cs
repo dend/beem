@@ -35,6 +35,9 @@ namespace Beem.Views
                 await AppLoaderAgent.AttemptStationLoading(customStation);
             }
 
+            // ANALYTICS
+            GoogleAnalytics.EasyTracker.GetTracker().SendView("MainPage");
+
             base.OnNavigatedTo(e);
         }
 

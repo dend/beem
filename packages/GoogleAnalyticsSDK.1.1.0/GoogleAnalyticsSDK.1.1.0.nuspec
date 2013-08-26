@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>GoogleAnalyticsSDK</id>
+    <version>1.1.0</version>
+    <title>Google Analytics SDK for Windows 8 and Windows Phone</title>
+    <authors>Tim Greenfield</authors>
+    <owners>Tim Greenfield</owners>
+    <licenseUrl>http://googleanalyticssdk.codeplex.com/license</licenseUrl>
+    <projectUrl>http://googleanalyticssdk.codeplex.com/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Google Analytics SDK for Windows 8 and Windows Phone with support for Google Universal Analytics Measurement Protocol</description>
+    <releaseNotes>More info on CodePlex at http://googleanalyticssdk.codeplex.com</releaseNotes>
+    <copyright>Copyright 2013</copyright>
+    <language />
+    <tags>google analtyics universal analytics measurement protocol Win8 WinJS WinRT WP7 WP8</tags>
+    <dependencies>
+      <group targetFramework="WindowsPhone7.1">
+        <dependency id="Microsoft.Bcl" version="1.0.19" />
+        <dependency id="Microsoft.Bcl.Build" version="1.0.7" />
+        <dependency id="Microsoft.Bcl.Async" version="1.0.16" />
+        <dependency id="Microsoft.Net.Http" version="2.1.10" />
+      </group>
+      <group targetFramework="WindowsPhone8.0">
+        <dependency id="Microsoft.Bcl" version="1.0.19" />
+        <dependency id="Microsoft.Bcl.Build" version="1.0.7" />
+        <dependency id="Microsoft.Net.Http" version="2.1.10" />
+      </group>
+      <group targetFramework="Windows8.0" />
+    </dependencies>
+  </metadata>
+</package>

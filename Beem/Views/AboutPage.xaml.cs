@@ -11,6 +11,14 @@ namespace Beem.Views
             InitializeComponent();
         }
 
+        protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
+        {
+            // ANALYTICS
+            GoogleAnalytics.EasyTracker.GetTracker().SendView("AboutPage");
+
+            base.OnNavigatedTo(e);
+        }
+
         private void btnFeedback_Click(object sender, RoutedEventArgs e)
         {
             EmailComposeTask emailTask = new EmailComposeTask();

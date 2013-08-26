@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<analytics xmlns="http://googleanalyticssdk.codeplex.com/ns/easytracker">
+  <!--Replace placeholder ID with your tracking ID-->
+  <trackingId></trackingId>
+  <!--Replace placeholder name with your app name-->
+  <appName>Beem Plus</appName>
+  <!--Replace placeholder version with your app version-->
+  <appVersion>1.8.2.0</appVersion>
+</analytics>

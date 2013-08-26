@@ -94,6 +94,10 @@ namespace Beem.Views
 
             StartStoryboard();
 
+            // ANALYTICS
+            GoogleAnalytics.EasyTracker.GetTracker().SendView("StationPlayer");
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("Stations", "Play", CoreViewModel.Instance.CurrentStation.Name, 0);
+
             base.OnNavigatedTo(e);
         }
 
