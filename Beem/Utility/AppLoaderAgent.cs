@@ -3,6 +3,7 @@ using Beem.Core.Models;
 using Beem.Settings;
 using Beem.ViewModels;
 using Coding4Fun.Toolkit.Storage;
+using Microsoft.Phone.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,6 +12,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using Windows.Storage;
 
 namespace Beem.Utility
 {
@@ -140,6 +142,45 @@ namespace Beem.Utility
             }
 
             return customStationToLoad;
+        }
+
+        public static void CheckForRatingPrompt()
+        {
+            RatingPromptValidator counter = Serialize.Open<RatingPromptValidator>("ratingcounter");
+            if (counter.ShouldShowPrompt)
+            {
+                if (!counter.AlreadyRated)
+                {
+                    counter.CurrentLaunchCount = 0;
+                    counter.ShouldShowPrompt = false;
+
+                    MessageBoxResult promptResult = MessageBoxResult.No;
+                    Deployment.Current.Dispatcher.BeginInvoke(() =>
+                        {
+                            promptResult = MessageBox.Show("I like working on Beem. You like using Beem. Want to help me out and rate the app?",
+                                "Beem", MessageBoxButton.OKCancel);
+
+                            if (promptResult == MessageBoxResult.OK)
+                            {
+                                counter.AlreadyRated = true;
+
+                                MarketplaceReviewTask reviewTask = new MarketplaceReviewTask();
+                                reviewTask.Show();
+                            }
+                        });
+                }
+            }
+            else
+            {
+                counter.CurrentLaunchCount++;
+                if (counter.CurrentLaunchCount == 5)
+                {
+                    counter.ShouldShowPrompt = true;
+                }
+            }
+
+            // All conditions considered, update the rating container.
+            Serialize.Save<RatingPromptValidator>("ratingcounter", counter);
         }
     }
 }

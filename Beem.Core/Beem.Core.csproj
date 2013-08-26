@@ -70,6 +70,7 @@
     <Compile Include="Binding\BindableBase.cs" />
     <Compile Include="Models\DISettingsCache.cs" />
     <Compile Include="Models\KeyContainer.cs" />
+    <Compile Include="Models\RatingPromptValidator.cs" />
     <Compile Include="Models\Station.cs" />
     <Compile Include="Models\Track.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

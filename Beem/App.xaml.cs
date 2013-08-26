@@ -46,6 +46,7 @@ namespace Beem
             CoreViewModel.Instance.ApiKeys.ZumoKey);
 
             AppLoaderAgent.AttemptFirstRun();
+            AppLoaderAgent.CheckForRatingPrompt();
         }
 
         private void Application_Activated(object sender, ActivatedEventArgs e)
