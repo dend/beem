@@ -3,7 +3,6 @@ using Beem.ViewModels;
 using Coding4Fun.Toolkit.Storage;
 using Microsoft.Phone.Shell;
 using System;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.IO.IsolatedStorage;
 using System.Linq;
