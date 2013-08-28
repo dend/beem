@@ -23,8 +23,10 @@ namespace Beem.Views
 
         protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
         {
-            // ANALYTICS
-            GoogleAnalytics.EasyTracker.GetTracker().SendView("SettingsPage");
+            if (CoreViewModel.Instance.CurrentAppSettings.EnableAnalytics)
+            {
+                GoogleAnalytics.EasyTracker.GetTracker().SendView("SettingsPage");
+            }
 
             base.OnNavigatedTo(e);
         }
@@ -40,8 +42,10 @@ namespace Beem.Views
             {
                 CoreViewModel.Instance.CurrentAppSettings.CanRunUnderLockScreen = true;
 
-                // ANALYTICS
-                GoogleAnalytics.EasyTracker.GetTracker().SendEvent("Settings", "RunUnderLockscreen", "Enabled", 0);
+                if (CoreViewModel.Instance.CurrentAppSettings.EnableAnalytics)
+                {
+                    GoogleAnalytics.EasyTracker.GetTracker().SendEvent("Settings", "RunUnderLockscreen", "Enabled", 0);
+                }
 
                 StoreAndAlert();
             }
@@ -66,8 +70,11 @@ namespace Beem.Views
             {
                 CoreViewModel.Instance.CurrentAppSettings.CanRunUnderLockScreen = false;
 
-                // ANALYTICS
-                GoogleAnalytics.EasyTracker.GetTracker().SendEvent("Settings", "RunUnderLockscreen", "Disabled", 0);
+                if (CoreViewModel.Instance.CurrentAppSettings.EnableAnalytics)
+                {
+                    // ANALYTICS
+                    GoogleAnalytics.EasyTracker.GetTracker().SendEvent("Settings", "RunUnderLockscreen", "Disabled", 0);
+                }
 
                 StoreAndAlert();
             }
@@ -82,15 +89,20 @@ namespace Beem.Views
             BackgroundAudioPlayer.Instance.Track = null;
 
             // ANALYTICS
-            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("Settings", "ClearControls", "Clicked", 0);
+            if (CoreViewModel.Instance.CurrentAppSettings.EnableAnalytics)
+            {
+                GoogleAnalytics.EasyTracker.GetTracker().SendEvent("Settings", "ClearControls", "Clicked", 0);
+            }
         }
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show("Are you sure you want to clear the local storage? All stored records will be deleted.", "Beem", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
             {
-                // ANALYTICS
-                GoogleAnalytics.EasyTracker.GetTracker().SendEvent("Settings", "CleanStorage", "Clicked", 0);
+                if (CoreViewModel.Instance.CurrentAppSettings.EnableAnalytics)
+                {
+                    GoogleAnalytics.EasyTracker.GetTracker().SendEvent("Settings", "CleanStorage", "Clicked", 0);
+                }
 
                 using (IsolatedStorageFile file = IsolatedStorageFile.GetUserStoreForApplication())
                 {
@@ -112,8 +124,10 @@ namespace Beem.Views
             {
                 CoreViewModel.Instance.CurrentAppSettings.ScrobbleOnLaunch = false;
 
-                // ANALYTICS
-                GoogleAnalytics.EasyTracker.GetTracker().SendEvent("Settings", "LastFmAutoScrobble", "Disabled", 0);
+                if (CoreViewModel.Instance.CurrentAppSettings.EnableAnalytics)
+                {
+                    GoogleAnalytics.EasyTracker.GetTracker().SendEvent("Settings", "LastFmAutoScrobble", "Disabled", 0);
+                }
 
                 StoreAndAlert(false);
             }
@@ -129,8 +143,10 @@ namespace Beem.Views
             {
                 CoreViewModel.Instance.CurrentAppSettings.ScrobbleOnLaunch = true;
 
-                // ANALYTICS
-                GoogleAnalytics.EasyTracker.GetTracker().SendEvent("Settings", "LastFmAutoScrobble", "Enabled", 0);
+                if (CoreViewModel.Instance.CurrentAppSettings.EnableAnalytics)
+                {
+                    GoogleAnalytics.EasyTracker.GetTracker().SendEvent("Settings", "LastFmAutoScrobble", "Enabled", 0);
+                }
 
                 StoreAndAlert(false);
             }
@@ -165,8 +181,10 @@ namespace Beem.Views
                             {
                                 CoreViewModel.Instance.CurrentAppSettings.Session = response.Session;
 
-                                // ANALYTICS
-                                GoogleAnalytics.EasyTracker.GetTracker().SendEvent("Settings", "LastFmLogin", "Successful", 0);
+                                if (CoreViewModel.Instance.CurrentAppSettings.EnableAnalytics)
+                                {
+                                    GoogleAnalytics.EasyTracker.GetTracker().SendEvent("Settings", "LastFmLogin", "Successful", 0);
+                                }
 
                                 SettingsManager.StoreSettings();
                             }
@@ -175,8 +193,10 @@ namespace Beem.Views
                                 MessageBox.Show("Could not log in to Last.fm. Either your credentials are invalid, the service is down or you are not connected to a network.",
                                     "Beem", MessageBoxButton.OK);
 
-                                // ANALYTICS
-                                GoogleAnalytics.EasyTracker.GetTracker().SendEvent("Settings", "LastFmLogin", "Failed", 0);
+                                if (CoreViewModel.Instance.CurrentAppSettings.EnableAnalytics)
+                                {
+                                    GoogleAnalytics.EasyTracker.GetTracker().SendEvent("Settings", "LastFmLogin", "Failed", 0);
+                                }
                             }
                         });
                 });
@@ -187,8 +207,10 @@ namespace Beem.Views
             if (MessageBox.Show("Are you sure you want to deauthenticate Beem from using Last.fm?",
                 "Beem", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
             {
-                // ANALYTICS
-                GoogleAnalytics.EasyTracker.GetTracker().SendEvent("Settings", "LastFmLogin", "DeAuth", 0);
+                if (CoreViewModel.Instance.CurrentAppSettings.EnableAnalytics)
+                {
+                    GoogleAnalytics.EasyTracker.GetTracker().SendEvent("Settings", "LastFmLogin", "DeAuth", 0);
+                }
 
                 CoreViewModel.Instance.CurrentAppSettings.ScrobbleOnLaunch = false;
                 CoreViewModel.Instance.CurrentAppSettings.Session = new LastFMClient.LastFmSession();
@@ -200,8 +222,10 @@ namespace Beem.Views
         // and send it to Beem later.
         private void btnGetKey_Click(object sender, RoutedEventArgs e)
         {
-            // ANALYTICS
-            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("Settings", "DiFmKey", "GetKeyFromWeb", 0);
+            if (CoreViewModel.Instance.CurrentAppSettings.EnableAnalytics)
+            {
+                GoogleAnalytics.EasyTracker.GetTracker().SendEvent("Settings", "DiFmKey", "GetKeyFromWeb", 0);
+            }
 
             WebBrowserTask task = new WebBrowserTask();
             task.Uri = new System.Uri("http://www.di.fm/member/listen_key");
@@ -225,8 +249,10 @@ namespace Beem.Views
 
                         Serialize.Save("di.xml", CoreViewModel.Instance.DISettings);
 
-                        // ANALYTICS
-                        GoogleAnalytics.EasyTracker.GetTracker().SendEvent("Settings", "DiFmKey", "Stored", 0);
+                        if (CoreViewModel.Instance.CurrentAppSettings.EnableAnalytics)
+                        {
+                            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("Settings", "DiFmKey", "Stored", 0);
+                        }
                     }
                 }
                 else
@@ -241,8 +267,10 @@ namespace Beem.Views
                     CoreViewModel.Instance.DISettings = new DISettingsCache();
                     Serialize.Save("di.xml", CoreViewModel.Instance.DISettings);
 
-                    // ANALYTICS
-                    GoogleAnalytics.EasyTracker.GetTracker().SendEvent("Settings", "DiFmKey", "DeAuth", 0);
+                    if (CoreViewModel.Instance.CurrentAppSettings.EnableAnalytics)
+                    {
+                        GoogleAnalytics.EasyTracker.GetTracker().SendEvent("Settings", "DiFmKey", "DeAuth", 0);
+                    }
                 }
             }
         }
@@ -250,6 +278,36 @@ namespace Beem.Views
         private void SaveDISettings(object sender, RoutedEventArgs e)
         {
             Serialize.Save("di.xml", CoreViewModel.Instance.DISettings);
+        }
+
+        // The user enabled the analytics.
+        private void tglAnalytics_Checked(object sender, RoutedEventArgs e)
+        {
+            if (!isPageLoading)
+            {
+                CoreViewModel.Instance.CurrentAppSettings.EnableAnalytics = true;
+
+                StoreAndAlert(false);
+            }
+            else
+            {
+                isPageLoading = false;
+            }
+        }
+
+        // The user decided to disable the analytics.
+        private void tglAnalytics_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (!isPageLoading)
+            {
+                CoreViewModel.Instance.CurrentAppSettings.EnableAnalytics = false;
+
+                StoreAndAlert(false);
+            }
+            else
+            {
+                isPageLoading = false;
+            }
         }
     }
 }

@@ -45,7 +45,7 @@
             <controls:PivotItem Header="premium">
                 <StackPanel>
                     <TextBlock Style="{StaticResource PhoneTextTitle3Style}" TextWrapping="Wrap"
-                           Text="DI.FM Premium allows you to listed to high-quality streams. This feature is available to paying DI.FM members."></TextBlock>
+                           Text="DI.FM Premium allows you to listen to high-quality streams. This feature is available to paying DI.FM members."></TextBlock>
 
                     <StackPanel Margin="0,24,0,0">
                         <toolkit:ToggleSwitch Checked="SaveDISettings" Unchecked="SaveDISettings" IsChecked="{Binding DISettings.IsPremiumEnabled, Mode=TwoWay}" IsEnabled="{Binding DISettings.PremiumKey, Converter={StaticResource KeyToEnabled}}" Header="Use DI.FM Premium"></toolkit:ToggleSwitch>
@@ -113,9 +113,29 @@
                 </StackPanel>
             </controls:PivotItem>
 
+            <controls:PivotItem Header="analytics">
+                <StackPanel>
+                    <TextBlock 
+                        Style="{StaticResource PhoneTextTitle3Style}" 
+                        Text="Beem Plus uses analytics to get a better idea of what our users like most. Information collected includes types of stations played and in-app pages you navigate to. This information is never shared with anyone but the developer." 
+                        TextWrapping="Wrap"></TextBlock>
+                    
+                    <TextBlock 
+                        Style="{StaticResource PhoneTextTitle3Style}" 
+                        Margin="12"
+                        Text="Disabling analytics will not affect application performance or workflow." 
+                        TextWrapping="Wrap"></TextBlock>
+
+                    <toolkit:ToggleSwitch x:Name="tglAnalytics" Content="Enable Analytics"
+                                          Checked="tglAnalytics_Checked"
+                                          Unchecked="tglAnalytics_Unchecked"
+                                          IsChecked="{Binding Path=Instance.CurrentAppSettings.EnableAnalytics,Source={StaticResource CoreViewModel}}" >
+                    </toolkit:ToggleSwitch>
+                </StackPanel>
+            </controls:PivotItem>
         </controls:Pivot>
 
-        <Grid Visibility="Collapsed" x:Name="grdLoading" >
+        <Grid Visibility="Collapsed" x:Name="grdLoading">
             <Grid.Background>
                 <SolidColorBrush Color="Black" Opacity=".8"></SolidColorBrush>
             </Grid.Background>

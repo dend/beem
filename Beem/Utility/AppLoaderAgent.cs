@@ -4,6 +4,7 @@ using Beem.Settings;
 using Beem.ViewModels;
 using Coding4Fun.Toolkit.Storage;
 using Microsoft.Phone.Tasks;
+using Microsoft.Xna.Framework.GamerServices;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,7 +13,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using Windows.Storage;
 
 namespace Beem.Utility
 {
@@ -24,28 +24,10 @@ namespace Beem.Utility
     {
         public static bool AttemptFirstRun()
         {
-            MessageBoxResult result = MessageBoxResult.Cancel;
-
             if (!SettingsManager.AttemptToLoadSettings())
             {
-                Deployment.Current.Dispatcher.BeginInvoke(()=>
-                    {
-                        result = MessageBox.Show("Would you like Beem to run under lock screen? This way the streaming is not disrupted.", "Run Under Lock Screen", MessageBoxButton.OKCancel);
-                    });
-
-                if (result == MessageBoxResult.OK)
-                {
-                    CoreViewModel.Instance.CurrentAppSettings.CanRunUnderLockScreen = true;
-                }
-                else
-                {
-                    CoreViewModel.Instance.CurrentAppSettings.CanRunUnderLockScreen = false;
-                }
-
-                CoreViewModel.Instance.CurrentAppSettings.FirstLaunchFlag = true;
-                CoreViewModel.Instance.CurrentAppSettings.ShowRecordingAlert = true;
-
-                SettingsManager.StoreSettings();
+                //TODO: Convert these to async/await and move settings storage here.
+                AttemptLockScreenPrompt();
 
                 return true;
             }
@@ -53,6 +35,60 @@ namespace Beem.Utility
             {
                 return false;
             }
+        }
+
+        private static void AttemptSetFirstLaunchFlags()
+        {
+            CoreViewModel.Instance.CurrentAppSettings.FirstLaunchFlag = true;
+            CoreViewModel.Instance.CurrentAppSettings.ShowRecordingAlert = true;
+
+            SettingsManager.StoreSettings();
+        }
+
+        private static void AttemptLockScreenPrompt()
+        {
+            Guide.BeginShowMessageBox("Run Under Lock Screen", "Would you like Beem to run under lock screen? This way the streaming is not disrupted.",
+                 new List<string> { "yes", "no" }, 0, MessageBoxIcon.Alert, new AsyncCallback(result =>
+                 {
+                     var messageResponse = Guide.EndShowMessageBox(result);
+
+                     if (messageResponse == 0)
+                     {
+                         CoreViewModel.Instance.CurrentAppSettings.CanRunUnderLockScreen = true;
+                     }
+                     else
+                     {
+                         CoreViewModel.Instance.CurrentAppSettings.CanRunUnderLockScreen = false;
+                     }
+
+                     SettingsManager.StoreSettings();
+
+                     // Let's ask the user about analytics at this point.
+                     AttemptAnalyticsPrompt();
+                 }), null);
+        }
+
+        private static void AttemptAnalyticsPrompt()
+        {
+            Guide.BeginShowMessageBox("Enable Analytics", "Would you like to help make Beem better and enable analytics?\nYou can later disable this in the app settings.",
+                new List<string> { "yes", "no" }, 0, MessageBoxIcon.Alert, new AsyncCallback(result =>
+                    {
+                        var messageResponse = Guide.EndShowMessageBox(result);
+
+                        if (messageResponse == 0)
+                        {
+                            CoreViewModel.Instance.CurrentAppSettings.EnableAnalytics = true;
+                        }
+                        else
+                        {
+                            CoreViewModel.Instance.CurrentAppSettings.EnableAnalytics = false;
+                        }
+
+                        // All ready. Set the last launch flags and let's get to work.
+                        AttemptSetFirstLaunchFlags();
+
+                        SettingsManager.StoreSettings();
+                    }), null);
         }
 
         public async static Task<bool> AttemptStationLoading(string defaultStation = "")
@@ -63,7 +99,6 @@ namespace Beem.Utility
             {
                 try
                 {
-
                     List<Station> stations = (await MobileServiceClientHelper.GetAllStations()).ToList();
                     Debug.WriteLine(stations.GetType());
 

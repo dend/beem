@@ -97,6 +97,23 @@ namespace Beem.Settings
             }
         }
 
+        private bool _enableAnalytics;
+        public bool EnableAnalytics
+        {
+            get
+            {
+                return _enableAnalytics;
+            }
+            set
+            {
+                if (_enableAnalytics != value)
+                {
+                    _enableAnalytics = value;
+                    NotifyPropertyChanged("EnableAnalytics");
+                }
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(String info)
         {

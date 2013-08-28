@@ -246,7 +246,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="analytics.xml" />
+    <Content Include="analytics.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="APIKeyManifest.xml">
       <SubType>Designer</SubType>
     </Content>

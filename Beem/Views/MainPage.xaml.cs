@@ -35,8 +35,10 @@ namespace Beem.Views
                 await AppLoaderAgent.AttemptStationLoading(customStation);
             }
 
-            // ANALYTICS
-            GoogleAnalytics.EasyTracker.GetTracker().SendView("MainPage");
+            if (CoreViewModel.Instance.CurrentAppSettings.EnableAnalytics)
+            {
+                GoogleAnalytics.EasyTracker.GetTracker().SendView("MainPage");
+            }
 
             base.OnNavigatedTo(e);
         }
@@ -104,14 +106,13 @@ namespace Beem.Views
         {
             string name = ((Button)sender).Tag.ToString();
 
-            using (IsolatedStorageFile myIsolatedStorage = IsolatedStorageFile.GetUserStoreForApplication())
-            {
-                string fullName = "Music/" + name;
 
-                BackgroundAudioPlayer.Instance.Track = new AudioTrack(new Uri(fullName, UriKind.Relative), name,
-                    "Beem", "Beem", new Uri("/Images/beem_media.jpg", UriKind.Relative));
-                BackgroundAudioPlayer.Instance.Play();
-            }
+            string fullName = "Music/" + name;
+            var trackUri = new Uri(fullName, UriKind.Relative);
+            var artUri = new Uri("Images/beem_media.jpg", UriKind.Relative);
+
+            BackgroundAudioPlayer.Instance.Track = new AudioTrack(trackUri, name, "Beem", "Beem", artUri);
+            BackgroundAudioPlayer.Instance.Play();
         }
 
 
@@ -261,9 +262,9 @@ namespace Beem.Views
             }
         }
 
-        private void btnRefreshStationList_Click_1(object sender, EventArgs e)
+        private async void btnRefreshStationList_Click_1(object sender, EventArgs e)
         {
-            AppLoaderAgent.AttemptStationLoading();
+            await AppLoaderAgent.AttemptStationLoading();
         }
     }
 }

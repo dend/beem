@@ -94,9 +94,11 @@ namespace Beem.Views
 
             StartStoryboard();
 
-            // ANALYTICS
-            GoogleAnalytics.EasyTracker.GetTracker().SendView("StationPlayer");
-            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("Stations", "Play", CoreViewModel.Instance.CurrentStation.Name, 0);
+            if (CoreViewModel.Instance.CurrentAppSettings.EnableAnalytics)
+            {
+                GoogleAnalytics.EasyTracker.GetTracker().SendView("StationPlayer");
+                GoogleAnalytics.EasyTracker.GetTracker().SendEvent("Stations", "Play", CoreViewModel.Instance.CurrentStation.Name, 0);
+            }
 
             base.OnNavigatedTo(e);
         }
@@ -409,6 +411,12 @@ namespace Beem.Views
 
         async void InitiateRecordingProcess()
         {
+            // ANALYTICS
+            if (CoreViewModel.Instance.CurrentAppSettings.EnableAnalytics)
+            {
+                GoogleAnalytics.EasyTracker.GetTracker().SendEvent("Stations", "RecordTrack", CoreViewModel.Instance.CurrentStation.Name, 0);
+            }
+
             TrackName = CoreViewModel.Instance.CurrentStation.NowPlaying.FullTrackName.Replace(" ", "_");
             PlaybackPageViewModel.Instance.RecordingContents = new MemoryStream();
 
@@ -419,17 +427,28 @@ namespace Beem.Views
             request.Method = "GET";
             try
             {
-                Stream r = (await request.GetResponseAsync()).GetResponseStream();
-                byte[] data = new byte[4096];
-                int read;
-                while ((read = r.Read(data, 0, data.Length)) > 0 && PlaybackPageViewModel.Instance.IsRecording)
-                {
-                    PlaybackPageViewModel.Instance.RecordingContents.Write(data, 0, read);
-                    PlaybackPageViewModel.Instance.RecordingLength = Convert.ToInt32(PlaybackPageViewModel.Instance.RecordingContents.Length / 1024);
-                }
+                await request.GetResponseAsync().ContinueWith(t =>
+                    {
+                        using (Stream r = t.Result.GetResponseStream())
+                        {
+                            byte[] data = new byte[1024];
+                            int read;
+                            while ((read = r.Read(data, 0, data.Length)) > 0 && PlaybackPageViewModel.Instance.IsRecording)
+                            {
+                                PlaybackPageViewModel.Instance.RecordingContents.Write(data, 0, read);
+
+                                Dispatcher.BeginInvoke(() =>
+                                    {
+                                        PlaybackPageViewModel.Instance.RecordingLength = Convert.ToInt32(PlaybackPageViewModel.Instance.RecordingContents.Length / 1024);
+                                    });
+                            }
+                        }
+                    });
             }
-            catch
+            catch (Exception ex)
             {
+                Debug.WriteLine(ex.Message);
+
                 MessageBox.Show("There was a problem recording this stream. Please check your Internet connection. If you are recording a DI.FM Premium stream, make sure that your key is valid",
                         "Beem", MessageBoxButton.OK);
                 PlaybackPageViewModel.Instance.IsRecording = false;
@@ -550,6 +569,12 @@ namespace Beem.Views
         private void TextBlock_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
             Track track = (Track)((Grid)sender).Tag;
+
+            if (CoreViewModel.Instance.CurrentAppSettings.EnableAnalytics)
+            {
+                GoogleAnalytics.EasyTracker.GetTracker().SendEvent("Stations", "SearchMarketplace", track.FullTrackName, 0);
+            }
+
             SearchMarketplace(string.Format("{0} {1}", track.Artist, track.Title));
         }
 
@@ -614,6 +639,12 @@ namespace Beem.Views
                                     {
                                         MessageBox.Show("Scrobbled track to Last.fm!", "Beem", MessageBoxButton.OK);
                                     });
+
+                                    // ANALYTICS
+                                    if (CoreViewModel.Instance.CurrentAppSettings.EnableAnalytics)
+                                    {
+                                        GoogleAnalytics.EasyTracker.GetTracker().SendEvent("Stations", "ScrobbleTrack", CoreViewModel.Instance.CurrentStation.NowPlaying.FullTrackName, 0);
+                                    }
                                 }
                             });
                         }
@@ -641,6 +672,12 @@ namespace Beem.Views
         {
             try
             {
+                // ANALYTICS
+                if (CoreViewModel.Instance.CurrentAppSettings.EnableAnalytics)
+                {
+                    GoogleAnalytics.EasyTracker.GetTracker().SendEvent("Stations", "SearchMarketplaceViaIcon", CoreViewModel.Instance.CurrentStation.NowPlaying.FullTrackName, 0);
+                }
+
                 SearchMarketplace(string.Format("{0} {1}", CoreViewModel.Instance.CurrentStation.NowPlaying.Artist,
                     CoreViewModel.Instance.CurrentStation.NowPlaying.Title));
             }
@@ -652,6 +689,12 @@ namespace Beem.Views
 
         private void btnPin_Click(object sender, RoutedEventArgs e)
         {
+            // ANALYTICS
+            if (CoreViewModel.Instance.CurrentAppSettings.EnableAnalytics)
+            {
+                GoogleAnalytics.EasyTracker.GetTracker().SendEvent("Stations", "PinStation", CoreViewModel.Instance.CurrentStation.Name, 0);
+            }
+
             Utility.StationManager.Pin(CoreViewModel.Instance.CurrentStation);
         }
 
@@ -666,6 +709,12 @@ namespace Beem.Views
                             int? result = Guide.EndShowMessageBox(res);
                             if (result == 0)
                             {
+                                // ANALYTICS
+                                if (CoreViewModel.Instance.CurrentAppSettings.EnableAnalytics)
+                                {
+                                    GoogleAnalytics.EasyTracker.GetTracker().SendEvent("Stations", "ShareThroughWindowsPhone", CoreViewModel.Instance.CurrentStation.NowPlaying.FullTrackName, 0);
+                                }
+
                                 ShareLinkTask shareLink = new ShareLinkTask();
                                 shareLink.LinkUri = new Uri("http://bitly.com/BeemPlus");
                                 shareLink.Message = "Listening to " + CoreViewModel.Instance.CurrentStation.NowPlaying.FullTrackName + " with #BeemWP.";
@@ -673,6 +722,12 @@ namespace Beem.Views
                             }
                             else if (result == 1)
                             {
+                                // ANALYTICS
+                                if (CoreViewModel.Instance.CurrentAppSettings.EnableAnalytics)
+                                {
+                                    GoogleAnalytics.EasyTracker.GetTracker().SendEvent("Stations", "ShareThroughLastFm", CoreViewModel.Instance.CurrentStation.NowPlaying.FullTrackName, 0);
+                                }
+
                                 ScrobbleCurrentTrack();
                             }
                         }, null);
@@ -696,6 +751,12 @@ namespace Beem.Views
 
             Utility.StationManager.SerializeFavorites();
             imgFave.Source = Utility.FavoriteImageSetter.GetImage(CoreViewModel.Instance.CurrentStation);
+
+            // ANALYTICS
+            if (CoreViewModel.Instance.CurrentAppSettings.EnableAnalytics)
+            {
+                GoogleAnalytics.EasyTracker.GetTracker().SendEvent("Stations", "SetFavorite", CoreViewModel.Instance.CurrentStation.Name, 0);
+            }
         }
 
         private void btnCopy_Click(object sender, RoutedEventArgs e)
@@ -704,6 +765,12 @@ namespace Beem.Views
             {
                 Clipboard.SetText(CoreViewModel.Instance.CurrentStation.NowPlaying.FullTrackName);
                 MessageBox.Show("Track name copied to clipboard!", "Beem", MessageBoxButton.OK);
+
+                // ANALYTICS
+                if (CoreViewModel.Instance.CurrentAppSettings.EnableAnalytics)
+                {
+                    GoogleAnalytics.EasyTracker.GetTracker().SendEvent("Stations", "Copied", CoreViewModel.Instance.CurrentStation.Name, 0);
+                }
             }
             else
             {

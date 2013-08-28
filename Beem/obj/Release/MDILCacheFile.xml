@@ -1,7 +1,7 @@
-﻿<xapCache source="C:\Users\Dennis\Documents\GitHub\beem\Beem\Bin\Release\Beem_Release_AnyCPU.xap" wasSigned="False" wasTritonized="False" certificateThumbprint="" TimeStampUrl="" signKeyFile="" signKeyPassword="" lastWriteTime="8/26/2013 6:30:28 PM">
-  <file source="C:\Users\Dennis\Documents\GitHub\beem\Beem\obj\Release\Beem.dll" archivePath="Beem.dll" lastWriteTime="8/26/2013 6:30:27 PM" />
-  <file source="C:\Users\Dennis\Documents\GitHub\beem\Beem\analytics.xml" archivePath="analytics.xml" lastWriteTime="8/26/2013 6:12:46 PM" />
-  <file source="C:\Users\Dennis\Documents\GitHub\beem\Beem\APIKeyManifest.xml" archivePath="APIKeyManifest.xml" lastWriteTime="8/26/2013 5:56:49 PM" />
+﻿<xapCache source="C:\Users\Dennis\Documents\GitHub\beem\Beem\Bin\Release\Beem_Release_AnyCPU.xap" wasSigned="False" wasTritonized="False" certificateThumbprint="" TimeStampUrl="" signKeyFile="" signKeyPassword="" lastWriteTime="8/28/2013 5:00:54 PM">
+  <file source="C:\Users\Dennis\Documents\GitHub\beem\Beem\obj\Release\Beem.dll" archivePath="Beem.dll" lastWriteTime="8/28/2013 5:00:53 PM" />
+  <file source="C:\Users\Dennis\Documents\GitHub\beem\Beem\analytics.xml" archivePath="analytics.xml" lastWriteTime="8/28/2013 2:41:21 PM" />
+  <file source="C:\Users\Dennis\Documents\GitHub\beem\Beem\APIKeyManifest.xml" archivePath="APIKeyManifest.xml" lastWriteTime="8/28/2013 2:41:41 PM" />
   <file source="C:\Users\Dennis\Documents\GitHub\beem\Beem\Images\appbar.check.png" archivePath="Images\appbar.check.png" lastWriteTime="8/23/2013 2:53:20 PM" />
   <file source="C:\Users\Dennis\Documents\GitHub\beem\Beem\Images\appbar.clipboard.png" archivePath="Images\appbar.clipboard.png" lastWriteTime="8/23/2013 2:53:20 PM" />
   <file source="C:\Users\Dennis\Documents\GitHub\beem\Beem\Images\appbar.clipboard.light.png" archivePath="Images\appbar.clipboard.light.png" lastWriteTime="8/23/2013 2:53:20 PM" />
