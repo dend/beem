@@ -21,7 +21,8 @@
         </Grid.RowDefinitions>
         
         <Grid.Background>
-            <ImageBrush Opacity=".5" ImageSource="/Images/panorama.png" AlignmentX="Left" Stretch="None"></ImageBrush>
+            <ImageBrush Opacity=".5" ImageSource="/Images/panorama.png" AlignmentX="Left" 
+                        Stretch="UniformToFill"></ImageBrush>
         </Grid.Background>
 
         <!--TitlePanel contains the name of the application and page title-->

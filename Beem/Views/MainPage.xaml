@@ -31,7 +31,7 @@
                 </DataTemplate>
             </controls:Pivot.TitleTemplate>
             <controls:Pivot.Background>
-                <ImageBrush Opacity=".5" ImageSource="/Images/panorama.png" Stretch="None"></ImageBrush>
+                <ImageBrush Opacity=".5" ImageSource="/Images/panorama.png" Stretch="UniformToFill"></ImageBrush>
             </controls:Pivot.Background>
             <controls:PivotItem Header="stations">
                 <Grid>

@@ -21,7 +21,8 @@
 
     <Grid x:Name="LayoutRoot">
         <Grid.Background>
-            <ImageBrush Opacity=".5" ImageSource="/Images/panorama.png" AlignmentX="Left" Stretch="None"></ImageBrush>
+            <ImageBrush Opacity=".5" ImageSource="/Images/panorama.png" AlignmentX="Left" 
+                        Stretch="UniformToFill"></ImageBrush>
         </Grid.Background>
 
         <controls:Pivot Grid.Row="1" Title="SETTINGS">
