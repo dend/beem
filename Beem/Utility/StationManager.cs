@@ -3,10 +3,7 @@ using Beem.ViewModels;
 using Coding4Fun.Toolkit.Storage;
 using Microsoft.Phone.Shell;
 using System;
-using System.IO;
-using System.IO.IsolatedStorage;
 using System.Linq;
-using System.Xml.Serialization;
 
 namespace Beem.Utility
 {
@@ -69,17 +66,7 @@ namespace Beem.Utility
 
         public static void DeserializeCurrentStation()
         {
-            CoreViewModel.Instance.CurrentStation = new Station();
-
-            var userStore = IsolatedStorageFile.GetUserStoreForApplication();
-            if (userStore.FileExists("current.xml"))
-            {
-                using (var stream = new IsolatedStorageFileStream("current.xml", FileMode.Open, userStore))
-                {
-                    XmlSerializer serializer = new XmlSerializer(CoreViewModel.Instance.CurrentStation.GetType());
-                    CoreViewModel.Instance.CurrentStation = (Station)serializer.Deserialize(stream);
-                }
-            }
+            CoreViewModel.Instance.CurrentStation = Serialize.Open<Station>("current.xml");
         }
 
         public static void SerializeFavorites()

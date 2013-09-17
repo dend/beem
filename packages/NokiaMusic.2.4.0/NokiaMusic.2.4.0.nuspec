@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>NokiaMusic</id>
+    <version>2.4.0</version>
+    <title>Nokia Music</title>
+    <authors>Steve Robbins</authors>
+    <owners>Steve Robbins</owners>
+    <licenseUrl>https://raw.github.com/nokia-entertainment/wp-api-client/master/LICENSE.txt</licenseUrl>
+    <projectUrl>https://github.com/nokia-entertainment/wp-api-client</projectUrl>
+    <iconUrl>http://api.ent.nokia.com/assets/NokiaMusicNuGet.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>The Nokia Music API lets you easily integrate your Windows Phone or Windows 8 applicaton with Nokia Music. The API offers two levels of integration; the simplest and quickest to get going is to use the high-level Launcher Tasks, with more advanced integration available to perform searches and get recommendations within your app.</description>
+    <summary>The Nokia Music API lets you easily integrate your Windows Phone or Windows 8 applicaton with Nokia Music.</summary>
+    <releaseNotes />
+    <copyright>Copyright (c) 2012-2013, Nokia</copyright>
+    <language>en-US</language>
+    <tags>Nokia Music NokiaMusic WindowsPhone wp71 wp8 windows8</tags>
+    <dependencies>
+      <group>
+        <dependency id="Newtonsoft.Json" version="4.5.11" />
+      </group>
+      <group targetFramework="WindowsPhone7.1">
+        <dependency id="SharpGIS.GZipWebClient" version="1.4.0.0" />
+        <dependency id="Newtonsoft.Json" version="4.5.11" />
+      </group>
+      <group targetFramework="WindowsPhone8.0">
+        <dependency id="SharpGIS.GZipWebClient" version="1.4.0.0" />
+        <dependency id="Newtonsoft.Json" version="4.5.11" />
+      </group>
+    </dependencies>
+    <references>
+      <reference file="_._" />
+      <reference file="Nokia.Music.Wp7.dll" />
+      <reference file="Nokia.Music.Win8.dll" />
+      <reference file="Nokia.Music.Wp8.dll" />
+    </references>
+  </metadata>
+</package>

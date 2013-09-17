@@ -11,6 +11,7 @@ using Microsoft.Phone.BackgroundAudio;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Tasks;
 using Microsoft.Xna.Framework.GamerServices;
+using Nokia.Music.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -144,7 +145,7 @@ namespace Beem.Views
                 // Also make sure that we scrobble the track to Last.fm if necessary.
                 if (CoreViewModel.Instance.CurrentAppSettings.ScrobbleOnLaunch)
                 {
-                    ScrobbleCurrentTrack(false);
+                    LastFmHelper.ScrobbleCurrentTrack(false);
                 }
 
                 if (BackgroundAudioPlayer.Instance.Track != null)
@@ -192,6 +193,8 @@ namespace Beem.Views
                     string.Empty,
                     new Uri(CoreViewModel.Instance.CurrentStation.Image), null, EnabledPlayerControls.All);
 
+                // Update the core tile with the track that is being played.
+                ShellHelper.SetCoreTile();
 
                 BackgroundAudioPlayer.Instance.Track = track;
 
@@ -575,24 +578,9 @@ namespace Beem.Views
                 GoogleAnalytics.EasyTracker.GetTracker().SendEvent("Stations", "SearchMarketplace", track.FullTrackName, 0);
             }
 
-            SearchMarketplace(string.Format("{0} {1}", track.Artist, track.Title));
+            FindTrack(string.Format("{0} {1}", track.Artist, track.Title));
         }
 
-        private void SearchMarketplace(string term)
-        {
-            MarketplaceSearchTask task = new MarketplaceSearchTask();
-            task.ContentType = MarketplaceContentType.Music;
-
-            task.SearchTerms = term;
-            try
-            {
-                task.Show();
-            }
-            catch
-            {
-
-            }
-        }
 
         protected override void OnBackKeyPress(System.ComponentModel.CancelEventArgs e)
         {
@@ -615,58 +603,7 @@ namespace Beem.Views
             }
         }
 
-        void ScrobbleCurrentTrack(bool showNotification = true)
-        {
-            if (CoreViewModel.Instance.CurrentAppSettings.Session != null &&
-                !string.IsNullOrEmpty(CoreViewModel.Instance.CurrentAppSettings.Session.Key))
-            {
-                Dispatcher.BeginInvoke(() =>
-                    {
-                        try
-                        {
-                            string trackArtist = string.IsNullOrEmpty(CoreViewModel.Instance.CurrentStation.NowPlaying.Artist) ?
-                                CoreViewModel.Instance.CurrentStation.Name : CoreViewModel.Instance.CurrentStation.NowPlaying.Artist;
-
-                            App.LFMClient.ScrobbleTrack(
-                            trackArtist,
-                            CoreViewModel.Instance.CurrentStation.NowPlaying.Title,
-                            CoreViewModel.Instance.CurrentAppSettings.Session.Key,
-                            (data) =>
-                            {
-                                if (showNotification)
-                                {
-                                    Dispatcher.BeginInvoke(() =>
-                                    {
-                                        MessageBox.Show("Scrobbled track to Last.fm!", "Beem", MessageBoxButton.OK);
-                                    });
-
-                                    // ANALYTICS
-                                    if (CoreViewModel.Instance.CurrentAppSettings.EnableAnalytics)
-                                    {
-                                        GoogleAnalytics.EasyTracker.GetTracker().SendEvent("Stations", "ScrobbleTrack", CoreViewModel.Instance.CurrentStation.NowPlaying.FullTrackName, 0);
-                                    }
-                                }
-                            });
-                        }
-                        catch
-                        {
-                            MessageBox.Show("Can't scrobble track. Make sure you are logged into Last.fm and you are connected to a network.",
-                                "Beem", MessageBoxButton.OK);
-                        }
-                    });
-            }
-            else
-            {
-                if (showNotification)
-                {
-                    Dispatcher.BeginInvoke(() =>
-                        {
-                            MessageBox.Show("Cannot scrobble track. Try authenticating with Last.fm first.", "Beem",
-                                MessageBoxButton.OK);
-                        });
-                }
-            }
-        }
+        
 
         private void btnMarket_Click(object sender, RoutedEventArgs e)
         {
@@ -678,13 +615,32 @@ namespace Beem.Views
                     GoogleAnalytics.EasyTracker.GetTracker().SendEvent("Stations", "SearchMarketplaceViaIcon", CoreViewModel.Instance.CurrentStation.NowPlaying.FullTrackName, 0);
                 }
 
-                SearchMarketplace(string.Format("{0} {1}", CoreViewModel.Instance.CurrentStation.NowPlaying.Artist,
-                    CoreViewModel.Instance.CurrentStation.NowPlaying.Title));
+                string trackName = string.Format("{0} {1}", CoreViewModel.Instance.CurrentStation.NowPlaying.Artist,
+                                    CoreViewModel.Instance.CurrentStation.NowPlaying.Title);
+
+                FindTrack(trackName);
             }
             catch
             {
-                MessageBox.Show("Oops! Looks like we can't reach the Marketplace right now. Try again later.", "Beem", MessageBoxButton.OK);
+                MessageBox.Show("We cannot search for the track at this time.", "Find Track", MessageBoxButton.OK);
             }
+        }
+
+        private void FindTrack(string trackName)
+        {
+            Guide.BeginShowMessageBox("Find Track", "You can try searching for the track in Xbox Music or Nokia Music. Which one do you prefer?",
+                new List<string> { "Xbox Music", "Nokia Music" }, 0, MessageBoxIcon.Alert, new AsyncCallback((result) =>
+                {
+                    int? userChoice = Guide.EndShowMessageBox(result);
+                    if (userChoice == 0)
+                    {
+                        ShellHelper.SearchXboxMusic(trackName);
+                    }
+                    else if (userChoice == 1)
+                    {
+                        ShellHelper.SearchNokiaMusic(trackName);
+                    }
+                }), null);
         }
 
         private void btnPin_Click(object sender, RoutedEventArgs e)
@@ -700,42 +656,44 @@ namespace Beem.Views
 
         private void btnShare_Click(object sender, RoutedEventArgs e)
         {
-            // The station is null if there was a problem with the Internet connection.
-            if (CoreViewModel.Instance.CurrentStation.NowPlaying != null)
-            {
-                Guide.BeginShowMessageBox("Beem", "Do you want to share the track through the Windows Phone social channels or Last.fm?",
-                    new List<string> { "windows phone", "last.fm" }, 0, MessageBoxIcon.None, (res) =>
-                        {
-                            int? result = Guide.EndShowMessageBox(res);
-                            if (result == 0)
-                            {
-                                // ANALYTICS
-                                if (CoreViewModel.Instance.CurrentAppSettings.EnableAnalytics)
-                                {
-                                    GoogleAnalytics.EasyTracker.GetTracker().SendEvent("Stations", "ShareThroughWindowsPhone", CoreViewModel.Instance.CurrentStation.NowPlaying.FullTrackName, 0);
-                                }
+            ShellHelper.ShareTrack();
 
-                                ShareLinkTask shareLink = new ShareLinkTask();
-                                shareLink.LinkUri = new Uri("http://bitly.com/BeemPlus");
-                                shareLink.Message = "Listening to " + CoreViewModel.Instance.CurrentStation.NowPlaying.FullTrackName + " with #BeemWP.";
-                                shareLink.Show();
-                            }
-                            else if (result == 1)
-                            {
-                                // ANALYTICS
-                                if (CoreViewModel.Instance.CurrentAppSettings.EnableAnalytics)
-                                {
-                                    GoogleAnalytics.EasyTracker.GetTracker().SendEvent("Stations", "ShareThroughLastFm", CoreViewModel.Instance.CurrentStation.NowPlaying.FullTrackName, 0);
-                                }
+            //// The station is null if there was a problem with the Internet connection.
+            //if (CoreViewModel.Instance.CurrentStation.NowPlaying != null)
+            //{
+            //    Guide.BeginShowMessageBox("Beem", "Do you want to share the track through the Windows Phone social channels or Last.fm?",
+            //        new List<string> { "windows phone", "last.fm" }, 0, MessageBoxIcon.None, (res) =>
+            //            {
+            //                int? result = Guide.EndShowMessageBox(res);
+            //                if (result == 0)
+            //                {
+            //                    // ANALYTICS
+            //                    if (CoreViewModel.Instance.CurrentAppSettings.EnableAnalytics)
+            //                    {
+            //                        GoogleAnalytics.EasyTracker.GetTracker().SendEvent("Stations", "ShareThroughWindowsPhone", CoreViewModel.Instance.CurrentStation.NowPlaying.FullTrackName, 0);
+            //                    }
 
-                                ScrobbleCurrentTrack();
-                            }
-                        }, null);
-            }
-            else
-            {
-                MessageBox.Show("Apparently there is no Internet connection, so we can't share your track at this time.", "Beem", MessageBoxButton.OK);
-            }
+            //                    ShareLinkTask shareLink = new ShareLinkTask();
+            //                    shareLink.LinkUri = new Uri("http://bitly.com/BeemPlus");
+            //                    shareLink.Message = "Listening to " + CoreViewModel.Instance.CurrentStation.NowPlaying.FullTrackName + " with #BeemWP.";
+            //                    shareLink.Show();
+            //                }
+            //                else if (result == 1)
+            //                {
+            //                    
+            //                    
+            //                    
+            //                    
+            //                    
+
+            //                    
+            //                }
+            //            }, null);
+            //}
+            //else
+            //{
+            //    MessageBox.Show("Apparently there is no Internet connection, so we can't share your track at this time.", "Beem", MessageBoxButton.OK);
+            //}
         }
 
         private void btnFavorite_Click(object sender, RoutedEventArgs e)

@@ -29,8 +29,11 @@
           <BackContent></BackContent>
           <BackBackgroundImageURI></BackBackgroundImageURI>
           <BackTitle></BackTitle>
+          <LargeBackgroundImageURI IsRelative="true" IsResource="false">large_tile_template2.png</LargeBackgroundImageURI>
+          <LargeBackContent />
+          <LargeBackBackgroundImageURI IsRelative="true" IsResource="false"></LargeBackBackgroundImageURI>
           <DeviceLockImageURI></DeviceLockImageURI>
-          <HasLarge>false</HasLarge>
+          <HasLarge>True</HasLarge>
         </TemplateFlip>
       </PrimaryToken>
     </Tokens>

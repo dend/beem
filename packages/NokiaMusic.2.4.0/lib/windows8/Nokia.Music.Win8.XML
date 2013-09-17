@@ -1,0 +1,2807 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Nokia.Music.Win8</name>
+    </assembly>
+    <members>
+        <member name="T:Nokia.Music.Commands.ArtistProductsCommand">
+            <summary>
+              Gets products by an artist.
+            </summary>
+        </member>
+        <member name="T:Nokia.Music.Commands.SearchCatalogCommand`1">
+            <summary>
+            Searches the Nokia Music Catalog
+            </summary>
+            <typeparam name="TReturnType">The type of the returned object.</typeparam>
+        </member>
+        <member name="T:Nokia.Music.Commands.MusicClientCommand`1">
+            <summary>
+            Defines the Music Client Command base class
+            </summary>
+            <typeparam name="TReturnType">The type of the returned object.</typeparam>
+        </member>
+        <member name="T:Nokia.Music.Commands.MusicClientCommand">
+            <summary>
+            Defines the Music Client Command base class
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Commands.MusicClientCommand.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nokia.Music.Commands.MusicClientCommand"/> class.
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Commands.MusicClientCommand.BuildRequestBody">
+            <summary>
+            Allows an API method to supply data to be sent in the body of a request
+            </summary>
+            <returns>The request data - Null by default, override to supply data for an API method</returns>
+        </member>
+        <member name="M:Nokia.Music.Commands.MusicClientCommand.AppendUriPath(System.Text.StringBuilder)">
+            <summary>
+            Appends the uri subpath and parameters specific to this API method
+            By default, no path is added, override this to add a uri subpath for a method
+            </summary>
+            <param name="uri">The base uri</param>
+        </member>
+        <member name="M:Nokia.Music.Commands.MusicClientCommand.SetAdditionalResponseInfo(Nokia.Music.Internal.Response.ResponseInfo)">
+            <summary>
+            In special cases, allows a command to use any additional information about the response
+            </summary>
+            <param name="responseInfo">The web response info</param>
+        </member>
+        <member name="M:Nokia.Music.Commands.MusicClientCommand.Execute">
+            <summary>
+            Executes the command
+            </summary>
+        </member>
+        <member name="P:Nokia.Music.Commands.MusicClientCommand.MusicClientSettings">
+            <summary>
+            Gets or sets the settings.
+            </summary>
+            <value>
+            The settings.
+            </value>
+        </member>
+        <member name="P:Nokia.Music.Commands.MusicClientCommand.RequestHandler">
+            <summary>
+            Gets or sets the request handler.
+            </summary>
+            <value>
+            The request handler.
+            </value>
+        </member>
+        <member name="P:Nokia.Music.Commands.MusicClientCommand.RequiresCountryCode">
+            <summary>
+            Gets a value indicating whether the API method requires a country code to be specified.
+            API methods require a country code by default. Override this method for calls that do not.
+            </summary>
+        </member>
+        <member name="P:Nokia.Music.Commands.MusicClientCommand.BaseApiUri">
+            <summary>
+            Gets or sets the base uri for Api requests
+            </summary>
+        </member>
+        <member name="P:Nokia.Music.Commands.MusicClientCommand.RequestId">
+            <summary>
+            Gets or sets an id representing this request.
+            </summary>
+        </member>
+        <member name="P:Nokia.Music.Commands.MusicClientCommand.HttpMethod">
+            <summary>
+            Gets the HTTP method used for this request. GET by default
+            </summary>
+        </member>
+        <member name="P:Nokia.Music.Commands.MusicClientCommand.ContentType">
+            <summary>
+            Gets the content type for this request
+            </summary>
+        </member>
+        <member name="T:Nokia.Music.Commands.MusicClientCommand.JTokenConversionDelegate`1">
+            <summary>
+            Signifies a method for converting a JToken into a typed object
+            </summary>
+            <typeparam name="T">The type to return</typeparam>
+            <param name="item">The item.</param>
+            <returns>A typed object</returns>
+        </member>
+        <member name="M:Nokia.Music.Commands.MusicClientCommand`1.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nokia.Music.Commands.MusicClientCommand`1"/> class.
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Commands.MusicClientCommand`1.Invoke(System.Action{`0})">
+            <summary>
+            Invoke the command
+            </summary>
+            <param name="callback">The callback to use when the API call has completed</param>
+        </member>
+        <member name="M:Nokia.Music.Commands.MusicClientCommand`1.ListItemResponseHandler``1(Nokia.Music.Response{Newtonsoft.Json.Linq.JObject},System.String,Nokia.Music.Commands.MusicClientCommand.JTokenConversionDelegate{``0},System.Action{Nokia.Music.ListResponse{``0}})">
+            <summary>
+            Generic response handler for content lists
+            </summary>
+            <typeparam name="T">The type to return</typeparam>
+            <param name="rawResult">The response</param>
+            <param name="itemsName">The json list name</param>
+            <param name="converter">The object creation method to use</param>
+            <param name="callback">The client callback</param>
+        </member>
+        <member name="M:Nokia.Music.Commands.MusicClientCommand`1.ItemResponseHandler``1(Nokia.Music.Response{Newtonsoft.Json.Linq.JObject},Nokia.Music.Commands.MusicClientCommand.JTokenConversionDelegate{``0},System.Action{Nokia.Music.Response{``0}})">
+            <summary>
+            Generic response handler for single item content
+            </summary>
+            <typeparam name="T">The type to return</typeparam>
+            <param name="rawResult">The response</param>
+            <param name="converter">The object creation method to use</param>
+            <param name="callback">The client callback</param>
+        </member>
+        <member name="M:Nokia.Music.Commands.MusicClientCommand`1.GetPagingParams">
+            <summary>
+            Creates an initial querystring dictionary containing paging parameters
+            </summary>
+            <returns>A dictionary containing standard querystring paging parameters</returns>
+        </member>
+        <member name="P:Nokia.Music.Commands.MusicClientCommand`1.ItemsPerPage">
+            <summary>
+            Gets or sets the number of items to fetch.
+            </summary>
+        </member>
+        <member name="P:Nokia.Music.Commands.MusicClientCommand`1.StartIndex">
+            <summary>
+            Gets or sets the zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).
+            </summary>
+        </member>
+        <member name="P:Nokia.Music.Commands.MusicClientCommand`1.JsonProcessor">
+            <summary>
+            Gets a json processor that can parse the response expected by this command.
+            By default, a processor for a named item list is returned.
+            </summary>
+        </member>
+        <member name="P:Nokia.Music.Commands.MusicClientCommand`1.Callback">
+            <summary>
+            Gets or sets the callback.
+            </summary>
+            <value>
+            The callback.
+            </value>
+        </member>
+        <member name="M:Nokia.Music.Commands.SearchCatalogCommand`1.InternalSearch``1(System.String,System.String,System.Nullable{Nokia.Music.Types.Category},System.String,System.String,System.Int32,System.Int32,Nokia.Music.Commands.MusicClientCommand.JTokenConversionDelegate{``0},System.Action{Nokia.Music.ListResponse{``0}})">
+            <summary>
+            Searches for items
+            </summary>
+            <typeparam name="T">The type to return</typeparam>
+            <param name="searchTerm">The search term.</param>
+            <param name="genreId">The genre to filter the results by.</param>
+            <param name="category">The category to filter the results by.</param>
+            <param name="location">The location to filter the results by.</param>
+            <param name="maxdistance">The max distance from the location to to filter the results by.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <param name="converter">The object creation method to use</param>
+            <param name="callback">The callback to use when the API call has completed</param>
+        </member>
+        <member name="M:Nokia.Music.Commands.ArtistProductsCommand.AppendUriPath(System.Text.StringBuilder)">
+            <summary>
+            Appends the uri subpath and parameters specific to this API method
+            </summary>
+            <param name="uri">The base uri</param>
+        </member>
+        <member name="M:Nokia.Music.Commands.ArtistProductsCommand.Execute">
+            <summary>
+            Executes the command
+            </summary>
+        </member>
+        <member name="P:Nokia.Music.Commands.ArtistProductsCommand.ArtistId">
+            <summary>
+            Gets or sets the artist id.
+            </summary>
+            <value>
+            The artist id.
+            </value>
+        </member>
+        <member name="P:Nokia.Music.Commands.ArtistProductsCommand.Category">
+            <summary>
+            Gets or sets the category.
+            </summary>
+        </member>
+        <member name="T:Nokia.Music.Commands.CountryResolverCommand">
+            <summary>
+            Defines the country resolver request
+            </summary>
+        </member>
+        <member name="P:Nokia.Music.Commands.CountryResolverCommand.CountryCode">
+            <summary>
+            Gets or sets the supplied country code
+            </summary>
+        </member>
+        <member name="T:Nokia.Music.Commands.CountryResolverCommand.CountryResolverSettings">
+            <summary>
+            Implementation of MusicClientSettings for use with country resolver request
+            </summary>
+        </member>
+        <member name="T:Nokia.Music.Internal.IMusicClientSettings">
+            <summary>
+            Defines the MusicClient Settings
+            </summary>
+        </member>
+        <member name="P:Nokia.Music.Internal.IMusicClientSettings.AppId">
+            <summary>
+            Gets the app id.
+            </summary>
+            <value>
+            The app id.
+            </value>
+        </member>
+        <member name="P:Nokia.Music.Internal.IMusicClientSettings.CountryCode">
+            <summary>
+            Gets the country code.
+            </summary>
+            <value>
+            The country code.
+            </value>
+        </member>
+        <member name="P:Nokia.Music.Internal.IMusicClientSettings.CountryCodeBasedOnRegionInfo">
+            <summary>
+            Gets a value indicating whether the country code was based on region info.
+            </summary>
+            <value>
+            <c>true</c> if the country code was based on region info; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="T:Nokia.Music.Commands.GenresCommand">
+            <summary>
+            Gets the available genres
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Commands.GenresCommand.AppendUriPath(System.Text.StringBuilder)">
+            <summary>
+            Appends the uri subpath and parameters specific to this API method
+            </summary>
+            <param name="uri">The base uri</param>
+        </member>
+        <member name="M:Nokia.Music.Commands.GenresCommand.Execute">
+            <summary>
+            Executes the command
+            </summary>
+        </member>
+        <member name="T:Nokia.Music.Commands.MixesCommand">
+            <summary>
+              Gets the Mixes available in a group
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Commands.MixesCommand.AppendUriPath(System.Text.StringBuilder)">
+            <summary>
+            Appends the uri subpath and parameters specific to this API method
+            </summary>
+            <param name="uri">The base uri</param>
+        </member>
+        <member name="M:Nokia.Music.Commands.MixesCommand.Execute">
+            <summary>
+            Executes the command
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Commands.MixesCommand.BuildQueryString">
+            <summary>
+            Builds the querystring parameters
+            </summary>
+            <returns>The querystring parameters</returns>
+        </member>
+        <member name="P:Nokia.Music.Commands.MixesCommand.ExclusiveTag">
+            <summary>
+              Gets or sets the mix group exclusive tag.
+            </summary>
+        </member>
+        <member name="P:Nokia.Music.Commands.MixesCommand.MixGroupId">
+            <summary>
+              Gets or sets the mix group id.
+            </summary>
+        </member>
+        <member name="T:Nokia.Music.Commands.MixGroupsCommand">
+            <summary>
+            Gets the Mix Groups available
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Commands.MixGroupsCommand.AppendUriPath(System.Text.StringBuilder)">
+            <summary>
+            Appends the uri subpath and parameters specific to this API method
+            </summary>
+            <param name="uri">The base uri</param>
+        </member>
+        <member name="M:Nokia.Music.Commands.MixGroupsCommand.Execute">
+            <summary>
+            Executes the command
+            </summary>
+        </member>
+        <member name="P:Nokia.Music.Commands.MixGroupsCommand.ExclusiveTag">
+            <summary>
+              Gets or sets the mix group exclusive tag.
+            </summary>
+        </member>
+        <member name="T:Nokia.Music.Commands.NewReleasesCommand">
+            <summary>
+            Gets a list of new releases
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Commands.NewReleasesCommand.AppendUriPath(System.Text.StringBuilder)">
+            <summary>
+            Appends the uri subpath and parameters specific to this API method
+            </summary>
+            <param name="uri">The base uri</param>
+        </member>
+        <member name="M:Nokia.Music.Commands.NewReleasesCommand.Execute">
+            <summary>
+            Executes the command
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Commands.NewReleasesCommand.ValidateCategory">
+            <summary>
+            Ensures that only a supported category type is used
+            </summary>
+        </member>
+        <member name="P:Nokia.Music.Commands.NewReleasesCommand.Category">
+            <summary>
+            Gets or sets the category - only Album and Track lists are available.
+            </summary>
+        </member>
+        <member name="P:Nokia.Music.Commands.NewReleasesCommand.GenreId">
+            <summary>
+            Gets or sets the genre ID to get results for.
+            </summary>
+        </member>
+        <member name="T:Nokia.Music.Commands.ProductCommand">
+            <summary>
+              Gets a specific product.
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Commands.ProductCommand.AppendUriPath(System.Text.StringBuilder)">
+            <summary>
+            Appends the uri subpath and parameters specific to this API method
+            </summary>
+            <param name="uri">The base uri</param>
+        </member>
+        <member name="M:Nokia.Music.Commands.ProductCommand.Execute">
+            <summary>
+            Executes the command
+            </summary>
+        </member>
+        <member name="P:Nokia.Music.Commands.ProductCommand.ProductId">
+            <summary>
+            Gets or sets the product id.
+            </summary>
+            <value>
+            The product id.
+            </value>
+        </member>
+        <member name="T:Nokia.Music.Commands.SearchArtistsCommand">
+            <summary>
+            Searches for an Artist
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Commands.SearchArtistsCommand.Execute">
+            <summary>
+            Executes the command
+            </summary>
+            <exception cref="T:System.ArgumentNullException">SearchTerm;A searchTerm must be supplied</exception>
+        </member>
+        <member name="P:Nokia.Music.Commands.SearchArtistsCommand.SearchTerm">
+            <summary>
+            Gets or sets the search term.
+            </summary>
+        </member>
+        <member name="P:Nokia.Music.Commands.SearchArtistsCommand.Location">
+            <summary>
+            Gets or sets the latitude and longitude to search around.
+            </summary>
+            <value>
+            The location.
+            </value>
+        </member>
+        <member name="P:Nokia.Music.Commands.SearchArtistsCommand.MaxDistance">
+            <summary>
+            Gets or sets the max distance to search around the location.
+            </summary>
+            <value>
+            The max distance.
+            </value>
+        </member>
+        <member name="T:Nokia.Music.Commands.SearchCommand">
+            <summary>
+            Searches the Nokia Music Catalog
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Commands.SearchCommand.CreateCatalogItemBasedOnCategory(Newtonsoft.Json.Linq.JToken)">
+            <summary>
+            Creates an CatalogItem based on it's category field
+            </summary>
+            <param name="item">The JSON item</param>
+            <returns>An CatalogItem</returns>
+            <remarks>Internal for testing purposes</remarks>
+        </member>
+        <member name="M:Nokia.Music.Commands.SearchCommand.Execute">
+            <summary>
+            Executes the command
+            </summary>
+        </member>
+        <member name="P:Nokia.Music.Commands.SearchCommand.SearchTerm">
+            <summary>
+            Gets or sets the search term.
+            </summary>
+        </member>
+        <member name="P:Nokia.Music.Commands.SearchCommand.Category">
+            <summary>
+            Gets or sets the category.
+            </summary>
+        </member>
+        <member name="P:Nokia.Music.Commands.SearchCommand.GenreId">
+            <summary>
+            Gets or sets the genre
+            </summary>
+        </member>
+        <member name="T:Nokia.Music.Commands.SearchSuggestionsCommand">
+            <summary>
+              Gets suggestions for a search term
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Commands.SearchSuggestionsCommand.AppendUriPath(System.Text.StringBuilder)">
+            <summary>
+            Appends the uri subpath and parameters specific to this API method
+            </summary>
+            <param name="uri">The base uri</param>
+        </member>
+        <member name="M:Nokia.Music.Commands.SearchSuggestionsCommand.Execute">
+            <summary>
+            Executes the command
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Commands.SearchSuggestionsCommand.ExtractStringFromJToken(Newtonsoft.Json.Linq.JToken)">
+            <summary>
+            Extracts a 
+            </summary>
+            <param name="item">The item.</param>
+            <returns>Returns the string value</returns>
+        </member>
+        <member name="P:Nokia.Music.Commands.SearchSuggestionsCommand.SearchTerm">
+            <summary>
+            Gets or sets the search term.
+            </summary>
+        </member>
+        <member name="P:Nokia.Music.Commands.SearchSuggestionsCommand.SuggestArtists">
+            <summary>
+            Gets or sets a value indicating whether to restrict to artist suggestions
+            </summary>
+        </member>
+        <member name="T:Nokia.Music.Commands.SimilarArtistsCommand">
+            <summary>
+            Gets similar artists to the supplied artist
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Commands.SimilarArtistsCommand.AppendUriPath(System.Text.StringBuilder)">
+            <summary>
+            Appends the uri subpath and parameters specific to this API method
+            </summary>
+            <param name="uri">The base uri</param>
+        </member>
+        <member name="M:Nokia.Music.Commands.SimilarArtistsCommand.Execute">
+            <summary>
+            Executes the command
+            </summary>
+        </member>
+        <member name="P:Nokia.Music.Commands.SimilarArtistsCommand.ArtistId">
+            <summary>
+            Gets or sets the artist id.
+            </summary>
+            <value>
+            The artist id.
+            </value>
+        </member>
+        <member name="T:Nokia.Music.Commands.SimilarProductsCommand">
+            <summary>
+             Gets similar products to the supplied product
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Commands.SimilarProductsCommand.AppendUriPath(System.Text.StringBuilder)">
+            <summary>
+            Appends the uri subpath and parameters specific to this API method
+            </summary>
+            <param name="uri">The base uri</param>
+        </member>
+        <member name="M:Nokia.Music.Commands.SimilarProductsCommand.Execute">
+            <summary>
+            Executes the command
+            </summary>
+        </member>
+        <member name="P:Nokia.Music.Commands.SimilarProductsCommand.ProductId">
+            <summary>
+            Gets or sets the product id.
+            </summary>
+            <value>
+            The product id.
+            </value>
+        </member>
+        <member name="T:Nokia.Music.Commands.TopArtistsCommand">
+            <summary>
+              Gets top artists
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Commands.TopArtistsCommand.Execute">
+            <summary>
+            Executes the command
+            </summary>
+        </member>
+        <member name="P:Nokia.Music.Commands.TopArtistsCommand.GenreId">
+            <summary>
+            Gets or sets the genre ID to get results for.
+            </summary>
+        </member>
+        <member name="T:Nokia.Music.Commands.TopProductsCommand">
+            <summary>
+            Gets a chart
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Commands.TopProductsCommand.AppendUriPath(System.Text.StringBuilder)">
+            <summary>
+            Appends the uri subpath and parameters specific to this API method
+            </summary>
+            <param name="uri">The base uri</param>
+        </member>
+        <member name="M:Nokia.Music.Commands.TopProductsCommand.Execute">
+            <summary>
+            Executes the command
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Commands.TopProductsCommand.ValidateCategory">
+            <summary>
+            Ensures that the supplied category is one of the supported types
+            </summary>
+        </member>
+        <member name="P:Nokia.Music.Commands.TopProductsCommand.Category">
+            <summary>
+            Gets or sets the category - only Album and Track charts are available.
+            </summary>
+        </member>
+        <member name="P:Nokia.Music.Commands.TopProductsCommand.GenreId">
+            <summary>
+            Gets or sets the genre ID to get results for.
+            </summary>
+        </member>
+        <member name="T:Nokia.Music.CountryResolver">
+            <summary>
+            The CountryResolver validates a country has availability for the Nokia Music API
+            </summary>
+        </member>
+        <member name="T:Nokia.Music.ICountryResolver">
+            <summary>
+            Defines the Nokia Music Country Resolver API
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.ICountryResolver.CheckAvailabilityAsync(System.String)">
+            <summary>
+            Validates that the Nokia Music API is available for a country
+            </summary>
+            <param name="countryCode">The country code.</param>
+            <returns>A Response containing whether the API is available or not</returns>
+        </member>
+        <member name="M:Nokia.Music.CountryResolver.#ctor(System.String,System.Nullable{System.Guid})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nokia.Music.CountryResolver"/> class.
+            </summary>
+            <param name="appId">The AppID obtained from api.developer.nokia.com</param>
+            <param name="requestId">A unique id to associate with this request</param>
+        </member>
+        <member name="M:Nokia.Music.CountryResolver.#ctor(System.String,Nokia.Music.Internal.Request.IApiRequestHandler,System.Nullable{System.Guid})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nokia.Music.CountryResolver"/> class.
+            </summary>
+            <param name="appId">The App ID obtained from api.developer.nokia.com</param>
+            <param name="requestHandler">The request handler.</param>
+            <param name="requestId">A unique id to associate with this request.</param>
+            <remarks>
+            Allows custom requestHandler for testing purposes
+            </remarks>
+        </member>
+        <member name="M:Nokia.Music.CountryResolver.CheckAvailabilityAsync(System.String)">
+            <summary>
+            Validates that the Nokia Music API is available for a country
+            </summary>
+            <param name="countryCode">The country code.</param>
+            <returns>
+            A Response containing whether the API is available or not
+            </returns>
+        </member>
+        <member name="M:Nokia.Music.CountryResolver.CheckAvailabilityInternal(System.Action{Nokia.Music.Response{System.Boolean}},System.String)">
+            <summary>
+            Validates that the Nokia Music API is available for a country
+            </summary>
+            <param name="callback">The callback to use when the API call has completed</param>
+            <param name="countryCode">The country code.</param>
+        </member>
+        <member name="M:Nokia.Music.CountryResolver.ValidateCountryCode(System.String)">
+            <summary>
+            Validates a country code.
+            </summary>
+            <param name="countryCode">The country code.</param>
+            <returns>A Boolean indicating that the country code is valid</returns>
+        </member>
+        <member name="P:Nokia.Music.CountryResolver.RequestHandler">
+            <summary>
+            Gets the request handler.
+            </summary>
+            <value>
+            The request handler.
+            </value>
+        </member>
+        <member name="T:Nokia.Music.ApiCallFailedException">
+            <summary>
+            Exception when an API call fails unexpectedly
+            </summary>
+        </member>
+        <member name="T:Nokia.Music.NokiaMusicException">
+            <summary>
+            Generic Nokia Music Exception.
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.NokiaMusicException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nokia.Music.NokiaMusicException"/> class with a specified error message.
+            </summary>
+            <param name="message">The message.</param>
+        </member>
+        <member name="M:Nokia.Music.ApiCallFailedException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nokia.Music.ApiCallFailedException"/> class.
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.ApiCallFailedException.#ctor(System.Nullable{System.Net.HttpStatusCode})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nokia.Music.ApiCallFailedException"/> class.
+            </summary>
+            <param name="statusCode">Details to append to the exception message</param>
+        </member>
+        <member name="P:Nokia.Music.ApiCallFailedException.StatusCode">
+            <summary>
+            Gets the HTTP status code that caused the exception to be constructed
+            </summary>
+        </member>
+        <member name="T:Nokia.Music.ApiCredentialsRequiredException">
+            <summary>
+            Exception when no API key has been supplied
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.ApiCredentialsRequiredException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nokia.Music.ApiCredentialsRequiredException"/> class.
+            </summary>
+        </member>
+        <member name="T:Nokia.Music.ApiNotAvailableException">
+            <summary>
+            Exception when an the API is not available in the current region
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.ApiNotAvailableException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nokia.Music.ApiNotAvailableException"/> class.
+            </summary>
+        </member>
+        <member name="T:Nokia.Music.CountryCodeRequiredException">
+            <summary>
+            Exception when no country has been supplied
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.CountryCodeRequiredException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nokia.Music.CountryCodeRequiredException"/> class.
+            </summary>
+        </member>
+        <member name="T:Nokia.Music.InvalidApiCredentialsException">
+            <summary>
+            Exception when invalid API credentials have been supplied
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.InvalidApiCredentialsException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nokia.Music.InvalidApiCredentialsException"/> class.
+            </summary>
+        </member>
+        <member name="T:Nokia.Music.InvalidCountryCodeException">
+            <summary>
+            Exception when an invalid country code has been supplied
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.InvalidCountryCodeException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nokia.Music.InvalidCountryCodeException"/> class.
+            </summary>
+        </member>
+        <member name="T:Nokia.Music.IMusicClient">
+            <summary>
+            Defines the Nokia Music API
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.IMusicClient.SearchArtistsAsync(System.String,System.Int32,System.Int32)">
+            <summary>
+            Searches for an Artist
+            </summary>
+            <param name="searchTerm">The search term.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <returns>A ListResponse containing Artists or an Error</returns>
+        </member>
+        <member name="M:Nokia.Music.IMusicClient.GetArtistSearchSuggestionsAsync(System.String,System.Int32)">
+            <summary>
+            Gets artist search suggestions.
+            </summary>
+            <param name="searchTerm">The search term.</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <returns>A ListResponse containing search suggestions</returns>
+        </member>
+        <member name="M:Nokia.Music.IMusicClient.GetArtistsAroundLocationAsync(System.Double,System.Double,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Gets artists that originate around a specified location
+            </summary>
+            <param name="latitude">The latitude to search around</param>
+            <param name="longitude">The longitude to search around</param>
+            <param name="maxdistance">The max distance (in KM) around the location to search</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <returns>A ListResponse containing Artists or an Error</returns>
+        </member>
+        <member name="M:Nokia.Music.IMusicClient.GetTopArtistsAsync(System.Int32,System.Int32)">
+            <summary>
+            Gets the top artists
+            </summary>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <returns>A ListResponse containing Artists or an Error</returns>
+        </member>
+        <member name="M:Nokia.Music.IMusicClient.GetTopArtistsForGenreAsync(System.String,System.Int32,System.Int32)">
+            <summary>
+            Gets the top artists for a genre
+            </summary>
+            <param name="id">The genre to get results for.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <returns>A ListResponse containing Artists or an Error</returns>
+        </member>
+        <member name="M:Nokia.Music.IMusicClient.GetTopArtistsForGenreAsync(Nokia.Music.Types.Genre,System.Int32,System.Int32)">
+            <summary>
+            Gets the top artists for a genre
+            </summary>
+            <param name="genre">The genre to get results for.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <returns>A ListResponse containing Artists or an Error</returns>
+        </member>
+        <member name="M:Nokia.Music.IMusicClient.GetSimilarArtistsAsync(System.String,System.Int32,System.Int32)">
+            <summary>
+            Gets similar artists for an artist.
+            </summary>
+            <param name="id">The artist id.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <returns>A ListResponse containing Artists or an Error</returns>
+        </member>
+        <member name="M:Nokia.Music.IMusicClient.GetSimilarArtistsAsync(Nokia.Music.Types.Artist,System.Int32,System.Int32)">
+            <summary>
+            Gets similar artists for an artist.
+            </summary>
+            <param name="artist">The artist.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <returns>A ListResponse containing Artists or an Error</returns>
+        </member>
+        <member name="M:Nokia.Music.IMusicClient.GetArtistProductsAsync(System.String,System.Nullable{Nokia.Music.Types.Category},System.Int32,System.Int32)">
+            <summary>
+            Gets products by an artist.
+            </summary>
+            <param name="id">The artist id.</param>
+            <param name="category">The category.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <returns>A ListResponse containing Products or an Error</returns>
+        </member>
+        <member name="M:Nokia.Music.IMusicClient.GetArtistProductsAsync(Nokia.Music.Types.Artist,System.Nullable{Nokia.Music.Types.Category},System.Int32,System.Int32)">
+            <summary>
+            Gets products by an artist.
+            </summary>
+            <param name="artist">The artist.</param>
+            <param name="category">The category.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <returns>A ListResponse containing Products or an Error</returns>
+        </member>
+        <member name="M:Nokia.Music.IMusicClient.GetProductAsync(System.String)">
+            <summary>
+            Gets a product by id
+            </summary>
+            <param name="id">The product id.</param>
+            <returns>A Response containing a Product or an Error</returns>
+        </member>
+        <member name="M:Nokia.Music.IMusicClient.GetTrackSampleUri(System.String)">
+            <summary>
+            Gets a track sample uri.
+            </summary>
+            <param name="id">The product id.</param>
+            <returns>
+            A uri to a sample clip of the track
+            </returns>
+        </member>
+        <member name="M:Nokia.Music.IMusicClient.GetSimilarProductsAsync(System.String,System.Int32,System.Int32)">
+            <summary>
+            Gets similar products for the supplied product.
+            </summary>
+            <param name="id">The product id.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <returns>A ListResponse containing Products or an Error</returns>
+        </member>
+        <member name="M:Nokia.Music.IMusicClient.GetSimilarProductsAsync(Nokia.Music.Types.Product,System.Int32,System.Int32)">
+            <summary>
+            Gets similar products for the supplied product.
+            </summary>
+            <param name="product">The product.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <returns>A ListResponse containing Products or an Error</returns>
+        </member>
+        <member name="M:Nokia.Music.IMusicClient.GetTopProductsAsync(Nokia.Music.Types.Category,System.Int32,System.Int32)">
+            <summary>
+            Gets a chart
+            </summary>
+            <param name="category">The category - only Album and Track charts are available.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <returns>A ListResponse containing Products or an Error</returns>
+        </member>
+        <member name="M:Nokia.Music.IMusicClient.GetTopProductsForGenreAsync(System.String,Nokia.Music.Types.Category,System.Int32,System.Int32)">
+            <summary>
+            Gets a chart
+            </summary>
+            <param name="id">The genre id.</param>
+            <param name="category">The category - only Album and Track charts are available.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <returns>
+            A ListResponse containing Products or an Error
+            </returns>
+        </member>
+        <member name="M:Nokia.Music.IMusicClient.GetTopProductsForGenreAsync(Nokia.Music.Types.Genre,Nokia.Music.Types.Category,System.Int32,System.Int32)">
+            <summary>
+            Gets a chart
+            </summary>
+            <param name="genre">The genre.</param>
+            <param name="category">The category - only Album and Track charts are available.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <returns>
+            A ListResponse containing Products or an Error
+            </returns>
+        </member>
+        <member name="M:Nokia.Music.IMusicClient.GetNewReleasesAsync(Nokia.Music.Types.Category,System.Int32,System.Int32)">
+            <summary>
+            Gets a list of new releases
+            </summary>
+            <param name="category">The category - only Album and Track lists are available.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <returns>A ListResponse containing Products or an Error</returns>
+        </member>
+        <member name="M:Nokia.Music.IMusicClient.GetNewReleasesForGenreAsync(System.String,Nokia.Music.Types.Category,System.Int32,System.Int32)">
+            <summary>
+            Gets a list of new releases
+            </summary>
+            <param name="id">The genre id.</param>
+            <param name="category">The category - only Album and Track lists are available.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <returns>
+            A ListResponse containing Products or an Error
+            </returns>
+        </member>
+        <member name="M:Nokia.Music.IMusicClient.GetNewReleasesForGenreAsync(Nokia.Music.Types.Genre,Nokia.Music.Types.Category,System.Int32,System.Int32)">
+            <summary>
+            Gets a list of new releases
+            </summary>
+            <param name="genre">The genre.</param>
+            <param name="category">The category - only Album and Track lists are available.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <returns>
+            A ListResponse containing Products or an Error
+            </returns>
+        </member>
+        <member name="M:Nokia.Music.IMusicClient.GetGenresAsync">
+            <summary>
+            Gets the available genres
+            </summary>
+            <returns>A ListResponse containing Genres or an Error</returns>
+        </member>
+        <member name="M:Nokia.Music.IMusicClient.SearchAsync(System.String,System.Nullable{Nokia.Music.Types.Category},System.Int32,System.Int32)">
+            <summary>
+            Searches Nokia Music
+            </summary>
+            <param name="searchTerm">The search term.</param>
+            <param name="category">The category.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <returns>A ListResponse containing MusicItems or an Error</returns>
+        </member>
+        <member name="M:Nokia.Music.IMusicClient.SearchGenreAsync(System.String,System.String,System.Nullable{Nokia.Music.Types.Category},System.Int32,System.Int32)">
+            <summary>
+            Searches within a Nokia Music Genre
+            </summary>
+            <param name="genreId">The genre id</param>
+            <param name="searchTerm">The search term.</param>
+            <param name="category">The category.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <returns>
+            A ListResponse containing MusicItems or an Error
+            </returns>
+        </member>
+        <member name="M:Nokia.Music.IMusicClient.GetSearchSuggestionsAsync(System.String,System.Int32)">
+            <summary>
+            Gets search suggestions.
+            </summary>
+            <param name="searchTerm">The search term.</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <returns>A ListResponse containing search suggestions</returns>
+        </member>
+        <member name="M:Nokia.Music.IMusicClient.GetMixGroupsAsync(System.Int32,System.Int32)">
+            <summary>
+            Gets the Mix Groups available
+            </summary>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <returns>A ListResponse containing MixGroups or an Error</returns>
+        </member>
+        <member name="M:Nokia.Music.IMusicClient.GetMixGroupsAsync(System.String,System.Int32,System.Int32)">
+            <summary>
+            Gets the Mix Groups available
+            </summary>
+            <param name="exclusiveTag">The exclusive tag.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <returns>
+            A ListResponse containing MixGroups or an Error
+            </returns>
+        </member>
+        <member name="M:Nokia.Music.IMusicClient.GetMixesAsync(System.String)">
+            <summary>
+            Gets the Mixes available in a group
+            </summary>
+            <param name="id">The mix group id.</param>
+            <returns>A ListResponse containing Mixes or an Error</returns>
+        </member>
+        <member name="M:Nokia.Music.IMusicClient.GetMixesAsync(System.String,System.String)">
+            <summary>
+            Gets the Mixes available in a group
+            </summary>
+            <param name="id">The mix group id.</param>
+            <param name="exclusiveTag">The exclusive tag.</param>
+            <returns>
+            A ListResponse containing Mixes or an Error
+            </returns>
+        </member>
+        <member name="M:Nokia.Music.IMusicClient.GetMixesAsync(Nokia.Music.Types.MixGroup)">
+            <summary>
+            Gets the Mixes available in a group
+            </summary>
+            <param name="group">The mix group.</param>
+            <returns>A ListResponse containing Mixes or an Error</returns>
+        </member>
+        <member name="M:Nokia.Music.IMusicClient.GetMixesAsync(Nokia.Music.Types.MixGroup,System.String)">
+            <summary>
+            Gets the Mixes available in a group
+            </summary>
+            <param name="group">The mix group.</param>
+            <param name="exclusiveTag">The exclusive tag.</param>
+            <returns>
+            A ListResponse containing Mixes or an Error
+            </returns>
+        </member>
+        <member name="T:Nokia.Music.Internal.Compression.GzipHandlerWin8">
+            <summary>
+            Handles enabling and processing of gzip responses
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Internal.Compression.IGzipHandler.EnableGzip(System.Net.WebRequest)">
+            <summary>
+            EnablesGzip for the supplied request
+            </summary>
+            <param name="request">The request</param>
+        </member>
+        <member name="M:Nokia.Music.Internal.Compression.IGzipHandler.GetResponseStream(System.Net.WebResponse)">
+            <summary>
+            Determines whether response is gzipped and invokes platform specific decompression if necessary
+            </summary>
+            <param name="response">The web response</param>
+            <returns>The response stream</returns>
+        </member>
+        <member name="M:Nokia.Music.Internal.Compression.GzipHandlerWin8.EnableGzip(System.Net.WebRequest)">
+            <summary>
+            Adds the gzip header to a web request
+            </summary>
+            <param name="request">The web request</param>
+        </member>
+        <member name="M:Nokia.Music.Internal.Compression.GzipHandlerWin8.GetResponseStream(System.Net.WebResponse)">
+            <summary>
+            Determines whether response is gzipped and invokes platform specific decompression if necessary
+            </summary>
+            <param name="response">The web response</param>
+            <returns>The response stream</returns>
+        </member>
+        <member name="T:Nokia.Music.Internal.Parsing.IJsonProcessor">
+            <summary>
+            Provides a common interface for parsing different kinds of lists
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Internal.Parsing.IJsonProcessor.ParseList``1(Newtonsoft.Json.Linq.JToken,System.String,Nokia.Music.Commands.MusicClientCommand.JTokenConversionDelegate{``0})">
+            <summary>
+            Parses a particular type of Json list
+            </summary>
+            <typeparam name="T">The type being parsed</typeparam>
+            <param name="rawJson">The raw json</param>
+            <param name="listName">The name of the list if appropriate eg. "items"</param>
+            <param name="converter">A delegate that can parse each object of type T</param>
+            <returns>A list of type T</returns>
+        </member>
+        <member name="M:Nokia.Music.Internal.Parsing.ArrayJsonProcessor.ParseList``1(Newtonsoft.Json.Linq.JToken,System.String,Nokia.Music.Commands.MusicClientCommand.JTokenConversionDelegate{``0})">
+            <summary>
+            Parses a json array
+            </summary>
+            <typeparam name="T">The type being parsed</typeparam>
+            <param name="rawJson">The raw json</param>
+            <param name="listName">The name of the list</param>
+            <param name="converter">A delegate that can parse each object of type T</param>
+            <returns>
+            A list of type T of each of the items in the array
+            </returns>
+        </member>
+        <member name="T:Nokia.Music.Internal.Parsing.NamedItemListJsonProcessor">
+            <summary>
+            The typical parsing mechanism for json list responses
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Internal.Parsing.NamedItemListJsonProcessor.ParseList``1(Newtonsoft.Json.Linq.JToken,System.String,Nokia.Music.Commands.MusicClientCommand.JTokenConversionDelegate{``0})">
+            <summary>
+            Parses a named json list.
+            </summary>
+            <typeparam name="T">The type being parsed</typeparam>
+            <param name="rawJson">The raw json</param>
+            <param name="listName">The name of the list if appropriate eg. "items"</param>
+            <param name="converter">A delegate that can parse each object of type T</param>
+            <returns>A list of type T</returns>
+        </member>
+        <member name="M:Nokia.Music.Internal.Parsing.ParseHelper.ParseEnumOrDefault``1(System.String)">
+            <summary>
+            Returns a matching enum value for specified string
+            </summary>
+            <typeparam name="T">The enum type</typeparam>
+            <param name="value">The response value</param>
+            <returns>The matching value or the default value which should be unknown or none</returns>
+        </member>
+        <member name="M:Nokia.Music.Internal.Parsing.ParseHelper.ParseWithDate(System.String)">
+            <summary>
+            Loads a JObject from the json.
+            If you use JObject.Parse it automatically changes the date to utc.
+            This keeps the date as it is in the json, allowing us to use local dates.
+            </summary>
+            <param name="json">The json string.</param>
+            <returns>The jobject</returns>
+        </member>
+        <member name="T:Nokia.Music.Internal.Request.ApiRequestHandler">
+            <summary>
+            Implementation of the raw API interface for making requests
+            </summary>
+        </member>
+        <member name="T:Nokia.Music.Internal.Request.IApiRequestHandler">
+            <summary>
+            Defines the raw API interface for making requests
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Internal.Request.IApiRequestHandler.SendRequestAsync``1(Nokia.Music.Commands.MusicClientCommand,Nokia.Music.Internal.IMusicClientSettings,System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}},Nokia.Music.Internal.Response.IResponseCallback{``0},System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Makes the API request
+            </summary>
+            <typeparam name="T">The type of response</typeparam>
+            <param name="command">The command to call.</param>
+            <param name="settings">The music client settings.</param>
+            <param name="queryParams">The queryString parameters.</param>
+            <param name="callback">The callback to hit when done.</param>
+            <param name="requestHeaders">HTTP headers to add to the request</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when no callback is specified</exception>
+        </member>
+        <member name="P:Nokia.Music.Internal.Request.IApiRequestHandler.UriBuilder">
+            <summary>
+            Gets the URI builder that is being used.
+            </summary>
+            <value>
+            The URI builder.
+            </value>
+        </member>
+        <member name="M:Nokia.Music.Internal.Request.ApiRequestHandler.#ctor(Nokia.Music.Internal.Request.IApiUriBuilder,Nokia.Music.Internal.Compression.IGzipHandler)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nokia.Music.Internal.Request.ApiRequestHandler"/> class.
+            </summary>
+            <param name="uriBuilder">The URI builder.</param>
+            <param name="gzipHandler">The gzip handler</param>
+        </member>
+        <member name="M:Nokia.Music.Internal.Request.ApiRequestHandler.SendRequestAsync``1(Nokia.Music.Commands.MusicClientCommand,Nokia.Music.Internal.IMusicClientSettings,System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}},Nokia.Music.Internal.Response.IResponseCallback{``0},System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Makes the API request
+            </summary>
+            <typeparam name="T">The type of response item</typeparam>
+            <param name="command">The command to call.</param>
+            <param name="settings">The music client settings.</param>
+            <param name="queryParams">The querystring.</param>
+            <param name="callback">The callback to hit when done.</param>
+            <param name="requestHeaders">HTTP headers to add to the request</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when no callback is specified</exception>
+        </member>
+        <member name="M:Nokia.Music.Internal.Request.ApiRequestHandler.IsFake404(System.Net.WebResponse)">
+            <summary>
+            Determines the difference between a 404 explicitly delivered by a service and a 404 response from WP while offline
+            </summary>
+            <param name="response">The web response</param>
+            <returns>True if this 404 was provided by the WP platform without making a request</returns>
+        </member>
+        <member name="M:Nokia.Music.Internal.Request.ApiRequestHandler.DoCallback``1(System.Action{Nokia.Music.Response{``0}},``0,System.Nullable{System.Net.HttpStatusCode},System.String,System.Exception,System.String,System.Guid,System.Uri,System.Boolean)">
+            <summary>
+            Logs the response and makes the callback
+            </summary>
+            <typeparam name="T">The type of response item</typeparam>
+            <param name="callback">The callback command</param>
+            <param name="response">The response item</param>
+            <param name="statusCode">The response status code</param>
+            <param name="contentType">The response content type</param>
+            <param name="error">An error or null if successful</param>
+            <param name="responseBody">The response body</param>
+            <param name="requestId">The unique id of this request</param>
+            <param name="uri">The uri requested</param>
+            <param name="offlineNotFoundResponse">Indicates whether this is a 'fake' 404 that WP can provide while offline</param>
+        </member>
+        <member name="M:Nokia.Music.Internal.Request.ApiRequestHandler.RequestStreamCallback(System.IAsyncResult)">
+            <summary>
+            Writes request data to the request stream
+            </summary>
+            <param name="ar">The async response</param>
+        </member>
+        <member name="P:Nokia.Music.Internal.Request.ApiRequestHandler.UriBuilder">
+            <summary>
+            Gets the URI builder that is being used.
+            </summary>
+            <value>
+            The URI builder.
+            </value>
+        </member>
+        <member name="T:Nokia.Music.Internal.Request.ApiUriBuilder">
+            <summary>
+            Defines the real Uri Builder
+            </summary>
+        </member>
+        <member name="T:Nokia.Music.Internal.Request.IApiUriBuilder">
+            <summary>
+            Defines the API URI Builder interface
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Internal.Request.IApiUriBuilder.BuildUri(Nokia.Music.Commands.MusicClientCommand,Nokia.Music.Internal.IMusicClientSettings,System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}})">
+            <summary>
+            Builds an API URI
+            </summary>
+            <param name="command">The command to call.</param>
+            <param name="settings">The client settings.</param>
+            <param name="queryParams">The querystring.</param>
+            <returns>
+            A Uri to call
+            </returns>
+        </member>
+        <member name="M:Nokia.Music.Internal.Request.ApiUriBuilder.BuildUri(Nokia.Music.Commands.MusicClientCommand,Nokia.Music.Internal.IMusicClientSettings,System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}})">
+            <summary>
+            Builds an API URI
+            </summary>
+            <param name="command">The command to call.</param>
+            <param name="settings">The music client settings.</param>
+            <param name="queryParams">The querystring parameters</param>
+            <returns>
+            A Uri to call
+            </returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when an unknown method is used</exception>
+            <exception cref="T:Nokia.Music.CountryCodeRequiredException">Thrown when a CountryCode is required but not supplied</exception>
+            <exception cref="T:Nokia.Music.ApiCredentialsRequiredException">Thrown when an API Key has not been supplied</exception>
+            <exception cref="T:System.ArgumentNullException"></exception>        
+        </member>
+        <member name="M:Nokia.Music.Internal.Request.ApiUriBuilder.AddAuthorisationParams(System.Text.StringBuilder,Nokia.Music.Internal.IMusicClientSettings)">
+            <summary>
+            Adds authorisation parameters to the querystring
+            </summary>
+            <param name="url">The url being built.</param>
+            <param name="settings">The music client settings.</param>
+        </member>
+        <member name="M:Nokia.Music.Internal.Request.ApiUriBuilder.AddCountryCode(System.Text.StringBuilder,Nokia.Music.Commands.MusicClientCommand,System.String)">
+            <summary>
+            Validates and adds country code if required
+            </summary>
+            <param name="url">The url being built</param>
+            <param name="command">The command to call.</param>
+            <param name="countryCode">The country code.</param>
+        </member>
+        <member name="M:Nokia.Music.Internal.Request.ApiUriBuilder.AppendQueryString(System.Text.StringBuilder,Nokia.Music.Commands.MusicClientCommand,Nokia.Music.Internal.IMusicClientSettings,System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}})">
+            <summary>
+            Appends the appropriate query string parameters to the url
+            </summary>
+            <param name="url">The url being built.</param>
+            <param name="command">The command for the url being built</param>
+            <param name="settings">The music client settings.</param>
+            <param name="queryParams">The query string.</param>
+        </member>
+        <member name="T:Nokia.Music.Internal.Request.HttpMethod">
+            <summary>
+            Currently supported HTTP method types
+            </summary>
+        </member>
+        <member name="F:Nokia.Music.Internal.Request.HttpMethod.Head">
+            <summary>
+            Represents an HTTP HEAD request
+            </summary>
+        </member>
+        <member name="F:Nokia.Music.Internal.Request.HttpMethod.Get">
+            <summary>
+            Represents an HTTP GET
+            </summary>
+        </member>
+        <member name="F:Nokia.Music.Internal.Request.HttpMethod.Post">
+            <summary>
+            Represents an HTTP POST
+            </summary>
+        </member>
+        <member name="F:Nokia.Music.Internal.Request.HttpMethod.Put">
+            <summary>
+            Represents an HTTP PUT
+            </summary>
+        </member>
+        <member name="F:Nokia.Music.Internal.Request.HttpMethod.Delete">
+            <summary>
+            Represents an HTTP DELETE
+            </summary>
+        </member>
+        <member name="T:Nokia.Music.Internal.Request.TimedRequest">
+            <summary>
+            Time-out implementation for web requests
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Internal.Request.TimedRequest.#ctor(System.Uri)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nokia.Music.Internal.Request.TimedRequest"/> class.
+            </summary>
+            <param name="uri">The uri used in the web request</param>
+        </member>
+        <member name="M:Nokia.Music.Internal.Request.TimedRequest.Dispose">
+            <summary>
+            Stops the timer
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Internal.Request.TimedRequest.BeginGetResponse(System.AsyncCallback,System.Action,System.Object)">
+            <summary>
+            Makes the request and starts the timer
+            </summary>
+            <param name="successCallback">The callback if the request is successful</param>
+            <param name="timeoutCallback">The callback if the request times-out</param>
+            <param name="state">The state object</param>
+        </member>
+        <member name="M:Nokia.Music.Internal.Request.TimedRequest.TimeoutReached(System.Object)">
+            <summary>
+            Aborts the web request when the timeout is reached
+            </summary>
+            <param name="state">The state object</param>
+        </member>
+        <member name="M:Nokia.Music.Internal.Request.TimedRequest.TimeoutReached(System.Object,System.Object)">
+            <summary>
+            Signals that the timeout has been reached
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The e.</param>
+        </member>
+        <member name="P:Nokia.Music.Internal.Request.TimedRequest.RequestTimeout">
+            <summary>
+            Gets or sets the request timeout duration in milliseconds
+            </summary>
+        </member>
+        <member name="T:Nokia.Music.Internal.Response.IResponseCallback`1">
+            <summary>
+            Defines a response callback
+            </summary>
+            <typeparam name="T">The type that the response callback is for</typeparam>
+        </member>
+        <member name="M:Nokia.Music.Internal.Response.IResponseCallback`1.ConvertFromRawResponse(System.String)">
+            <summary>
+            Converts from a raw response.
+            </summary>
+            <param name="response">The response.</param>
+            <returns>A converted response</returns>
+        </member>
+        <member name="P:Nokia.Music.Internal.Response.IResponseCallback`1.Callback">
+            <summary>
+            Gets the callback.
+            </summary>
+            <value>
+            The callback.
+            </value>
+        </member>
+        <member name="T:Nokia.Music.Internal.Response.JsonResponseCallback">
+            <summary>
+            Defines a callback to parse a json response
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Internal.StreamExtensions.AsString(System.IO.Stream,System.Text.Encoding)">
+            <summary>
+              Converts the stream to a string. The stream will be disposed by this operation.
+            </summary>
+            <param name = "stream">The stream from which to read a string</param>
+            <param name = "encoding">The encoding of the stream</param>
+            <returns>The string held within the stream</returns>
+        </member>
+        <member name="T:Nokia.Music.ListResponse`1">
+            <summary>
+            Contains the result or the error if an error occurred.
+            </summary>
+            <typeparam name="T">The type of the result.</typeparam>
+        </member>
+        <member name="T:Nokia.Music.Response`1">
+            <summary>
+            Contains the result or the error if an error occurred.
+            </summary>
+            <typeparam name="T">The type of the result.</typeparam>
+        </member>
+        <member name="M:Nokia.Music.Response`1.#ctor(System.Nullable{System.Net.HttpStatusCode},`0,System.Guid)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nokia.Music.Response`1"/> class.
+            </summary>
+            <param name="statusCode">The status code.</param>
+            <param name="result">The result.</param>
+            /// <param name="requestId">The request id</param>
+        </member>
+        <member name="M:Nokia.Music.Response`1.#ctor(System.Nullable{System.Net.HttpStatusCode},System.String,`0,System.Guid)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nokia.Music.Response`1"/> class.
+            </summary>
+            <param name="statusCode">The status code.</param>
+            <param name="contentType">The response Content Type.</param>
+            <param name="result">The result.</param>
+            <param name="requestId">The request id</param>
+        </member>
+        <member name="M:Nokia.Music.Response`1.#ctor(System.Nullable{System.Net.HttpStatusCode},System.Exception,System.String,System.Guid)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nokia.Music.Response`1"/> class.
+            </summary>
+            <param name="statusCode">The HTTP Status code</param>
+            <param name="error">The error.</param>
+            <param name="responseBody">The response body.</param>
+            <param name="requestId">The request id.</param>
+        </member>
+        <member name="P:Nokia.Music.Response`1.Error">
+            <summary>
+            Gets the exception if the call was not successful
+            </summary>
+        </member>
+        <member name="P:Nokia.Music.Response`1.Succeeded">
+            <summary>
+            Gets a value indicating whether the call succeeded
+            </summary>
+        </member>
+        <member name="P:Nokia.Music.Response`1.Result">
+            <summary>
+            Gets the result if the call was successful
+            </summary>
+            <value>
+            The result.
+            </value>
+        </member>
+        <member name="P:Nokia.Music.Response`1.RequestId">
+            <summary>
+            Gets or sets the id of this request
+            </summary>
+        </member>
+        <member name="P:Nokia.Music.Response`1.ContentType">
+            <summary>
+            Gets or sets the HTTP Content Type
+            </summary>
+            <value>
+            The content type.
+            </value>
+        </member>
+        <member name="P:Nokia.Music.Response`1.ErrorResponseBody">
+            <summary>
+            Gets or sets the response body supplied for an error response
+            </summary>
+            <value>
+            The raw response body.
+            </value>
+        </member>
+        <member name="P:Nokia.Music.Response`1.StatusCode">
+            <summary>
+            Gets or sets the HTTP Status code
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.ListResponse`1.#ctor(System.Nullable{System.Net.HttpStatusCode},System.Collections.Generic.List{`0},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Guid)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nokia.Music.ListResponse`1"/> class.
+            </summary>
+            <param name="statusCode">The status code.</param>
+            <param name="result">The result.</param>
+            <param name="startIndex">The start index asked for.</param>
+            <param name="itemsPerPage">The items per page asked for.</param>
+            <param name="totalResults">The total results available.</param>
+            <param name="requestId">The request id.</param>
+        </member>
+        <member name="M:Nokia.Music.ListResponse`1.#ctor(System.Nullable{System.Net.HttpStatusCode},System.Exception,System.String,System.Guid)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nokia.Music.ListResponse`1"/> class.
+            </summary>
+            <param name="statusCode">The HTTP Status code</param>
+            <param name="error">The error.</param>
+            <param name="errorResponseBody">The response body</param>
+            <param name="requestId">The request id.</param>
+        </member>
+        <member name="M:Nokia.Music.ListResponse`1.GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through the collection.
+            </summary>
+            <returns>
+            A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
+            </returns>
+        </member>
+        <member name="M:Nokia.Music.ListResponse`1.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through a collection.
+            </summary>
+            <returns>
+            An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
+            </returns>
+        </member>
+        <member name="P:Nokia.Music.ListResponse`1.ItemsPerPage">
+            <summary>
+            Gets the items per page the API call was asked for.
+            </summary>
+            <value>
+            The items per page.
+            </value>
+        </member>
+        <member name="P:Nokia.Music.ListResponse`1.StartIndex">
+            <summary>
+            Gets the start index the API call was asked for.
+            </summary>
+            <value>
+            The start index.
+            </value>
+        </member>
+        <member name="P:Nokia.Music.ListResponse`1.TotalResults">
+            <summary>
+            Gets the total results available.
+            </summary>
+            <value>
+            The total results.
+            </value>
+        </member>
+        <member name="T:Nokia.Music.MusicClient">
+            <summary>
+              The Nokia Music API client
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.#ctor(System.String)">
+            <summary>
+              Initializes a new instance of the <see cref="T:Nokia.Music.MusicClient"/> class,
+              using the RegionInfo settings to locate the user.
+            </summary>
+            <param name="appId"> The App ID obtained from api.developer.nokia.com </param>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.#ctor(System.String,System.String)">
+            <summary>
+              Initializes a new instance of the <see cref="T:Nokia.Music.MusicClient"/> class.
+            </summary>
+            <param name="appId"> The App ID obtained from api.developer.nokia.com </param>
+            <param name="countryCode"> The country code. </param>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.#ctor(System.String,Nokia.Music.Internal.Request.IApiRequestHandler)">
+            <summary>
+              Initializes a new instance of the <see cref="T:Nokia.Music.MusicClient"/> class.
+            </summary>
+            <param name="appId"> The App ID obtained from api.developer.nokia.com </param>
+            <param name="requestHandler"> The request handler. </param>
+            <remarks>
+              Allows custom requestHandler for testing purposes
+            </remarks>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.#ctor(System.String,System.String,Nokia.Music.Internal.Request.IApiRequestHandler)">
+            <summary>
+              Initializes a new instance of the <see cref="T:Nokia.Music.MusicClient"/> class.
+            </summary>
+            <param name="appId"> The App ID obtained from api.developer.nokia.com </param>
+            <param name="countryCode"> The country code. </param>
+            <param name="requestHandler"> The request handler. </param>
+            <remarks>
+              Allows custom requestHandler for testing purposes
+            </remarks>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.SearchArtistsAsync(System.String,System.Int32,System.Int32)">
+            <summary>
+            Searches for an Artist
+            </summary>
+            <param name="searchTerm">The search term.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <returns>
+            A ListResponse containing Artists or an Error
+            </returns>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.GetArtistSearchSuggestionsAsync(System.String,System.Int32)">
+            <summary>
+            Gets artist search suggestions.
+            </summary>
+            <param name="searchTerm">The search term.</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <returns>
+            A ListResponse containing search suggestions
+            </returns>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.GetArtistsAroundLocationAsync(System.Double,System.Double,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Gets artists that originate around a specified location
+            </summary>
+            <param name="latitude">The latitude to search around</param>
+            <param name="longitude">The longitude to search around</param>
+            <param name="maxdistance">The max distance (in KM) around the location to search</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <returns>
+            A ListResponse containing Artists or an Error
+            </returns>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.GetTopArtistsAsync(System.Int32,System.Int32)">
+            <summary>
+            Gets the top artists
+            </summary>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <returns>
+            A ListResponse containing Artists or an Error
+            </returns>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.GetTopArtistsForGenreAsync(System.String,System.Int32,System.Int32)">
+            <summary>
+            Gets the top artists for a genre
+            </summary>
+            <param name="id">The genre to get results for.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <returns>
+            A ListResponse containing Artists or an Error
+            </returns>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.GetTopArtistsForGenreAsync(Nokia.Music.Types.Genre,System.Int32,System.Int32)">
+            <summary>
+            Gets the top artists for a genre
+            </summary>
+            <param name="genre">The genre to get results for.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <returns>
+            A ListResponse containing Artists or an Error
+            </returns>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.GetSimilarArtistsAsync(System.String,System.Int32,System.Int32)">
+            <summary>
+            Gets similar artists for an artist.
+            </summary>
+            <param name="id">The artist id.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <returns>
+            A ListResponse containing Artists or an Error
+            </returns>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.GetSimilarArtistsAsync(Nokia.Music.Types.Artist,System.Int32,System.Int32)">
+            <summary>
+            Gets similar artists for an artist.
+            </summary>
+            <param name="artist">The artist.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <returns>
+            A ListResponse containing Artists or an Error
+            </returns>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.GetArtistProductsAsync(System.String,System.Nullable{Nokia.Music.Types.Category},System.Int32,System.Int32)">
+            <summary>
+            Gets products by an artist.
+            </summary>
+            <param name="id">The artist id.</param>
+            <param name="category">The category.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <returns>
+            A ListResponse containing Products or an Error
+            </returns>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.GetArtistProductsAsync(Nokia.Music.Types.Artist,System.Nullable{Nokia.Music.Types.Category},System.Int32,System.Int32)">
+            <summary>
+            Gets products by an artist.
+            </summary>
+            <param name="artist">The artist.</param>
+            <param name="category">The category.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <returns>
+            A ListResponse containing Products or an Error
+            </returns>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.GetProductAsync(System.String)">
+            <summary>
+            Gets products by id.
+            </summary>
+            <param name="id">The product id.</param>
+            <returns>
+            A Response containing a Product or an Error
+            </returns>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.GetTrackSampleUri(System.String)">
+            <summary>
+            Gets a track sample uri.
+            </summary>
+            <param name="id">The track id.</param>
+            <returns>
+            A uri to a sample clip of the track
+            </returns>
+            <exception cref="T:System.ArgumentNullException">id;id cannot be null</exception>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.GetSimilarProductsAsync(System.String,System.Int32,System.Int32)">
+            <summary>
+            Gets a similar product for the supplied product.
+            </summary>
+            <param name="id">The product id.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <returns>A ListResponse containing Products or an Error</returns>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.GetSimilarProductsAsync(Nokia.Music.Types.Product,System.Int32,System.Int32)">
+            <summary>
+            Gets a similar product for the supplied product.
+            </summary>
+            <param name="product">The product.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <returns>A ListResponse containing Products or an Error</returns>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.GetTopProductsAsync(Nokia.Music.Types.Category,System.Int32,System.Int32)">
+            <summary>
+            Gets a chart
+            </summary>
+            <param name="category">The category - only Album and Track charts are available.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <returns>
+            A ListResponse containing Products or an Error
+            </returns>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.GetTopProductsForGenreAsync(System.String,Nokia.Music.Types.Category,System.Int32,System.Int32)">
+            <summary>
+            Gets a chart
+            </summary>
+            <param name="id">The genre id.</param>
+            <param name="category">The category - only Album and Track charts are available.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <returns>
+            A ListResponse containing Products or an Error
+            </returns>
+            <exception cref="T:System.ArgumentNullException">genre;genre cannot be null</exception>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.GetTopProductsForGenreAsync(Nokia.Music.Types.Genre,Nokia.Music.Types.Category,System.Int32,System.Int32)">
+            <summary>
+            Gets a chart
+            </summary>
+            <param name="genre">The genre.</param>
+            <param name="category">The category - only Album and Track charts are available.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <returns>
+            A ListResponse containing Products or an Error
+            </returns>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.GetNewReleasesAsync(Nokia.Music.Types.Category,System.Int32,System.Int32)">
+            <summary>
+            Gets a list of new releases
+            </summary>
+            <param name="category">The category - only Album and Track lists are available.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <returns>
+            A ListResponse containing Products or an Error
+            </returns>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.GetNewReleasesForGenreAsync(Nokia.Music.Types.Genre,Nokia.Music.Types.Category,System.Int32,System.Int32)">
+            <summary>
+            Gets a list of new releases
+            </summary>
+            <param name="genre">The genre.</param>
+            <param name="category">The category - only Album and Track lists are available.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <returns>
+            A ListResponse containing Products or an Error
+            </returns>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.GetNewReleasesForGenreAsync(System.String,Nokia.Music.Types.Category,System.Int32,System.Int32)">
+            <summary>
+            Gets a list of new releases
+            </summary>
+            <param name="id">The genre id.</param>
+            <param name="category">The category - only Album and Track lists are available.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <returns>
+            A ListResponse containing Products or an Error
+            </returns>
+            <exception cref="T:System.ArgumentNullException">genre;genre cannot be null</exception>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.GetGenresAsync">
+            <summary>
+            Gets the available genres
+            </summary>
+            <returns>
+            A ListResponse containing Genres or an Error
+            </returns>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.SearchAsync(System.String,System.Nullable{Nokia.Music.Types.Category},System.Int32,System.Int32)">
+            <summary>
+            Searches Nokia Music
+            </summary>
+            <param name="searchTerm">The search term.</param>
+            <param name="category">The category.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <returns>
+            A ListResponse containing MusicItems or an Error
+            </returns>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.SearchGenreAsync(System.String,System.String,System.Nullable{Nokia.Music.Types.Category},System.Int32,System.Int32)">
+            <summary>
+            Searches Nokia Music
+            </summary>
+            <param name="genreId">The optional genre id</param>
+            <param name="searchTerm">The search term.</param>
+            <param name="category">The category.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <returns>
+            A ListResponse containing MusicItems or an Error
+            </returns>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.GetSearchSuggestionsAsync(System.String,System.Int32)">
+            <summary>
+            Gets search suggestions.
+            </summary>
+            <param name="searchTerm">The search term.</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <returns>
+            A ListResponse containing search suggestions
+            </returns>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.GetMixGroupsAsync(System.Int32,System.Int32)">
+            <summary>
+            Gets the Mix Groups available
+            </summary>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <returns>
+            A ListResponse containing MixGroups or an Error
+            </returns>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.GetMixGroupsAsync(System.String,System.Int32,System.Int32)">
+            <summary>
+            Gets the Mix Groups available
+            </summary>
+            <param name="exclusiveTag">The exclusive tag.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <returns>
+            A ListResponse containing MixGroups or an Error
+            </returns>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.GetMixesAsync(System.String)">
+            <summary>
+            Gets the Mixes available in a group
+            </summary>
+            <param name="id">The mix group id.</param>
+            <returns>
+            A ListResponse containing Mixes or an Error
+            </returns>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.GetMixesAsync(System.String,System.String)">
+            <summary>
+            Gets the Mixes available in a group
+            </summary>
+            <param name="id">The mix group id.</param>
+            <param name="exclusiveTag">The exclusive tag.</param>
+            <returns>
+            A ListResponse containing Mixes or an Error
+            </returns>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.GetMixesAsync(Nokia.Music.Types.MixGroup)">
+            <summary>
+            Gets the Mixes available in a group
+            </summary>
+            <param name="group">The mix group.</param>
+            <returns>
+            A ListResponse containing Mixes or an Error
+            </returns>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.GetMixesAsync(Nokia.Music.Types.MixGroup,System.String)">
+            <summary>
+            Gets the Mixes available in a group
+            </summary>
+            <param name="group">The mix group.</param>
+            <param name="exclusiveTag">The exclusive tag.</param>
+            <returns>
+            A ListResponse containing Mixes or an Error
+            </returns>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.SearchArtistsInternal(System.Action{Nokia.Music.ListResponse{Nokia.Music.Types.Artist}},System.String,System.Int32,System.Int32)">
+            <summary>
+            Searches for an Artist
+            </summary>
+            <param name="callback">The callback to use when the API call has completed</param>
+            <param name="searchTerm">The search term.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.GetArtistSearchSuggestionsInternal(System.Action{Nokia.Music.ListResponse{System.String}},System.String,System.Int32)">
+            <summary>
+            Gets artist search suggestions.
+            </summary>
+            <param name="callback">The callback.</param>
+            <param name="searchTerm">The search term.</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.GetArtistsAroundLocationInternal(System.Action{Nokia.Music.ListResponse{Nokia.Music.Types.Artist}},System.Double,System.Double,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Gets artists that originate around a specified location
+            </summary>
+            <param name="callback">The callback to use when the API call has completed</param>
+            <param name="latitude">The latitude to search around</param>
+            <param name="longitude">The longitude to search around</param>
+            <param name="maxdistance">The max distance (in KM) around the location to search</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.GetTopArtistsInternal(System.Action{Nokia.Music.ListResponse{Nokia.Music.Types.Artist}},System.Int32,System.Int32)">
+            <summary>
+            Gets the top artists
+            </summary>
+            <param name="callback">The callback to use when the API call has completed</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.GetTopArtistsForGenreInternal(System.Action{Nokia.Music.ListResponse{Nokia.Music.Types.Artist}},System.String,System.Int32,System.Int32)">
+            <summary>
+            Gets the top artists for a genre
+            </summary>
+            <param name="callback">The callback to use when the API call has completed</param>
+            <param name="id">The genre to get results for.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.GetSimilarArtistsInternal(System.Action{Nokia.Music.ListResponse{Nokia.Music.Types.Artist}},System.String,System.Int32,System.Int32)">
+            <summary>
+            Gets similar artists for an artist.
+            </summary>
+            <param name="callback">The callback.</param>
+            <param name="id">The artist id.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.GetArtistProductsInternal(System.Action{Nokia.Music.ListResponse{Nokia.Music.Types.Product}},System.String,System.Nullable{Nokia.Music.Types.Category},System.Int32,System.Int32)">
+            <summary>
+            Gets products by an artist.
+            </summary>
+            <param name="callback">The callback.</param>
+            <param name="id">The artist id.</param>
+            <param name="category">The category.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.GetProductInternal(System.Action{Nokia.Music.Response{Nokia.Music.Types.Product}},System.String)">
+            <summary>
+            Gets a product by product id.
+            </summary>
+            <param name="callback">The callback.</param>
+            <param name="id">The product id.</param>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.GetSimilarProductsInternal(System.Action{Nokia.Music.ListResponse{Nokia.Music.Types.Product}},System.String,System.Int32,System.Int32)">
+            <summary>
+            Gets similar products to the product provided.
+            </summary>
+            <param name="callback">The callback.</param>
+            <param name="id">The product id.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.GetTopProductsInternal(System.Action{Nokia.Music.ListResponse{Nokia.Music.Types.Product}},Nokia.Music.Types.Category,System.Int32,System.Int32)">
+            <summary>
+            Gets a chart
+            </summary>
+            <param name="callback">The callback.</param>
+            <param name="category">The category - only Album and Track charts are available.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.GetTopProductsForGenreInternal(System.Action{Nokia.Music.ListResponse{Nokia.Music.Types.Product}},System.String,Nokia.Music.Types.Category,System.Int32,System.Int32)">
+            <summary>
+            Gets a chart
+            </summary>
+            <param name="callback">The callback.</param>
+            <param name="id">The genre id.</param>
+            <param name="category">The category - only Album and Track charts are available.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.GetNewReleasesInternal(System.Action{Nokia.Music.ListResponse{Nokia.Music.Types.Product}},Nokia.Music.Types.Category,System.Int32,System.Int32)">
+            <summary>
+            Gets a list of new releases
+            </summary>
+            <param name="callback">The callback.</param>
+            <param name="category">The category - only Album and Track lists are available.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.GetNewReleasesForGenreInternal(System.Action{Nokia.Music.ListResponse{Nokia.Music.Types.Product}},System.String,Nokia.Music.Types.Category,System.Int32,System.Int32)">
+            <summary>
+            Gets a list of new releases
+            </summary>
+            <param name="callback">The callback.</param>
+            <param name="id">The genre id.</param>
+            <param name="category">The category - only Album and Track lists are available.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+            <exception cref="T:System.ArgumentNullException">id;genre id cannot be null</exception>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.GetGenresInternal(System.Action{Nokia.Music.ListResponse{Nokia.Music.Types.Genre}})">
+            <summary>
+            Gets the available genres
+            </summary>
+            <param name="callback">The callback to use when the API call has completed</param>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.SearchInternal(System.Action{Nokia.Music.ListResponse{Nokia.Music.Types.MusicItem}},System.String,System.Nullable{Nokia.Music.Types.Category},System.String,System.Int32,System.Int32)">
+            <summary>
+            Searches Nokia Music
+            </summary>
+            <param name="callback">The callback to use when the API call has completed</param>
+            <param name="searchTerm">The search term.</param>
+            <param name="category">The category.</param>
+            <param name="genreId">The genre id.</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.GetSearchSuggestionsInternal(System.Action{Nokia.Music.ListResponse{System.String}},System.String,System.Int32)">
+            <summary>
+            Gets search suggestions.
+            </summary>
+            <param name="callback">The callback.</param>
+            <param name="searchTerm">The search term.</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.GetMixGroupsInternal(System.Action{Nokia.Music.ListResponse{Nokia.Music.Types.MixGroup}},System.String,System.Int32,System.Int32)">
+            <summary>
+            Gets the Mix Groups available
+            </summary>
+            <param name="callback">The callback to use when the API call has completed</param>
+            <param name="exclusiveTag">The exclusive tag</param>
+            <param name="startIndex">The zero-based start index to fetch items from (e.g. to get the second page of 10 items, pass in 10).</param>
+            <param name="itemsPerPage">The number of items to fetch.</param>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.GetMixesInternal(System.Action{Nokia.Music.ListResponse{Nokia.Music.Types.Mix}},System.String,System.String)">
+            <summary>
+            Gets the Mixes available in a group
+            </summary>
+            <param name="callback">The callback to use when the API call has completed</param>
+            <param name="id">The mix group id.</param>
+            <param name="exclusiveTag">The exclusive tag.</param>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.Create``1">
+            <summary>
+            Creates a command to execute
+            </summary>
+            <typeparam name="TCommand">The type of the command.</typeparam>
+            <returns>A Command to call</returns>
+        </member>
+        <member name="M:Nokia.Music.MusicClient.ValidateCountryCode(System.String)">
+            <summary>
+              Validates a country code.
+            </summary>
+            <param name="countryCode"> The country code. </param>
+            <returns> A Boolean indicating that the country code is valid </returns>
+        </member>
+        <member name="P:Nokia.Music.MusicClient.RequestTimeout">
+            <summary>
+            Gets or sets the timeout duration for web requests.
+            </summary>
+            <value>
+            The timeout duration in milliseconds.
+            </value>
+        </member>
+        <member name="P:Nokia.Music.MusicClient.CountryCodeBasedOnRegionInfo">
+            <summary>
+            Gets a value indicating whether the country code was based on region info.
+            </summary>
+            <value>
+            <c>true</c> if the country code was based on region info; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Nokia.Music.MusicClient.AppId">
+            <summary>
+            Gets the app id.
+            </summary>
+            <value>
+            The app id.
+            </value>
+        </member>
+        <member name="P:Nokia.Music.MusicClient.CountryCode">
+            <summary>
+            Gets the country code.
+            </summary>
+            <value>
+            The country code.
+            </value>
+        </member>
+        <member name="P:Nokia.Music.MusicClient.RequestHandler">
+            <summary>
+            Gets the request handler in use for testing purposes.
+            </summary>
+            <value>
+            The request handler.
+            </value>
+        </member>
+        <member name="P:Nokia.Music.MusicClient.BaseApiUri">
+            <summary>
+            Gets or sets the base API uri
+            </summary>
+        </member>
+        <member name="T:Nokia.Music.Tasks.LaunchTask">
+            <summary>
+            Provides a simple way to show Nokia Music
+            </summary>
+        </member>
+        <member name="T:Nokia.Music.Tasks.TaskBase">
+            <summary>
+            Base class for Nokia Music Tasks
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Tasks.TaskBase.Launch(System.Uri,System.Uri)">
+            <summary>
+            Launches the specified app to app URI if available or shows a web equivalent.
+            </summary>
+            <param name="appToAppUri">The app to app URI.</param>
+            <param name="webFallbackUri">The web fallback URI.</param>
+        </member>
+        <member name="M:Nokia.Music.Tasks.LaunchTask.Show">
+            <summary>
+            Shows Nokia Music
+            </summary>
+        </member>
+        <member name="T:Nokia.Music.Tasks.MusicSearchTask">
+            <summary>
+            Provides a simple way to show Nokia Music Search Results
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Tasks.MusicSearchTask.Show">
+            <summary>
+            Shows the Search Page in Nokia Music
+            </summary>
+        </member>
+        <member name="P:Nokia.Music.Tasks.MusicSearchTask.SearchTerms">
+            <summary>
+            Gets or sets the search terms.
+            </summary>
+            <value>
+            The search terms.
+            </value>
+        </member>
+        <member name="T:Nokia.Music.Tasks.PlayMixTask">
+            <summary>
+            Provides a simple way to play a Nokia Music Mix
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Tasks.PlayMixTask.Show">
+            <summary>
+            Plays the Mix in Nokia Music
+            </summary>
+        </member>
+        <member name="P:Nokia.Music.Tasks.PlayMixTask.ArtistName">
+            <summary>
+            Gets or sets the Artist Name.
+            </summary>
+            <value>
+            The artist Name.
+            </value>
+            <remarks>You need to supply a Mix ID or an Artist Name</remarks>
+        </member>
+        <member name="P:Nokia.Music.Tasks.PlayMixTask.MixId">
+            <summary>
+            Gets or sets a Mix ID.
+            </summary>
+            <value>
+            The mix ID.
+            </value>
+            <remarks>You need to supply a Mix ID or an Artist Name</remarks>
+        </member>
+        <member name="T:Nokia.Music.Tasks.ShowArtistTask">
+            <summary>
+            Provides a simple way to show Nokia Music Artists
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Tasks.ShowArtistTask.Show">
+            <summary>
+            Shows the Artist Page in Nokia Music
+            </summary>
+        </member>
+        <member name="P:Nokia.Music.Tasks.ShowArtistTask.ArtistId">
+            <summary>
+            Gets or sets the Artist ID.
+            </summary>
+            <value>
+            The artist ID.
+            </value>
+            <remarks>You need to supply an ID or a name</remarks>
+        </member>
+        <member name="P:Nokia.Music.Tasks.ShowArtistTask.ArtistName">
+            <summary>
+            Gets or sets the Artist Name.
+            </summary>
+            <value>
+            The artist Name.
+            </value>
+            <remarks>You need to supply an ID or a name</remarks>
+        </member>
+        <member name="T:Nokia.Music.Tasks.ShowMixesTask">
+            <summary>
+            Provides a simple way to show Nokia Music Mixes
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Tasks.ShowMixesTask.Show">
+            <summary>
+            Shows Nokia Music Mixes
+            </summary>
+        </member>
+        <member name="T:Nokia.Music.Tasks.ShowProductTask">
+            <summary>
+            Provides a simple way to show Nokia Music Products
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Tasks.ShowProductTask.Show">
+            <summary>
+            Shows the Product Page in Nokia Music
+            </summary>
+        </member>
+        <member name="P:Nokia.Music.Tasks.ShowProductTask.AppId">
+            <summary>
+            Gets or sets the optional App ID for passing through to Nokia Music.
+            </summary>
+            <value>
+            The app ID.
+            </value>
+        </member>
+        <member name="P:Nokia.Music.Tasks.ShowProductTask.ProductId">
+            <summary>
+            Gets or sets the Product ID.
+            </summary>
+            <value>
+            The product ID.
+            </value>
+        </member>
+        <member name="T:Nokia.Music.Types.Artist">
+            <summary>
+            Represents a Nokia Music Artist
+            </summary>
+        </member>
+        <member name="T:Nokia.Music.Types.MusicItem">
+            <summary>
+            Represents a Nokia Music Catalog Item
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Types.MusicItem.ExtractThumbs(Newtonsoft.Json.Linq.JToken,System.Uri@,System.Uri@,System.Uri@,System.Uri@)">
+            <summary>
+            Extracts the thumbnails from JSON.
+            </summary>
+            <param name="thumbnailsToken">The thumbnails token.</param>
+            <param name="square50">The square50 uri.</param>
+            <param name="square100">The square100 uri.</param>
+            <param name="square200">The square200 uri.</param>
+            <param name="square320">The square320 uri.</param>
+        </member>
+        <member name="P:Nokia.Music.Types.MusicItem.Id">
+            <summary>
+            Gets or sets the item id.
+            </summary>
+            <value>
+            The item id.
+            </value>
+        </member>
+        <member name="P:Nokia.Music.Types.MusicItem.AppToAppUri">
+            <summary>
+            Gets the app-to-app uri to use to show this item in Nokia Music
+            </summary>
+        </member>
+        <member name="P:Nokia.Music.Types.MusicItem.Name">
+            <summary>
+            Gets or sets the item name.
+            </summary>
+            <value>
+            The item name.
+            </value>
+        </member>
+        <member name="P:Nokia.Music.Types.MusicItem.Thumb50Uri">
+            <summary>
+            Gets or sets the 50x50 thumbnail URI.
+            </summary>
+            <value>
+            The 50x50 thumbnail URI.
+            </value>
+        </member>
+        <member name="P:Nokia.Music.Types.MusicItem.Thumb100Uri">
+            <summary>
+            Gets or sets the 100x100 thumbnail URI.
+            </summary>
+            <value>
+            The 100x100 thumbnail URI.
+            </value>
+        </member>
+        <member name="P:Nokia.Music.Types.MusicItem.Thumb200Uri">
+            <summary>
+            Gets or sets the 200x200 thumbnail URI.
+            </summary>
+            <value>
+            The 200x200 thumbnail URI.
+            </value>
+        </member>
+        <member name="P:Nokia.Music.Types.MusicItem.Thumb320Uri">
+            <summary>
+            Gets or sets the 320x320 thumbnail URI.
+            </summary>
+            <value>
+            The 320x320 thumbnail URI.
+            </value>
+        </member>
+        <member name="M:Nokia.Music.Types.Artist.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nokia.Music.Types.Artist"/> class.
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Types.Artist.Equals(System.Object)">
+            <summary>
+            Determines whether the specified <see cref="T:System.Object"/> is equal to this instance.
+            </summary>
+            <param name="obj">The <see cref="T:System.Object"/> to compare with this instance.</param>
+            <returns>
+              <c>true</c> if the specified <see cref="T:System.Object"/> is equal to this instance; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Nokia.Music.Types.Artist.GetHashCode">
+            <summary>
+            Returns a hash code for this instance.
+            </summary>
+            <returns>
+            A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+            </returns>
+        </member>
+        <member name="M:Nokia.Music.Types.Artist.PlayMix">
+            <summary>
+            Launches Nokia Music to start a mix for the artist using the PlayMixTask
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Types.Artist.Show">
+            <summary>
+            Launches Nokia Music to show details for the artist using the ShowArtistTask
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Types.Artist.FromJToken(Newtonsoft.Json.Linq.JToken)">
+            <summary>
+            Creates an Artist from a JSON Object
+            </summary>
+            <param name="item">The item.</param>
+            <returns>An Artist object</returns>
+        </member>
+        <member name="P:Nokia.Music.Types.Artist.AppToAppUri">
+            <summary>
+            Gets the app-to-app uri to use to show this item in Nokia Music
+            </summary>
+        </member>
+        <member name="P:Nokia.Music.Types.Artist.Country">
+            <summary>
+            Gets or sets the artist's country of origin.
+            </summary>
+            <value>
+            The artist's country of origin.
+            </value>
+        </member>
+        <member name="P:Nokia.Music.Types.Artist.Genres">
+            <summary>
+            Gets or sets the artist's genres.
+            </summary>
+            <value>
+            The artist's genres.
+            </value>
+        </member>
+        <member name="P:Nokia.Music.Types.Artist.Origin">
+            <summary>
+            Gets or sets the artist's origin location where available.
+            </summary>
+            <value>
+            The origin.
+            </value>
+        </member>
+        <member name="T:Nokia.Music.Types.Category">
+            <summary>
+            Defines the API item category
+            </summary>
+        </member>
+        <member name="F:Nokia.Music.Types.Category.Unknown">
+            <summary>
+            The item is unknown
+            </summary>
+        </member>
+        <member name="F:Nokia.Music.Types.Category.Artist">
+            <summary>
+            The item is an Artist
+            </summary>
+        </member>
+        <member name="F:Nokia.Music.Types.Category.Album">
+            <summary>
+            The item is an Album
+            </summary>
+        </member>
+        <member name="F:Nokia.Music.Types.Category.Single">
+            <summary>
+            The item is a Single
+            </summary>
+        </member>
+        <member name="F:Nokia.Music.Types.Category.Track">
+            <summary>
+            The item is a Track
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Types.CategoryExtensions.ParseCategory(System.String)">
+            <summary>
+            Parses a Category id into an enumeration
+            </summary>
+            <param name="category">The string representation of the Category</param>
+            <returns>A Category</returns>
+            <remarks>Internal for testing purposes</remarks>
+        </member>
+        <member name="T:Nokia.Music.Types.Genre">
+            <summary>
+            Represents a Nokia Music Genre
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Types.Genre.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nokia.Music.Types.Genre"/> class.
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Types.Genre.Equals(System.Object)">
+            <summary>
+            Determines whether the specified <see cref="T:System.Object"/> is equal to this instance.
+            </summary>
+            <param name="obj">The <see cref="T:System.Object"/> to compare with this instance.</param>
+            <returns>
+              <c>true</c> if the specified <see cref="T:System.Object"/> is equal to this instance; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Nokia.Music.Types.Genre.GetHashCode">
+            <summary>
+            Returns a hash code for this instance.
+            </summary>
+            <returns>
+            A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+            </returns>
+        </member>
+        <member name="M:Nokia.Music.Types.Genre.FromJToken(Newtonsoft.Json.Linq.JToken)">
+            <summary>
+            Creates a Genre from a JSON Object
+            </summary>
+            <param name="item">The item.</param>
+            <returns>A Genre object</returns>
+        </member>
+        <member name="P:Nokia.Music.Types.Genre.Id">
+            <summary>
+            Gets or sets the genre id.
+            </summary>
+            <value>
+            The genre id.
+            </value>
+        </member>
+        <member name="P:Nokia.Music.Types.Genre.Name">
+            <summary>
+            Gets or sets the genre name.
+            </summary>
+            <value>
+            The genre name.
+            </value>
+        </member>
+        <member name="T:Nokia.Music.Types.Location">
+            <summary>
+            Represents a Location
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Types.Location.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nokia.Music.Types.Location"/> class.
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Types.Location.ToString">
+            <summary>
+            Returns a string representation of the location object
+            </summary>
+            <returns>A string representation of the location object</returns>
+        </member>
+        <member name="P:Nokia.Music.Types.Location.Latitude">
+            <summary>
+            Gets or sets the latitude.
+            </summary>
+            <value>
+            The latitude.
+            </value>
+        </member>
+        <member name="P:Nokia.Music.Types.Location.Longitude">
+            <summary>
+            Gets or sets the longitude.
+            </summary>
+            <value>
+            The longitude.
+            </value>
+        </member>
+        <member name="P:Nokia.Music.Types.Location.Name">
+            <summary>
+            Gets or sets the name of the location if available.
+            </summary>
+            <value>
+            The name of the location if available.
+            </value>
+        </member>
+        <member name="P:Nokia.Music.Types.Location.HorizontalAccuracy">
+            <summary>
+            Gets or sets the horizontal accuracy.
+            </summary>
+            <value>
+            The horizontal accuracy.
+            </value>
+        </member>
+        <member name="P:Nokia.Music.Types.Location.Timestamp">
+            <summary>
+            Gets or sets the timestamp.
+            </summary>
+            <value>
+            The timestamp.
+            </value>
+        </member>
+        <member name="P:Nokia.Music.Types.Location.Source">
+            <summary>
+            Gets or sets the source.
+            </summary>
+            <value>
+            The source.
+            </value>
+        </member>
+        <member name="T:Nokia.Music.Types.LocationSource">
+            <summary>
+            The location data source
+            </summary>
+        </member>
+        <member name="F:Nokia.Music.Types.LocationSource.Cellular">
+            <summary>
+            The location data was obtained from a celullar source
+            </summary>
+        </member>
+        <member name="F:Nokia.Music.Types.LocationSource.Satellite">
+            <summary>
+            The location data was obtained from a satellite source
+            </summary>
+        </member>
+        <member name="F:Nokia.Music.Types.LocationSource.Wifi">
+            <summary>
+            The location data was obtained from a wifi source
+            </summary>
+        </member>
+        <member name="T:Nokia.Music.Types.Mix">
+            <summary>
+            Represents a Mix
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Types.Mix.Equals(System.Object)">
+            <summary>
+            Determines whether the specified <see cref="T:System.Object"/> is equal to this instance.
+            </summary>
+            <param name="obj">The <see cref="T:System.Object"/> to compare with this instance.</param>
+            <returns>
+              <c>true</c> if the specified <see cref="T:System.Object"/> is equal to this instance; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Nokia.Music.Types.Mix.GetHashCode">
+            <summary>
+            Returns a hash code for this instance.
+            </summary>
+            <returns>
+            A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+            </returns>
+        </member>
+        <member name="M:Nokia.Music.Types.Mix.Play">
+            <summary>
+            Launches Nokia Music to start playback of the mix using the PlayMixTask
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Types.Mix.FromJToken(Newtonsoft.Json.Linq.JToken)">
+            <summary>
+            Creates a Mix from a JSON Object
+            </summary>
+            <param name="item">The item.</param>
+            <returns>A Mix object</returns>
+        </member>
+        <member name="P:Nokia.Music.Types.Mix.AppToAppUri">
+            <summary>
+            Gets the app-to-app uri to use to show this item in Nokia Music
+            </summary>
+        </member>
+        <member name="P:Nokia.Music.Types.Mix.ParentalAdvisory">
+            <summary>
+            Gets or sets a value indicating whether the mix has a parental advisory warning.
+            </summary>
+            <value>
+              <c>true</c> if parental advisory; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Nokia.Music.Types.Mix.TrackCount">
+            <summary>
+            Gets or sets the track count.
+            </summary>
+            <value>
+            The track count.
+            </value>
+        </member>
+        <member name="T:Nokia.Music.Types.MixGroup">
+            <summary>
+            Represents a mix group
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Types.MixGroup.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nokia.Music.Types.MixGroup"/> class.
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Types.MixGroup.Equals(System.Object)">
+            <summary>
+            Determines whether the specified <see cref="T:System.Object"/> is equal to this instance.
+            </summary>
+            <param name="obj">The <see cref="T:System.Object"/> to compare with this instance.</param>
+            <returns>
+              <c>true</c> if the specified <see cref="T:System.Object"/> is equal to this instance; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Nokia.Music.Types.MixGroup.GetHashCode">
+            <summary>
+            Returns a hash code for this instance.
+            </summary>
+            <returns>
+            A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+            </returns>
+        </member>
+        <member name="M:Nokia.Music.Types.MixGroup.FromJToken(Newtonsoft.Json.Linq.JToken)">
+            <summary>
+            Creates a MixGroup from a JSON Object
+            </summary>
+            <param name="item">The item.</param>
+            <returns>A MixGroup object</returns>
+        </member>
+        <member name="P:Nokia.Music.Types.MixGroup.Id">
+            <summary>
+            Gets the MixGroup id.
+            </summary>
+            <value>
+            The MixGroup id.
+            </value>
+        </member>
+        <member name="P:Nokia.Music.Types.MixGroup.Name">
+            <summary>
+            Gets the MixGroup name.
+            </summary>
+            <value>
+            The MixGroup name.
+            </value>
+        </member>
+        <member name="T:Nokia.Music.Types.Price">
+            <summary>
+            Represents a Nokia Music Price
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Types.Price.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nokia.Music.Types.Price"/> class.
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Types.Price.FromJToken(Newtonsoft.Json.Linq.JToken)">
+            <summary>
+            Creates a Price from a JSON Object
+            </summary>
+            <param name="item">The item.</param>
+            <returns>A Price object</returns>
+        </member>
+        <member name="P:Nokia.Music.Types.Price.Currency">
+            <summary>
+            Gets the currency.
+            </summary>
+            <value>
+            The currency.
+            </value>
+        </member>
+        <member name="P:Nokia.Music.Types.Price.Value">
+            <summary>
+            Gets the value.
+            </summary>
+            <value>
+            The value.
+            </value>
+        </member>
+        <member name="T:Nokia.Music.Types.Product">
+            <summary>
+            Represents a Nokia Music Product, i.e. Album, Single or Track
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Types.Product.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nokia.Music.Types.Product"/> class.
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Types.Product.Equals(System.Object)">
+            <summary>
+            Determines whether the specified <see cref="T:System.Object"/> is equal to this instance.
+            </summary>
+            <param name="obj">The <see cref="T:System.Object"/> to compare with this instance.</param>
+            <returns>
+              <c>true</c> if the specified <see cref="T:System.Object"/> is equal to this instance; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Nokia.Music.Types.Product.GetHashCode">
+            <summary>
+            Returns a hash code for this instance.
+            </summary>
+            <returns>
+            A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+            </returns>
+        </member>
+        <member name="M:Nokia.Music.Types.Product.Show">
+            <summary>
+            Launches Nokia Music to show details about the product using the ShowProductTask
+            </summary>
+        </member>
+        <member name="M:Nokia.Music.Types.Product.FromJToken(Newtonsoft.Json.Linq.JToken)">
+            <summary>
+            Creates a Product from a JSON Object
+            </summary>
+            <param name="item">The item.</param>
+            <returns>A Product object</returns>
+        </member>
+        <member name="M:Nokia.Music.Types.Product.ExtractTracks(Newtonsoft.Json.Linq.JToken)">
+            <summary>
+            Extracts the tracks from the json.
+            </summary>
+            <param name="tracksToken">The tracks token.</param>
+            <returns>A list of tracks</returns>
+        </member>
+        <member name="P:Nokia.Music.Types.Product.AppToAppUri">
+            <summary>
+            Gets the app-to-app uri to use to show this item in Nokia Music
+            </summary>
+        </member>
+        <member name="P:Nokia.Music.Types.Product.Category">
+            <summary>
+            Gets or sets the product's category.
+            </summary>
+            <value>
+            The product's category.
+            </value>
+        </member>
+        <member name="P:Nokia.Music.Types.Product.Genres">
+            <summary>
+            Gets or sets the product's genres.
+            </summary>
+            <value>
+            The product's genres.
+            </value>
+        </member>
+        <member name="P:Nokia.Music.Types.Product.Performers">
+            <summary>
+            Gets or sets the product's performers.
+            </summary>
+            <value>
+            The product's performers.
+            </value>
+        </member>
+        <member name="P:Nokia.Music.Types.Product.Price">
+            <summary>
+            Gets or sets the product's price when available to purchase.
+            </summary>
+            <value>
+            The price when available to purchase.
+            </value>
+        </member>
+        <member name="P:Nokia.Music.Types.Product.TrackCount">
+            <summary>
+            Gets or sets the track count for Album or Single products.
+            </summary>
+            <value>
+            The track count.
+            </value>
+        </member>
+        <member name="P:Nokia.Music.Types.Product.TakenFrom">
+            <summary>
+            Gets or sets the Album or Single a Track is from.
+            </summary>
+            <value>
+            The owning Album or Single if appropriate.
+            </value>
+        </member>
+        <member name="P:Nokia.Music.Types.Product.Tracks">
+            <summary>
+            Gets or sets the tracks on the album.
+            </summary>
+            <value>
+            The tracks.
+            </value>
+        </member>
+        <member name="P:Nokia.Music.Types.Product.Duration">
+            <summary>
+            Gets or sets the product's duration.
+            </summary>
+            <value>
+            The duration.
+            </value>
+        </member>
+        <member name="P:Nokia.Music.Types.Product.Sequence">
+            <summary>
+            Gets or sets the tracknumber of a local track if available.
+            </summary>
+            <value>
+            The tracknumber.
+            </value>
+        </member>
+        <member name="P:Nokia.Music.Types.Product.VariousArtists">
+            <summary>
+            Gets or sets a value indicating whether there are various artists on this product (album/track).
+            </summary>
+            <value>
+              <c>True</c> if there are various artists on this product (album/track); otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Nokia.Music.Types.Product.Label">
+            <summary>
+            Gets or sets the product's record label.
+            </summary>
+            <value>
+            The name of the record label.
+            </value>
+        </member>
+        <member name="P:Nokia.Music.Types.Product.StreetReleaseDate">
+            <summary>
+            Gets or sets the street release date of the product.
+            </summary>
+            <value>
+            The street release date.
+            </value>
+        </member>
+        <member name="P:Nokia.Music.Types.Product.SellerStatement">
+            <summary>
+            Gets or sets the Seller Statement for the product
+            </summary>
+            <value>
+            The state from the seller, if available. Sony provide this for example.
+            </value>
+        </member>
+    </members>
+</doc>

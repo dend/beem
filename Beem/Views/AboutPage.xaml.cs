@@ -25,7 +25,7 @@ namespace Beem.Views
         private void btnFeedback_Click(object sender, RoutedEventArgs e)
         {
             EmailComposeTask emailTask = new EmailComposeTask();
-            emailTask.Subject = "Beem Plus 1.8.2 Feedback";
+            emailTask.Subject = "Beem Plus 1.9.0 Feedback";
             emailTask.To = "hilltopdev@outlook.com";
             emailTask.Show();
         }
